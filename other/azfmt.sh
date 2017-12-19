@@ -39,18 +39,7 @@ text_files | while IFS= read -r file; do
     strip_file "${file}"
 done
 
-# Xcode
-# if [ -d "$(basename "${PWD}").xcodeproj" ]; then
-#     synx "$(basename "${PWD}").xcodeproj" >/dev/null
-# fi
-
-# Swift
-swiftlint autocorrect --quiet 2>/dev/null || true
-
-# Shell
-project_files | grep '\.sh$' | while IFS= read -r file; do
-    shfmt -i 4 -p -w "${file}"
-done
+### data/config ###
 
 # JSON
 project_files | grep '\.json$' | while IFS= read -r file; do
@@ -66,6 +55,25 @@ project_files | grep '\.svg$' | while IFS= read -r file; do
 done
 
 # SVG, XML
+# for svg has to be after svgcleaner
 project_files | grep -E '\.(svg|xml)$' | while IFS= read -r file; do
     printf '%s\n' "$(xmllint --format "${file}")" >"${file}"
 done
+
+# Xcode
+# if [ -d "$(basename "${PWD}").xcodeproj" ]; then
+#     synx "$(basename "${PWD}").xcodeproj" >/dev/null
+# fi
+
+### code ###
+
+# Python
+autopep8 '.' --recursive --in-place
+
+# Shell
+project_files | grep '\.sh$' | while IFS= read -r file; do
+    shfmt -i 4 -p -w "${file}"
+done
+
+# Swift
+swiftlint autocorrect --quiet 2>/dev/null || true
