@@ -9,4 +9,6 @@ install() {
     chmod +x "${HOME}/bin/${1}"
 }
 
+install 'azfmt'
+install 'azlint'
 install 'cldir'
