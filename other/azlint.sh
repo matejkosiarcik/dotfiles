@@ -24,6 +24,9 @@ htmlhint --format unix '.' | grep -v '^$' | grep -Ev '^(.*)([0-9]+) problem(s?)(
 
 # Markdown
 mdl '.' -g || true
+project_files | grep -E '\.(md|markdown)$' | while IFS= read -r file; do
+    markdownlint "${file}" || true
+done
 
 # SASS
 sass-lint --verbose --no-exit --syntax scss --format unix | grep -Ev '([0-9]+) problems' | grep -v '^$' |
