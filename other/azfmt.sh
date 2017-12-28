@@ -51,7 +51,7 @@ project_files | grep '\.svg$' | while IFS= read -r file; do
     svgcleaner "${file}" "${file}" --quiet --multipass \
         --coordinates-precision 1 --properties-precision 1 \
         --transforms-precision 3 --paths-coordinates-precision 1 \
-        --convert-shapes no --trim-ids no
+        --convert-shapes no --trim-ids no --use-implicit-cmds no
 done
 
 # SVG, XML
