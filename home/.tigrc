@@ -1,0 +1,1 @@
+set main-options = --exclude=refs/stash --all

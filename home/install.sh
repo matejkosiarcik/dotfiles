@@ -7,6 +7,8 @@ reload() {
     cp "${1}" "${HOME}/${1}"
 }
 
-reload '.profile'
 reload '.bashrc'
+reload '.profile'
+reload '.tigrc'
+reload '.vimrc'
 reload '.zshrc'
