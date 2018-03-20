@@ -1,0 +1,89 @@
+# shellcheck shell=sh
+# This file sets default programs for some file types/extension
+
+# associate text files
+editor="com.microsoft.VSCode"
+duti -s "${editor}" .emacs all
+duti -s "${editor}" .gitconfig all
+duti -s "${editor}" .gitignore all
+duti -s "${editor}" .history all
+duti -s "${editor}" .htaccess all
+duti -s "${editor}" .htpasswd all
+duti -s "${editor}" .json all
+duti -s "${editor}" .log all
+duti -s "${editor}" .markdown all
+duti -s "${editor}" .md all
+duti -s "${editor}" .session all
+duti -s "${editor}" .tex all
+duti -s "${editor}" .tigrc all
+duti -s "${editor}" .vimrc all
+duti -s "${editor}" .xhtml all
+duti -s "${editor}" .yaml all
+duti -s "${editor}" .yml all
+duti -s "${editor}" .zshrc all
+duti -s "${editor}" com.apple.applescript.text all
+duti -s "${editor}" com.apple.ink.inktext all
+duti -s "${editor}" com.apple.rez-source all
+duti -s "${editor}" com.apple.symbol-export all
+duti -s "${editor}" com.apple.traditional-mac-plain-text all
+duti -s "${editor}" com.netscape.javascript-source all
+duti -s "${editor}" com.real.smil all
+duti -s "${editor}" com.sun.java-source all
+duti -s "${editor}" com.sun.java-web-start all
+duti -s "${editor}" public.assembly-source all
+duti -s "${editor}" public.c-header all
+duti -s "${editor}" public.c-plus-plus-header all
+duti -s "${editor}" public.c-plus-plus-source all
+duti -s "${editor}" public.c-source all
+duti -s "${editor}" public.csh-script all
+duti -s "${editor}" public.mig-source all
+duti -s "${editor}" public.objective-c-plus-plus-source all
+duti -s "${editor}" public.objective-c-source all
+duti -s "${editor}" public.perl-script all
+duti -s "${editor}" public.php-script all
+duti -s "${editor}" public.plain-text all
+duti -s "${editor}" public.python-script all
+duti -s "${editor}" public.rtf all
+duti -s "${editor}" public.ruby-script all
+duti -s "${editor}" public.script all
+duti -s "${editor}" public.shell-script all
+duti -s "${editor}" public.source-code all
+duti -s "${editor}" public.text all
+duti -s "${editor}" public.unix-executable all
+duti -s "${editor}" public.utf16-external-plain-text all
+duti -s "${editor}" public.utf16-plain-text all
+duti -s "${editor}" public.utf8-plain-text all
+duti -s "${editor}" public.xml all
+
+# associate media files
+mediaplayer="org.videolan.vlc"
+duti -s "${mediaplayer}" com.apple.coreaudio-format all
+duti -s "${mediaplayer}" com.apple.protected-mpeg-4-audio all
+duti -s "${mediaplayer}" com.apple.quicktime-movie all
+duti -s "${mediaplayer}" com.digidesign.sd2-audio all
+duti -s "${mediaplayer}" com.microsoft.advanced-stream-redirector all
+duti -s "${mediaplayer}" com.microsoft.advanced-systems-format all
+duti -s "${mediaplayer}" com.microsoft.waveform-audio all
+duti -s "${mediaplayer}" com.microsoft.windows-media-wax all
+duti -s "${mediaplayer}" com.microsoft.windows-media-wm all
+duti -s "${mediaplayer}" com.microsoft.windows-media-wma all
+duti -s "${mediaplayer}" com.microsoft.windows-media-wmp all
+duti -s "${mediaplayer}" com.microsoft.windows-media-wmv all
+duti -s "${mediaplayer}" com.microsoft.windows-media-wmx all
+duti -s "${mediaplayer}" com.microsoft.windows-media-wvx all
+duti -s "${mediaplayer}" com.real.realaudio all
+duti -s "${mediaplayer}" com.real.realmedia all
+duti -s "${mediaplayer}" public.3gpp all
+duti -s "${mediaplayer}" public.3gpp2 all
+duti -s "${mediaplayer}" public.aifc-audio all
+duti -s "${mediaplayer}" public.aiff-audio all
+duti -s "${mediaplayer}" public.audio all
+duti -s "${mediaplayer}" public.audiovisual-content all
+duti -s "${mediaplayer}" public.avi all
+duti -s "${mediaplayer}" public.movie all
+duti -s "${mediaplayer}" public.mp3 all
+duti -s "${mediaplayer}" public.mpeg all
+duti -s "${mediaplayer}" public.mpeg-4 all
+duti -s "${mediaplayer}" public.mpeg-4-audio all
+duti -s "${mediaplayer}" public.ulaw-audio all
+duti -s "${mediaplayer}" public.video all
