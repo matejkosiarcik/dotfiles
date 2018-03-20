@@ -20,6 +20,9 @@ chflags nohidden "${HOME}/Library"
 # show whitespace in xcode
 defaults write 'com.apple.dt.Xcode' DVTTextShowInvisibleCharacters -int 1
 
+# Symlink iOS simulator to applications
+sudo ln -sf '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app' '/Applications/iOS Simulator.app'
+
 # save file as UTF-8
 defaults write 'com.apple.TextEdit' PlainTextEncoding -int 4
 defaults write 'com.apple.TextEdit' PlainTextEncodingForWrite -int 4
@@ -33,9 +36,6 @@ defaults write 'com.apple.TimeMachine' DoNotOfferNewDisksForBackup -bool true
 # copy address as 'foo@bar.com' instead of 'Foo <foo@bar.com>'
 defaults write 'com.apple.TimeMachine' DoNotOfferNewDisksForBackup -bool true
 
-# Symlink iOS simulator to applications
-sudo ln -sf '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app' '/Applications/iOS Simulator.app'
-
 # set system to restart when it freezes
 sudo systemsetup -setrestartfreeze on
 
@@ -48,3 +48,9 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 # disable this witchcraft
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+# quit windows when quitting app
+defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
+
+# disable startup sound
+sudo nvram SystemAudioVolume=' '
