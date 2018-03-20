@@ -4,6 +4,8 @@ export PATH="${HOME}/bin:/Library/TeX:${PATH}"
 # Simple aliases
 alias o="open"
 alias t="tig"
+alias ..='cd ..'
+alias ...='cd ../..'
 
 # Advanced aliases
 alias h="diff2html -s side -i stdin"
