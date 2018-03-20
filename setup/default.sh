@@ -13,6 +13,8 @@ duti -s "${editor}" .json all
 duti -s "${editor}" .log all
 duti -s "${editor}" .markdown all
 duti -s "${editor}" .md all
+duti -s "${editor}" .mdj all
+duti -s "${editor}" .scpt all
 duti -s "${editor}" .session all
 duti -s "${editor}" .tex all
 duti -s "${editor}" .tigrc all
