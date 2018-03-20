@@ -1,7 +1,7 @@
 #!/bin/sh
 set -euf
 
-if [ "${#}" -le '1' ]; then
+if [ "${#}" -le 1 ]; then
     printf 'No path provided\n' >&2
     exit 1
 fi
