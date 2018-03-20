@@ -2,7 +2,7 @@
 # This file sets default programs for some file types/extension
 
 # associate text files
-editor="com.microsoft.VSCode"
+editor='com.microsoft.VSCode'
 duti -s "${editor}" .emacs all
 duti -s "${editor}" .gitconfig all
 duti -s "${editor}" .gitignore all
@@ -58,7 +58,7 @@ duti -s "${editor}" public.utf8-plain-text all
 duti -s "${editor}" public.xml all
 
 # associate media files
-mediaplayer="org.videolan.vlc"
+mediaplayer='org.videolan.vlc'
 duti -s "${mediaplayer}" com.apple.coreaudio-format all
 duti -s "${mediaplayer}" com.apple.protected-mpeg-4-audio all
 duti -s "${mediaplayer}" com.apple.quicktime-movie all
