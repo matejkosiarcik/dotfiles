@@ -2,8 +2,6 @@
 export PATH="${HOME}/bin:/Library/TeX:${PATH}"
 
 # Simple aliases
-alias ..='cd ..'
-alias ...='cd ../..'
 alias o='open'
 alias t='tig'
 
@@ -17,7 +15,7 @@ tdup() {
 }
 
 mcd() {
-    mkdir -p "${1}" && { cd "${1}" || return; }
+    mkdir -p "${1}" && cd "${1}"
 }
 
 tap() {
