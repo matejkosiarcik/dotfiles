@@ -59,6 +59,7 @@ duti -s "${editor}" 'public.xml' all
 
 # associate media files
 mediaplayer='org.videolan.vlc'
+duti -s "${mediaplayer}" '.part' all
 duti -s "${mediaplayer}" 'com.apple.coreaudio-format' all
 duti -s "${mediaplayer}" 'com.apple.protected-mpeg-4-audio' all
 duti -s "${mediaplayer}" 'com.apple.quicktime-movie' all
@@ -84,8 +85,8 @@ duti -s "${mediaplayer}" 'public.audiovisual-content' all
 duti -s "${mediaplayer}" 'public.avi' all
 duti -s "${mediaplayer}" 'public.movie' all
 duti -s "${mediaplayer}" 'public.mp3' all
-duti -s "${mediaplayer}" 'public.mpeg' all
-duti -s "${mediaplayer}" 'public.mpeg-4' all
 duti -s "${mediaplayer}" 'public.mpeg-4-audio' all
+duti -s "${mediaplayer}" 'public.mpeg-4' all
+duti -s "${mediaplayer}" 'public.mpeg' all
 duti -s "${mediaplayer}" 'public.ulaw-audio' all
 duti -s "${mediaplayer}" 'public.video' all
