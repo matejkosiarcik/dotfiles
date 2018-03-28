@@ -1,8 +1,7 @@
 # shellcheck shell=sh
 set -euf
-
-[ -d "${HOME}/bin" ] || mkdir "${HOME}/bin"
 cd "$(dirname "${0}")"
+[ -d "${HOME}/bin" ] || mkdir "${HOME}/bin"
 
 install() {
     cp "${1}.sh" "${HOME}/bin/${1}"
