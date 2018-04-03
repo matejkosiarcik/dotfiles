@@ -19,7 +19,7 @@ sudo systemsetup -setrestartfreeze on
 sudo nvram SystemAudioVolume=' '
 
 #
-# Modifying defaults to applications
+# Modifying defaults of applications
 #
 
 # do not create .DS_Store on network volumes
