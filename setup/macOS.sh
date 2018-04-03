@@ -29,7 +29,7 @@ defaults write 'com.apple.desktopservices' DSDontWriteNetworkStores -bool true
 defaults write 'com.apple.dt.xcode' DVTTextShowInvisibleCharacters -int 1
 
 # show hidden files in finder
-defaults write 'com.apple.dinder' AppleShowAllFiles -bool true
+defaults write 'com.apple.finder' AppleShowAllFiles -bool true
 
 # do not warn before emptying trash
 defaults write 'com.apple.finder' WarnOnEmptyTrash -bool false
