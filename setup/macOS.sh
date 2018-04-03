@@ -34,7 +34,7 @@ defaults write 'com.apple.TextEdit' RichText -int 0
 defaults write 'com.apple.TimeMachine' DoNotOfferNewDisksForBackup -bool true
 
 # copy address as 'foo@bar.com' instead of 'Foo <foo@bar.com>'
-defaults write 'com.apple.TimeMachine' DoNotOfferNewDisksForBackup -bool true
+defaults write 'com.apple.mail' AddressesIncludeNameOnPasteboard -bool false
 
 # set system to restart when it freezes
 sudo systemsetup -setrestartfreeze on
