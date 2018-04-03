@@ -3,6 +3,8 @@
 
 # associate text files
 editor='com.microsoft.VSCode'
+duti -s "${editor}" '.bash_history' all
+duti -s "${editor}" '.bashrc' all
 duti -s "${editor}" '.emacs' all
 duti -s "${editor}" '.gitconfig' all
 duti -s "${editor}" '.gitignore' all
@@ -14,14 +16,18 @@ duti -s "${editor}" '.log' all
 duti -s "${editor}" '.markdown' all
 duti -s "${editor}" '.md' all
 duti -s "${editor}" '.mdj' all
+duti -s "${editor}" '.plist' all
+duti -s "${editor}" '.profile' all
 duti -s "${editor}" '.scpt' all
 duti -s "${editor}" '.session' all
 duti -s "${editor}" '.tex' all
+duti -s "${editor}" '.tig_history' all
 duti -s "${editor}" '.tigrc' all
 duti -s "${editor}" '.vimrc' all
 duti -s "${editor}" '.xhtml' all
 duti -s "${editor}" '.yaml' all
 duti -s "${editor}" '.yml' all
+duti -s "${editor}" '.zsh_history' all
 duti -s "${editor}" '.zshrc' all
 duti -s "${editor}" 'com.apple.applescript.text' all
 duti -s "${editor}" 'com.apple.ink.inktext' all
@@ -56,6 +62,7 @@ duti -s "${editor}" 'public.utf16-external-plain-text' all
 duti -s "${editor}" 'public.utf16-plain-text' all
 duti -s "${editor}" 'public.utf8-plain-text' all
 duti -s "${editor}" 'public.xml' all
+duti -s "${editor}" 'rc' all # ~/.lftp/rc
 
 # associate media files
 mediaplayer='org.videolan.vlc'
