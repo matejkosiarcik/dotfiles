@@ -37,7 +37,7 @@ defaults write 'com.apple.finder' WarnOnEmptyTrash -bool false
 # show path bar (bottom)
 defaults write 'com.apple.finder' ShowPathbar -bool true
 
-# display full POSIX path as window title\
+# display full POSIX path as window title
 defaults write 'com.apple.finder' _FXShowPosixPathInTitle -bool true
 
 # disable warning when changing a file extension
