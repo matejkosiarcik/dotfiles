@@ -8,6 +8,8 @@ reload() {
 }
 
 reload '.bashrc'
+reload '.emacs'
+reload '.lftp/rc'
 reload '.profile'
 reload '.tigrc'
 reload '.vimrc'
