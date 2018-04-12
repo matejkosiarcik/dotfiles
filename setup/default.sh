@@ -11,6 +11,7 @@ duti -s "${editor}" '.gitignore' all
 duti -s "${editor}" '.history' all
 duti -s "${editor}" '.htaccess' all
 duti -s "${editor}" '.htpasswd' all
+duti -s "${editor}" '.iuml' all
 duti -s "${editor}" '.json' all
 duti -s "${editor}" '.log' all
 duti -s "${editor}" '.markdown' all
@@ -18,6 +19,7 @@ duti -s "${editor}" '.md' all
 duti -s "${editor}" '.mdj' all
 duti -s "${editor}" '.plist' all
 duti -s "${editor}" '.profile' all
+duti -s "${editor}" '.puml' all
 duti -s "${editor}" '.scpt' all
 duti -s "${editor}" '.session' all
 duti -s "${editor}" '.tex' all
