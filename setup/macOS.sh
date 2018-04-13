@@ -70,9 +70,6 @@ defaults write 'NSGlobalDomain' NSAutomaticQuoteSubstitutionEnabled -bool false
 # disable autocorrect
 defaults write 'NSGlobalDomain' NSAutomaticSpellingCorrectionEnabled -bool false
 
-# disable automatic termination of inactive apps
-defaults write 'NSGlobalDomain' NSDisableAutomaticTermination -bool true
-
 # expand save panel by default
 defaults write 'NSGlobalDomain' NSNavPanelExpandedStateForSaveMode -bool true
 
