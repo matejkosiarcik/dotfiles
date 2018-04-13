@@ -27,6 +27,7 @@ duti -s "${editor}" '.tex' all
 duti -s "${editor}" '.tig_history' all
 duti -s "${editor}" '.tigrc' all
 duti -s "${editor}" '.tmp' all
+duti -s "${editor}" '.tt' all
 duti -s "${editor}" '.vimrc' all
 duti -s "${editor}" '.xhtml' all
 duti -s "${editor}" '.yaml' all
