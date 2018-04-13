@@ -23,6 +23,7 @@ duti -s "${editor}" '.puml' all
 duti -s "${editor}" '.scpt' all
 duti -s "${editor}" '.session' all
 duti -s "${editor}" '.smil' all
+duti -s "${editor}" '.tcsh' all
 duti -s "${editor}" '.tex' all
 duti -s "${editor}" '.tig_history' all
 duti -s "${editor}" '.tigrc' all
