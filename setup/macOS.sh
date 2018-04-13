@@ -46,7 +46,7 @@ defaults write 'com.apple.finder' FXEnableExtensionChangeWarning -bool false
 # copy address as 'foo@bar.com' instead of 'Foo <foo@bar.com>'
 defaults write 'com.apple.mail' AddressesIncludeNameOnPasteboard -bool false
 
-# save file as UTF-8
+# save files as UTF-8
 defaults write 'com.apple.textedit' PlainTextEncoding -int 4
 defaults write 'com.apple.textedit' PlainTextEncodingForWrite -int 4
 
