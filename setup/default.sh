@@ -22,6 +22,7 @@ duti -s "${editor}" '.profile' all
 duti -s "${editor}" '.puml' all
 duti -s "${editor}" '.scpt' all
 duti -s "${editor}" '.session' all
+duti -s "${editor}" '.smil' all
 duti -s "${editor}" '.tex' all
 duti -s "${editor}" '.tig_history' all
 duti -s "${editor}" '.tigrc' all
@@ -38,7 +39,6 @@ duti -s "${editor}" 'com.apple.rez-source' all
 duti -s "${editor}" 'com.apple.symbol-export' all
 duti -s "${editor}" 'com.apple.traditional-mac-plain-text' all
 duti -s "${editor}" 'com.netscape.javascript-source' all
-duti -s "${editor}" 'com.real.smil' all
 duti -s "${editor}" 'com.sun.java-source' all
 duti -s "${editor}" 'com.sun.java-web-start' all
 duti -s "${editor}" 'public.assembly-source' all
