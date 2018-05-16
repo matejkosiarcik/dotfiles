@@ -3,6 +3,7 @@
 
 # associate text files
 editor='com.microsoft.VSCode'
+duti -s "${editor}" '.am' all
 duti -s "${editor}" '.bash_history' all
 duti -s "${editor}" '.bashrc' all
 duti -s "${editor}" '.emacs' all
@@ -11,6 +12,7 @@ duti -s "${editor}" '.gitignore' all
 duti -s "${editor}" '.history' all
 duti -s "${editor}" '.htaccess' all
 duti -s "${editor}" '.htpasswd' all
+duti -s "${editor}" '.in' all
 duti -s "${editor}" '.iuml' all
 duti -s "${editor}" '.json' all
 duti -s "${editor}" '.log' all
