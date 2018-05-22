@@ -15,7 +15,9 @@ duti -s "${editor}" '.htpasswd' all
 duti -s "${editor}" '.in' all
 duti -s "${editor}" '.iuml' all
 duti -s "${editor}" '.json' all
+duti -s "${editor}" '.lisp' all
 duti -s "${editor}" '.log' all
+duti -s "${editor}" '.lsp' all
 duti -s "${editor}" '.markdown' all
 duti -s "${editor}" '.md' all
 duti -s "${editor}" '.mdj' all
