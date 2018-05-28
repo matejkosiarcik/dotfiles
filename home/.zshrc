@@ -1,6 +1,7 @@
 # shellcheck shell=bash
-# shellcheck source=/dev/null
-# shellcheck disable=SC2034
+# shellcheck source=/dev/null # do not look for sourced files
+# shellcheck disable=SC2034 # unused variables (we need them for config)
+
 source "${HOME}/.profile"
 export ZSH="${HOME}/.oh-my-zsh"
 
