@@ -1,5 +1,6 @@
 # shellcheck shell=sh
-export PATH="${HOME}/bin:/Library/TeX:${PATH}"
+
+export PATH="${PATH}:${HOME}/bin:/Library/TeX"
 
 # Simple aliases
 alias o='open'
