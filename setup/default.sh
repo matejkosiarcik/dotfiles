@@ -24,6 +24,7 @@ duti -s "${editor}" '.mdj' all
 duti -s "${editor}" '.plist' all
 duti -s "${editor}" '.profile' all
 duti -s "${editor}" '.puml' all
+duti -s "${editor}" '.rst' all
 duti -s "${editor}" '.scpt' all
 duti -s "${editor}" '.session' all
 duti -s "${editor}" '.smil' all
