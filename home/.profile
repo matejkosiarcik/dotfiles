@@ -15,6 +15,7 @@ tdup() {
     open -a 'Terminal' "${PWD}"
 }
 
+# Create folder if not existed and go to it
 mcd() {
     mkdir -p "${1}" && cd "${1}"
 }
