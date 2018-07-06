@@ -1,6 +1,7 @@
 # shellcheck shell=sh
 
-export PATH="${PATH}:${HOME}/bin:/Library/TeX"
+# customize PATH
+export PATH="${PATH}:${HOME}/bin"
 
 # Simple aliases
 alias o='open'
@@ -12,14 +13,12 @@ alias pine="tree --ignore-case -CI '.build|.git|*.xcodeproj|build|external|Carth
 
 # Functions
 tdup() {
+    # TODO: make iterm2, hyper.js compatible
+    # TODO: make ubuntu compatible
     open -a 'Terminal' "${PWD}"
 }
 
 # Create folder if not existed and go to it
 mcd() {
     mkdir -p "${1}" && cd "${1}"
-}
-
-tap() {
-    mkdir -p "$(dirname "${1}")" && touch "${1}"
 }
