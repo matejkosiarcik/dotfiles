@@ -6,7 +6,7 @@ source "${HOME}/.profile"
 export ZSH="${HOME}/.oh-my-zsh"
 
 unsetopt nomatch
-plugins=(brew git osx zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git osx zsh-autosuggestions zsh-syntax-highlighting)
 
 ZSH_THEME='robbyrussell'
 HIST_STAMPS='yyyy-mm-dd'

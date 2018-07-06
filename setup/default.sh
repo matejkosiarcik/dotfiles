@@ -38,6 +38,7 @@ duti -s "${editor}" '.vimrc' all
 duti -s "${editor}" '.xhtml' all
 duti -s "${editor}" '.yaml' all
 duti -s "${editor}" '.yml' all
+duti -s "${editor}" '.zprofile' all
 duti -s "${editor}" '.zsh_history' all
 duti -s "${editor}" '.zshrc' all
 duti -s "${editor}" 'com.apple.applescript.text' all
