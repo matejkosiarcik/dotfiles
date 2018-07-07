@@ -9,6 +9,7 @@ reload() {
 
 reload '.bashrc'
 reload '.emacs'
+reload '.gitconfig'
 reload '.lftp/rc'
 reload '.profile'
 reload '.tigrc'

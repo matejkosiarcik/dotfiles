@@ -1,0 +1,19 @@
+[user]
+    name = 'Matej Košiarčik'
+
+[core]
+    excludesfile = '~/.gitignore_global'
+
+[alias]
+    # email configuration after cloning project
+    personal = config user.email 'matejkosiarcik@gmail.com'
+    touch4it = config user.email 'matej.kosiarcik@touch4it.com'
+
+    # shortcuts
+    c = commit
+    d = diff
+    ds = diff --staged
+    s = status
+
+    # new commands
+    push-up-to-last = ! "git push origin HEAD^:$(git rev-parse --abbrev-ref HEAD)"
