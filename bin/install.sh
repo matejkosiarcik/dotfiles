@@ -11,3 +11,4 @@ install() {
 install 'azfmt'
 install 'azlint'
 install 'cldir'
+install 'gitignore'
