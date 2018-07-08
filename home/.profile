@@ -11,7 +11,7 @@ alias t='tig'
 alias h='diff2html -s side -i stdin'
 alias pine="tree --ignore-case -CI '.build|.git|*.xcodeproj|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods'"
 
-# Functions
+# Open new terminal at current directory
 tdup() {
     # TODO: make iterm2, hyper.js compatible
     # TODO: make ubuntu compatible
