@@ -11,6 +11,7 @@
 
     # shortcuts
     c = commit
+    ch = checkout
     d = diff
     ds = diff --staged
     s = status
