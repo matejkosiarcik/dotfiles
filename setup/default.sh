@@ -21,6 +21,7 @@ duti -s "${editor}" '.lsp' all
 duti -s "${editor}" '.markdown' all
 duti -s "${editor}" '.md' all
 duti -s "${editor}" '.mdj' all
+duti -s "${editor}" '.mustache' all
 duti -s "${editor}" '.plist' all
 duti -s "${editor}" '.profile' all
 duti -s "${editor}" '.puml' all
