@@ -1,7 +1,12 @@
 #!/bin/sh
 set -euf
 
+# TODO: example usage
+# TODO: help page
+# TODO: make dry run
+
 path='.'
+# TODO: make cleaning for all supplied paths
 if [ "${#}" -ge 1 ]; then
     path="${1}"
 fi
