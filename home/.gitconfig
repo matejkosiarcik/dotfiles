@@ -2,7 +2,7 @@
     name = 'Matej Košiarčik'
 
 [core]
-    excludesfile = '~/.gitignore_global'
+    excludesfile = ~/.gitignore
 
 [alias]
     # email configuration after cloning project
