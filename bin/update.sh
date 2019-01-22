@@ -24,11 +24,11 @@ if command -v npm >/dev/null 2>&1; then
 fi
 
 if command -v pip >/dev/null 2>&1; then
-    pip list --outdated --format=freeze | grep -v '^\-e' | cut -d '=' -f '1'  | xargs -n1 pip install -U # update packages
+    pip list --outdated --format=freeze | grep -v '^\-e' | cut -d '=' -f '1' | xargs -n1 pip install -U # update packages
 fi
 if command -v pip2 >/dev/null 2>&1; then
-    pip2 list --outdated --format=freeze | grep -v '^\-e' | cut -d '=' -f '1'  | xargs -n1 pip install -U # update packages
+    pip2 list --outdated --format=freeze | grep -v '^\-e' | cut -d '=' -f '1' | xargs -n1 pip install -U # update packages
 fi
 if command -v pip3 >/dev/null 2>&1; then
-    pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d '=' -f '1'  | xargs -n1 pip install -U # update packages
+    pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d '=' -f '1' | xargs -n1 pip install -U # update packages
 fi
