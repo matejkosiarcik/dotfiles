@@ -14,9 +14,11 @@ install() {
 }
 
 install 'cldir'
-install 'fmt'
 install 'gitignore'
-install 'lint'
+
 install 'g-update'
+
+install 'p-fmt'
+install 'p-lint'
 install 'p-bootstrap'
 install 'p-update'
