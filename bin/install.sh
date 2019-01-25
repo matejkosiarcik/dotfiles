@@ -1,11 +1,16 @@
 # shellcheck shell=sh
 set -euf
 cd "$(dirname "${0}")"
-[ -d "${HOME}/bin" ] || mkdir "${HOME}/bin"
+
+output="${HOME}/.custom-user-scripts"
+if [ -d "${output}" ]; then
+    rm -rf "${output}"
+fi
+mkdir "${output}"
 
 install() {
-    cp "${1}.sh" "${HOME}/bin/${1}"
-    chmod a+x "${HOME}/bin/${1}"
+    cp "${1}.sh" "${output}/${1}"
+    chmod a+x "${output}/${1}"
 }
 
 install 'cldir'

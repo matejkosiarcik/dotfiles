@@ -1,7 +1,7 @@
 # shellcheck shell=sh
 
 # customize PATH
-export PATH="${PATH}:${HOME}/bin"
+export PATH="${PATH}:${HOME}/.custom-user-scripts"
 
 # Simple aliases
 alias o='open'
