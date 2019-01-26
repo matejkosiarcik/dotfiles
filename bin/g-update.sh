@@ -5,8 +5,8 @@ cd "${HOME}"
 # System level package managers
 
 if command -v brew >/dev/null 2>&1; then
-    brew update # update brew itself
-    brew upgrade && brew cleanup # update formulas
+    brew update                            # update brew itself
+    brew upgrade && brew cleanup           # update formulas
     brew cask upgrade && brew cask cleanup # update cask formulas
     # TODO: considre removing cleanup (should be automatic in recent brew versions)
 fi

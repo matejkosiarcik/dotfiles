@@ -3,7 +3,7 @@ set -euf
 cd "$(dirname "${0}")"
 
 case "$(uname -s)" in
-'Darwin') brew bundle;;
+'Darwin') brew bundle ;;
 esac
 
 if command -v npm >/dev/null 2>&1; then

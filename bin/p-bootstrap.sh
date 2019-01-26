@@ -6,7 +6,7 @@ if [ '$(shell uname)' == 'Darwin' ] && [ -f 'Brewfile' ]; then
 fi
 
 if [ -f '.gitman.yml' ]; then
-	gitman install
+    gitman install
 fi
 
 if [ -f 'requirements.txt' ]; then
@@ -24,7 +24,7 @@ if [ -f 'package.json' ]; then
 fi
 
 if [ -f 'Cartfile' ]; then
-	carthage bootstrap --no-use-binaries
+    carthage bootstrap --no-use-binaries
 fi
 
 if [ -f 'Gemfile' ]; then

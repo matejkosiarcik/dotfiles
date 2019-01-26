@@ -19,5 +19,5 @@ reload '.zshrc'
 # load platform dependent gitconfig
 rm -f "${HOME}/.gitconfig_platform"
 case "$(uname -s)" in
-    'Darwin') cp '.gitconfig_macos' "${HOME}/.gitconfig_platform";;
+'Darwin') cp '.gitconfig_macos' "${HOME}/.gitconfig_platform" ;;
 esac
