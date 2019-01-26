@@ -96,6 +96,7 @@ pycodestyle '.' | sed -E 's~(.*):([0-9]+):([0-9]+): ~\1:\2:\3: warning: ~' | sed
 # Shell
 project_files | grep '\.sh$' | while IFS= read -r file; do
     shellcheck --format gcc "${file}" || true
+    # TODO: bash8
     shfmt -i 4 -p -l "${file}" |
         sed -E 's~(.*)~\1: warning: file badly formatted (bad_format)~g'
     bash -n "${file}" || true
