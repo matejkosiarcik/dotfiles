@@ -80,5 +80,4 @@ defaults write 'NSGlobalDomain' NSQuitAlwaysKeepsWindows -bool false
 # Reload changes
 #
 
-killall 'Finder'
-printf 'Some apps (Mail, TextEdit, Xcode) may need a restart to see changes.\n'
+printf 'Some apps (Finder, Mail, TextEdit, Xcode) may need a restart to see changes.\n'

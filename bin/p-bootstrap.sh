@@ -1,7 +1,7 @@
 #!/bin/sh
 set -euf
 
-if [ '$(shell uname)' == 'Darwin' ] && [ -f 'Brewfile' ]; then
+if [ "$(shell uname)" = 'Darwin' ] && [ -f 'Brewfile' ]; then
     brew bundle
 fi
 

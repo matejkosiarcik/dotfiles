@@ -91,7 +91,7 @@ project_files | grep '\.py$' | while IFS= read -r file; do
 done
 flake8 '.' | sed -E 's~(.*):([0-9]+):([0-9]+): ([^ ]+) (.*)~\1:\2:\3: \5 [\4]~' |
     sed -E 's~(.*):([0-9]+):([0-9]+): ~\1:\2:\3: warning: ~' | sed 's~^./~~'
-pep8 '.' | sed -E 's~(.*):([0-9]+):([0-9]+): ~\1:\2:\3: warning: ~' | sed 's~^./~~'
+pycodestyle '.' | sed -E 's~(.*):([0-9]+):([0-9]+): ~\1:\2:\3: warning: ~' | sed 's~^./~~'
 
 # Shell
 project_files | grep '\.sh$' | while IFS= read -r file; do

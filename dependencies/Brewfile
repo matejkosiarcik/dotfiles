@@ -13,7 +13,7 @@ cask "powershell"
 
 # languages
 brew "node"
-brew "php"
+brew "php", restart_service: true
 brew "python@2"
 brew "python@3"
 brew "ruby"

@@ -3,6 +3,7 @@ eslint
 htmlhint
 htmllint-cli
 jsonlint-cli
+markdownlint-cli
 node-sass
 npm-check-updates
 npx

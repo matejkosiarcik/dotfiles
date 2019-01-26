@@ -2,11 +2,12 @@ autopep8
 bash8
 Click
 Faker
+flake8
 Flask
 GitMan
 grip
 jinja2-cli
-pep8
+pycodestyle
 pylint
 pystache
 pytest
