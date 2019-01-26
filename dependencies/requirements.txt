@@ -1,0 +1,13 @@
+autopep8
+bash8
+Click
+Faker
+Flask
+GitMan
+grip
+jinja2-cli
+pep8
+pylint
+pystache
+pytest
+SimpleHTTP404Server
