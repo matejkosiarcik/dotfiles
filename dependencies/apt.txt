@@ -1,0 +1,11 @@
+build-essential
+chromium-browser
+curl
+git
+libssl-dev
+mercurial
+python-dev
+python-pip
+tmux
+vim
+zsh

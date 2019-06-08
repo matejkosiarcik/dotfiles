@@ -6,22 +6,25 @@ brew "mas"
 brew "dash"
 brew "ksh"
 brew "mksh"
+brew "tmux"
 brew "yash"
 brew "zsh"
 cask "iterm2"
 cask "powershell"
 
 # languages
-brew "jython"
-brew "micropython"
 brew "node"
 brew "php", restart_service: true
-brew "pypy"
-brew "pypy3"
 brew "python@2"
 brew "python@3"
 brew "ruby"
 cask "java"
+
+# additional languages
+brew "jython"
+brew "micropython"
+brew "pypy"
+brew "pypy3"
 
 # package managers
 brew "carthage"
@@ -88,7 +91,8 @@ cask "mactex"
 cask "sublime-text"
 cask "visual-studio-code"
 
-# git
+# version control
+brew "mercurial"
 brew "tig"
 cask "sourcetree"
 
