@@ -6,7 +6,10 @@ export PATH="${PATH}:${HOME}/.custom-user-scripts"
 # Simple aliases
 alias o='open'
 alias t='tig status'
-alias s="git status"
+
+alias s="git s"
+alias df="git df | h"
+alias ds="git ds | h"
 
 # Advanced aliases
 alias h='diff2html -s side -i stdin'
