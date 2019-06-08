@@ -2,22 +2,25 @@
 set -euf
 cd "$(dirname "${0}")"
 
+# Install subfolders
+sh 'git/install.sh'
+sh 'shell/install.sh'
+
+# Reload individual files
 reload() {
     rm -f "${HOME}/${1}"
     cp "${1}" "${HOME}/${1}"
 }
 
-reload '.bashrc'
 reload '.emacs'
-reload '.gitconfig'
-reload '.lftp/rc'
-reload '.profile'
 reload '.tigrc'
 reload '.vimrc'
-reload '.zshrc'
 
-# load platform dependent gitconfig
-rm -f "${HOME}/.gitconfig_platform"
-case "$(uname -s)" in
-'Darwin') cp '.gitconfig_macos' "${HOME}/.gitconfig_platform" ;;
-esac
+# Reload nested files
+reload_nested() {
+    mkdir -p "$(dirname "${HOME}/${1}")"
+    reload "${1}"
+}
+
+reload_nested '.gnupg/gpg.conf'
+reload_nested '.lftp/rc'

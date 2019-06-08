@@ -1,0 +1,26 @@
+[user]
+    name = 'Matej Košiarčik'
+
+[includeIf "gitdir:~/Dev/"]
+    path = ~/.personal.gitconfig
+
+[includeIf "gitdir:~/Touch4IT/"]
+    path = ~/.touch4it.gitconfig
+
+[commit]
+    gpgsign = true
+
+[core]
+    excludesfile = ~/.gitignore
+
+[alias]
+    # shortcuts
+    c = commit -m
+    ca = commit --amend
+    ch = checkout
+    d = diff
+    ds = diff --staged
+    pl = pull --ff-only
+    pu = push
+    r = reset
+    s = status
