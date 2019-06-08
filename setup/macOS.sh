@@ -9,9 +9,6 @@ set -euf
 # show ~/Library
 chflags nohidden "${HOME}/Library"
 
-# symlink iOS simulator to applications
-sudo ln -sf '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app' '/Applications/iOS Simulator.app'
-
 # set system to restart when it freezes
 sudo systemsetup -setrestartfreeze on
 
