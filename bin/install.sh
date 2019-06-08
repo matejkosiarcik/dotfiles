@@ -16,7 +16,7 @@ install() {
 install 'cldir'
 install 'gitignore'
 
-install 'g-update'
+install 'up'
 
 install 'p-fmt'
 install 'p-lint'
