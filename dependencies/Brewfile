@@ -2,7 +2,7 @@
 tap "caskroom/cask"
 brew "mas"
 
-# shells
+# shells/terminals
 brew "dash"
 brew "ksh"
 brew "mksh"
@@ -12,8 +12,12 @@ cask "iterm2"
 cask "powershell"
 
 # languages
+brew "jython"
+brew "micropython"
 brew "node"
 brew "php", restart_service: true
+brew "pypy"
+brew "pypy3"
 brew "python@2"
 brew "python@3"
 brew "ruby"
@@ -21,6 +25,7 @@ cask "java"
 
 # package managers
 brew "carthage"
+brew "cocoapods"
 brew "composer"
 
 # generators
@@ -39,16 +44,25 @@ brew "yamllint"
 # toolings
 brew "autoconf"
 brew "cmake"
+brew "docker"
+brew "emscripten"
 brew "gcc"
 brew "plantuml"
+cask "docker"
 
-# services
-brew "circleci"
-brew "hub"
+# dev/other
+brew "lftp"
+brew "libssh2"
+brew "ncurses"
+brew "openssl"
+brew "wget"
+cask "xquartz"
 
 # image manipulation
+brew "cairo"
 brew "imagemagick", args: ["with-librsvg"]
 brew "librsvg"
+brew "openjpeg"
 brew "svg2pdf"
 brew "svg2png"
 cask "gimp"
@@ -56,26 +70,30 @@ cask "inkscape"
 
 # browsers
 brew "elinks"
+brew "geckodriver"
 brew "lynx"
+cask "chromedriver"
 cask "firefox"
 cask "google-chrome"
 cask "opera"
+cask "operadriver"
 cask "tor-browser"
 cask "vivaldi"
 
 # editors/IDEs
 cask "android-studio"
+cask "atom"
 cask "jetbrains-toolbox"
 cask "mactex"
 cask "sublime-text"
 cask "visual-studio-code"
 
-# git UIs
+# git
 brew "tig"
-cask "meld"
 cask "sourcetree"
 
 # media
+brew "ffmpeg"
 brew "youtube-dl"
 cask "handbrake"
 cask "vlc"
@@ -86,30 +104,18 @@ cask "skype"
 cask "slack"
 
 # user tools
+brew "aspell"
+brew "cliclick"
 brew "cloc"
-brew "cputhrottle"
+brew "duti"
 brew "tree"
 brew "wine"
 brew "winetricks"
 cask "coconutbattery"
 cask "duet"
 cask "flux"
+cask "free-ruler"
 cask "spectacle"
 cask "transmission"
 cask "virtualbox-extension-pack"
 cask "virtualbox"
-
-# dev/other
-brew "aspell"
-brew "cliclick"
-brew "docker-completion"
-brew "docker"
-brew "duti"
-brew "lftp"
-brew "ncurses"
-brew "openssl"
-brew "redir"
-brew "wget"
-cask "docker"
-cask "free-ruler"
-cask "xquartz"
