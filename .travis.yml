@@ -17,3 +17,7 @@ matrix:
 
 before_script:
   - uname -a
+
+script:
+  - source "home/shell/custom.sh"
+  - source "home/shell/custom.bash"
