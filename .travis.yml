@@ -11,9 +11,7 @@ addons:
 matrix:
   fast_finish: true
 
-  include:
-    - os: osx
-      language: generic
+install: []
 
 before_script:
   - uname -a
