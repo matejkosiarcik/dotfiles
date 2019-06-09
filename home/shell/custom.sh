@@ -6,6 +6,7 @@ export PATH="${PATH}:${HOME}/.custom-user-scripts"
 # Simple aliases
 alias o='open'
 alias t='tig status'
+alias tm='tig'
 
 alias s="git s"
 alias df="git df | h"
