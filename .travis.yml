@@ -1,0 +1,19 @@
+language: generic
+sudo: false
+
+addons:
+  apt:
+    update: true
+  homebrew:
+    update: true
+    brewfile: dependencies/Brewfile
+
+matrix:
+  fast_finish: true
+
+  include:
+    - os: osx
+      language: generic
+
+before_script:
+  - uname -a
