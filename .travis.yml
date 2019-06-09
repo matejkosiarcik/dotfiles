@@ -17,5 +17,9 @@ before_script:
   - uname -a
 
 script:
-  - source "home/shell/custom.sh"
-  - source "home/shell/custom.bash"
+  - sh home/install.sh
+  - source ~/.custom.bash
+  - sh setup/install.sh
+  # - sh dependencies/install.sh
+  - sh bin/install.sh
+  # - sh default-apps/install.sh

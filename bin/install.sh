@@ -2,7 +2,7 @@
 set -euf
 cd "$(dirname "${0}")"
 
-output="${HOME}/.custom-user-scripts"
+output="${HOME}/.user-scripts"
 if [ -d "${output}" ]; then
     rm -rf "${output}"
 fi
