@@ -54,10 +54,12 @@ brew "plantuml"
 cask "docker"
 
 # dev/other
+brew "circleci"
 brew "lftp"
 brew "libssh2"
 brew "ncurses"
 brew "openssl"
+brew "travis"
 brew "wget"
 cask "xquartz"
 
