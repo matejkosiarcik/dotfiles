@@ -52,6 +52,7 @@ com.netscape.javascript-source
 com.sun.java-source
 com.sun.java-web-start
 Gemfile
+Podfile
 Procfile
 public.assembly-source
 public.c-header
