@@ -13,7 +13,6 @@ addons:
     update: true
   homebrew:
     update: true
-    brewfile: dependencies/Brewfile
 
 matrix:
   fast_finish: true
