@@ -7,8 +7,6 @@ os:
 addons:
   apt:
     update: true
-    packages:
-      - bats
   homebrew:
     update: true
     packages:
@@ -18,7 +16,11 @@ addons:
 matrix:
   fast_finish: true
 
-install: skip
+install:
+  - |
+    if [ "${TRAVIS_OS_NAME}" == 'linux' ]; then
+      npm install -g bats
+    fi
 
 before_script:
   - uname -a
