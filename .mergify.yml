@@ -1,21 +1,21 @@
-repeating_rules: &repeating_rules
-  - status-success=continuous-integration/travis-ci/pr
-  - status-success=stickler-ci
-  - base=master
-
-actions: &repeating_actions
-  merge:
-    method: merge
-    strict: true
-
 pull_request_rules:
   - name: Automatic merge for Owner
     conditions:
-      - <<: *repeating_rules
       - author=matejkosiarcik
-    actions: *repeating_actions
+      - status-success=stickler-ci
+      - status-success=continuous-integration/travis-ci/pr
+      - base=master
+    actions:
+      merge:
+        method: merge
+        strict: true
   - name: Automatic merge for collaborators
     conditions:
-      - <<: *repeating_rules
       - "#approved-reviews-by>=1"
-    actions: *repeating_actions
+      - status-success=stickler-ci
+      - status-success=continuous-integration/travis-ci/pr
+      - base=master
+    actions:
+      merge:
+        method: merge
+        strict: true
