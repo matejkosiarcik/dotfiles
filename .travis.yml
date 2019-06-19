@@ -7,11 +7,14 @@ os:
 addons:
   apt:
     update: true
+    packages:
+      - zsh
   homebrew:
     update: true
     packages:
       - bats-core
       - duti
+      - zsh
 
 matrix:
   fast_finish: true
@@ -25,20 +28,16 @@ install:
 before_script:
   - uname -a
   - |
-    which sh
-    which bash
-    which zsh
-    which ksh
-    which mksh
-    which dash
-    which yash
-  - |
     if [ "${TRAVIS_OS_NAME}" == 'osx' ]; then
       sw_vers
     fi
 
 script:
   - bats 'tests/main.bats'
+  - |
+    if [ "${TRAVIS_OS_NAME}" == 'osx' ]; then
+      bats 'tests/zsh.bats'
+    fi
   - sh home/install.sh
   - sh setup/install.sh
   - sh bin/install.sh
