@@ -10,10 +10,12 @@ actions: &repeating_actions
 
 pull_request_rules:
   - name: Automatic merge for Owner
-    conditions: <<: *repeating_rules
+    conditions:
+      - <<: *repeating_rules
       - author=matejkosiarcik
     actions: *repeating_actions
   - name: Automatic merge for collaborators
-    conditions: <<: *repeating_rules
+    conditions:
+      - <<: *repeating_rules
       - "#approved-reviews-by>=1"
     actions: *repeating_actions
