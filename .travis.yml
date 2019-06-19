@@ -8,12 +8,12 @@ addons:
   apt:
     update: true
     packages:
-      bats
+      - bats
   homebrew:
     update: true
     packages:
-      bats-core
-      duti
+      - bats-core
+      - duti
 
 matrix:
   fast_finish: true
