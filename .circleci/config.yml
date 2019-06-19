@@ -16,8 +16,8 @@ commands:
   test:
     steps:
       - run:
-          name: Execute tests
-          command: bats 'test.bats'
+        name: Execute tests
+        command: bats 'test.bats'
   all:
     steps:
       - checkout
