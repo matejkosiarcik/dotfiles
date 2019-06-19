@@ -15,7 +15,7 @@ commands:
     steps:
       - run:
           name: Execute tests
-          command: npx bats 'test.bats'
+          command: npx bats 'tests/main.bats'
   all:
     steps:
       - checkout

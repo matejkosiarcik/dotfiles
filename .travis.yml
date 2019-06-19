@@ -30,7 +30,7 @@ before_script:
     fi
 
 script:
-  - bats 'test.bats'
+  - bats 'tests/main.bats'
   - sh home/install.sh
   - sh setup/install.sh
   - sh bin/install.sh
