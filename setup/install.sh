@@ -7,7 +7,7 @@ case "$(uname -s)" in
 esac
 
 # TODO: make it compatible with linux
-if [ "$(uname -s)" == "Darwin" ]; do
+if [ "$(uname -s)" == "Darwin" ]; then
     while IFS="" read -r line; do
         duti -s 'com.microsoft.VSCode' "${line}" all
     done <'textfiles.txt'
