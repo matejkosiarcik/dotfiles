@@ -10,12 +10,12 @@ commands:
     steps:
       - run:
           name: Install dependencies
-          command: npm install -g bats
+          command: npm install npx bats
   test:
     steps:
       - run:
           name: Execute tests
-          command: bats 'test.bats'
+          command: npx bats 'test.bats'
   all:
     steps:
       - checkout
