@@ -25,6 +25,14 @@ install:
 before_script:
   - uname -a
   - |
+    which sh
+    which bash
+    which zsh
+    which ksh
+    which mksh
+    which dash
+    which yash
+  - |
     if [ "${TRAVIS_OS_NAME}" == 'osx' ]; then
       sw_vers
     fi

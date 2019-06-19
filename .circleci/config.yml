@@ -5,7 +5,15 @@ commands:
     steps:
       - run:
           name: Print env info
-          command: uname -a
+          command: |
+            uname -a
+            which sh
+            which bash
+            which zsh
+            which ksh
+            which mksh
+            which dash
+            which yash
   install:
     steps:
       - run:
