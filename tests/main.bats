@@ -9,6 +9,6 @@
 }
 
 @test 'shell - sh' {
-    run sh -c 'source home/shell/custom.sh'
+    run sh -c '. home/shell/custom.sh'
     [ "${status}" -eq '0' ]
 }
