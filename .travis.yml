@@ -34,10 +34,7 @@ before_script:
 
 script:
   - bats 'tests/main.bats'
-  - |
-    if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then
-      bats 'tests/zsh.bats'
-    fi
+  - bats 'tests/zsh.bats'
   - sh home/install.sh
   - sh setup/install.sh
   - sh bin/install.sh
