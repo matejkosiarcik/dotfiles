@@ -4,15 +4,16 @@ os:
   - linux
   - osx
 
-osx_image:
-  -
-  - xcode10.2
-
 addons:
   apt:
     update: true
+    packages:
+      bats
   homebrew:
     update: true
+    packages:
+      bats-core
+      duti
 
 matrix:
   fast_finish: true
@@ -21,11 +22,10 @@ install: skip
 
 before_script:
   - uname -a
+  - sw_vers
 
 script:
   - sh home/install.sh
-  - source ~/.custom.bash
+  - bats 'test.bats'
   - sh setup/install.sh
-  # - sh dependencies/install.sh
   - sh bin/install.sh
-  # - sh default-apps/install.sh
