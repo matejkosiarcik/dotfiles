@@ -14,9 +14,3 @@ install() {
 }
 
 install 'cldir'
-install 'gitignore'
-
-install 'up'
-
-install 'p-fmt'
-install 'p-lint'
