@@ -25,7 +25,7 @@ before_script:
   - sw_vers
 
 script:
-  - sh home/install.sh
   - bats 'test.bats'
+  - sh home/install.sh
   - sh setup/install.sh
   - sh bin/install.sh
