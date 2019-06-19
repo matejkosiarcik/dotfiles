@@ -24,7 +24,10 @@ install:
 
 before_script:
   - uname -a
-  - sw_vers
+  - |
+    if [ "${TRAVIS_OS_NAME}" == 'osx' ]; then
+      sw_vers
+    fi
 
 script:
   - bats 'test.bats'
