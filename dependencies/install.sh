@@ -13,8 +13,6 @@ if command -v apt >/dev/null 2>&1; then
     apt install -y $(sed -E 's~(\s*)#(.*)~~' <'apt.txt' | grep -vE '^(\s*)$' | tr '\n' ' ')
 fi
 
-# TODO: yum install -y
-
 ## Language-specific package managers ##
 
 # shellcheck disable=SC2046
