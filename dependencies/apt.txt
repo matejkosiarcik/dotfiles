@@ -1,6 +1,7 @@
 build-essential
 chromium-browser
 curl
+file
 git
 libssl-dev
 mercurial
