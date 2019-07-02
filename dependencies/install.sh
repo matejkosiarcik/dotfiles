@@ -9,13 +9,13 @@ if command -v brew >/dev/null 2>&1; then
 fi
 
 if command -v apt >/dev/null 2>&1; then
-    apt install -y $(cat 'apt.txt' | sed -E 's~(\s*)#(.*)~~' | grep -vE '^(\s*)$' | tr '\n' ' ')
+    # shellcheck disable=SC2046
+    apt install -y $(sed -E 's~(\s*)#(.*)~~' <'apt.txt' | grep -vE '^(\s*)$' | tr '\n' ' ')
 fi
-
-# TODO: yum install -y
 
 ## Language-specific package managers ##
 
-npm install -g $(cat 'npm.txt' | sed -E 's~(\s*)#(.*)~~' | grep -vE '^(\s*)$' | tr '\n' ' ')
+# shellcheck disable=SC2046
+npm install -g $(sed -E 's~(\s*)#(.*)~~' <'npm.txt' | grep -vE '^(\s*)$' | tr '\n' ' ')
 
 pip3 install -r 'requirements.txt'

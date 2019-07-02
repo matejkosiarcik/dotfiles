@@ -4,29 +4,37 @@ os:
   - linux
   - osx
 
-osx_image:
-  -
-  - xcode10.2
-
 addons:
   apt:
     update: true
+    packages:
+      - zsh
   homebrew:
     update: true
-    brewfile: dependencies/Brewfile
+    packages:
+      - bats-core
+      - duti
+      - zsh
 
 matrix:
   fast_finish: true
 
-install: skip
+install:
+  - |
+    if [ "${TRAVIS_OS_NAME}" = 'linux' ]; then
+      npm install -g bats
+    fi
 
 before_script:
   - uname -a
+  - |
+    if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then
+      sw_vers
+    fi
 
 script:
+  - bats 'tests/main.bats'
+  - bats 'tests/zsh.bats'
   - sh home/install.sh
-  - source ~/.custom.bash
   - sh setup/install.sh
-  # - sh dependencies/install.sh
   - sh bin/install.sh
-  # - sh default-apps/install.sh
