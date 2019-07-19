@@ -2,6 +2,12 @@
 tap "caskroom/cask"
 brew "mas"
 
+tap "kylef/formulae"
+brew "swiftenv"
+
+tap "heroku/brew"
+brew "heroku"
+
 # shells/terminals
 brew "dash"
 brew "ksh"
@@ -25,6 +31,12 @@ brew "jython"
 brew "micropython"
 brew "pypy"
 brew "pypy3"
+
+# languages support
+brew "pipenv"
+brew "pyenv"
+brew "nvm"
+brew "rbenv"
 
 # package managers
 brew "carthage"
