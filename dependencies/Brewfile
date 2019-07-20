@@ -2,12 +2,6 @@
 tap "caskroom/cask"
 brew "mas"
 
-tap "kylef/formulae"
-brew "swiftenv"
-
-tap "heroku/brew"
-brew "heroku"
-
 # shells/terminals
 brew "dash"
 brew "ksh"
