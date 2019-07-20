@@ -14,14 +14,66 @@ addons:
     packages:
       - bats-core
       - duti
+      - node
+      - python
+      - ruby
       - zsh
 
 matrix:
   fast_finish: true
 
+  include:
+    - &apt-test
+      sudo: true
+      script: |
+        cd 'dependencies'
+        cat 'apt.txt' | while IFS= read package; do sudo apt install "${package}"; done
+    - <<: *apt-test
+      dist: precise
+    - <<: *apt-test
+      dist: trusty
+    - <<: *apt-test
+      dist: xenial
+    - <<: *apt-test
+      dist: bionic
+
+    - &gem-test
+      language: ruby
+      script: |
+        cd 'dependencies'
+        bundle install --system
+    - <<: *gem-test
+      os: osx
+      language: generic
+
+    - &npm-test
+      language: node
+      script: |
+        cd 'dependencies'
+        cat 'npm.txt' | while IFS= read package; do npm install "${package}"; done
+    - <<: *npm-test
+      os: osx
+      language: node
+    - <<: *npm-test
+      os: osx
+      language: generic
+
+    - &pip-test
+      language: python
+      script: |
+        cd 'dependencies'
+        pip install -r 'requirements.txt'
+    - <<: *pip-test
+      os: osx
+      language: generic
+
+      - os: osx
+        language: generic
+        script: brew bundle --file=dependencies/brew/Brewfile.taps
+
 install:
   - |
-    if [ "${TRAVIS_OS_NAME}" = 'linux' ]; then
+    if [ "${TRAVIS_OS_NAME}" = 'linux' ] && [ "${TRAVIS_LANGUAGE}" = 'generic' ]; then
       npm install -g bats
     fi
 
