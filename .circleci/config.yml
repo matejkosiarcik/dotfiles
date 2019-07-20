@@ -41,9 +41,9 @@ jobs:
           node --version
           npm --version
       - run: npm install bats
-      - run: source "$(npm bin)" && npx --version
-      - run: source "$(npm bin)" && npx bats --version
-      - run: source "$(npm bin)" && npx bats 'tests/main.bats'
+      - run: PATH="${PATH}:$(npm bin)" sh -c 'npx --version'
+      - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats --version'
+      - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats "tests/main.bats"'
   circle-node-latest: { <<: *circle-node, docker: [ image: circleci/node:latest ] }
   circle-node-10: { <<: *circle-node, docker: [ image: circleci/node:10 ] }
   circle-node-9: { <<: *circle-node, docker: [ image: circleci/node:9 ] }
