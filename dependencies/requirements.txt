@@ -14,7 +14,6 @@ pylint
 pystache
 pytest
 setuptools
-SimpleHTTPServer
 SimpleHTTP404Server
 Transcrypt
 wheel
