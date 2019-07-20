@@ -1,9 +1,8 @@
-# shellcheck shell=sh
+#!/bin/sh
 set -euf
 cd "$(dirname "${0}")"
 
 ## System-level package managers ##
-
 if command -v brew >/dev/null 2>&1; then
     brew bundle
 fi

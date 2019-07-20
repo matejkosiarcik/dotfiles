@@ -1,10 +1,10 @@
-# shellcheck shell=sh
+#!/bin/sh
 set -euf
 cd "$(dirname "${0}")"
 
 # Install subfolders
-sh 'git/install.sh'
-sh 'shell/install.sh'
+./git/install.sh
+./shell/install
 
 # Reload individual files
 reload() {

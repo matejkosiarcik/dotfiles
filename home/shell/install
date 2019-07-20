@@ -1,4 +1,4 @@
-# shellcheck shell=sh
+#!/bin/sh
 set -euf
 cd "$(dirname "${0}")"
 
