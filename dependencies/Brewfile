@@ -13,14 +13,17 @@ cask "iterm2"
 cask "powershell"
 
 # languages
+brew "gcc"
 brew "node"
 brew "php", restart_service: true
 brew "python@2"
 brew "python@3"
 brew "ruby"
+cask "adoptopenjdk"
 cask "java"
 
 # additional languages
+# brew "emscripten"
 brew "jython"
 brew "micropython"
 brew "pypy"
@@ -38,6 +41,8 @@ brew "cocoapods"
 brew "composer"
 
 # generators
+brew "autoconf"
+brew "cmake"
 brew "sourcery"
 brew "swiftgen"
 brew "xcodegen"
@@ -50,46 +55,17 @@ brew "swiftlint"
 brew "tidy-html5"
 brew "yamllint"
 
-# toolings
-brew "autoconf"
-brew "cmake"
-brew "docker"
-brew "emscripten"
-brew "gcc"
-brew "plantuml"
-cask "docker"
-
 # dev/other
 brew "circleci"
+brew "cloc"
 brew "lftp"
 brew "libssh2"
 brew "ncurses"
 brew "openssl"
+brew "plantuml"
 brew "travis"
 brew "wget"
 cask "xquartz"
-
-# image manipulation
-brew "cairo"
-brew "imagemagick", args: ["with-librsvg"]
-brew "librsvg"
-brew "openjpeg"
-brew "svg2pdf"
-brew "svg2png"
-cask "gimp"
-cask "inkscape"
-
-# browsers
-brew "elinks"
-brew "geckodriver"
-brew "lynx"
-cask "chromedriver"
-cask "firefox"
-cask "google-chrome"
-cask "opera"
-cask "operadriver"
-cask "tor-browser"
-cask "vivaldi"
 
 # editors/IDEs
 cask "android-studio"
@@ -104,30 +80,14 @@ brew "mercurial"
 brew "tig"
 cask "sourcetree"
 
-# media
-brew "ffmpeg"
-brew "youtube-dl"
-cask "handbrake"
-cask "vlc"
-
-# communication
-cask "microsoft-teams"
-cask "skype"
-cask "slack"
-
 # user tools
 brew "aspell"
-brew "cliclick"
-brew "cloc"
+# brew "cliclick"
 brew "duti"
 brew "tree"
-brew "wine"
-brew "winetricks"
 cask "coconutbattery"
 cask "duet"
 cask "flux"
-cask "free-ruler"
+# cask "free-ruler"
 cask "spectacle"
 cask "transmission"
-cask "virtualbox-extension-pack"
-cask "virtualbox"

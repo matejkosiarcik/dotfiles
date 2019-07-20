@@ -67,9 +67,21 @@ matrix:
       os: osx
       language: generic
 
-    - os: osx
+    - &brew-test
+      os: osx
       language: generic
-      script: brew bundle --file=dependencies/brew/Brewfile.taps
+      env: file=Brewfile.taps
+      script: brew bundle --file="dependencies/brew/${file}"
+    - <<: *brew-test
+      env: file=Brewfile.browsers
+    - <<: *brew-test
+      env: file=Brewfile.graphics
+    - <<: *brew-test
+      env: file=Brewfile.media
+    - <<: *brew-test
+      env: file=Brewfile.social
+    - <<: *brew-test
+      env: file=Brewfile.vm
 
 install:
   - |
