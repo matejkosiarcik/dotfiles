@@ -70,8 +70,6 @@ jobs:
       - run: zsh --version
       - run: zsh -c 'source home/shell/custom.zsh'
   zsh-latest: { <<: *zsh, docker: [ image: zshusers/zsh:latest ] }
-  zsh-5: { <<: *zsh, docker: [ image: zshusers/zsh:5 ] }
-  zsh-4: { <<: *zsh, docker: [ image: zshusers/zsh:4.3 ] }
 
   bash: &bash
     docker:
