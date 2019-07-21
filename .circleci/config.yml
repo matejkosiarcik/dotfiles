@@ -47,7 +47,6 @@ jobs:
   circle-node-10: { <<: *circle-node, docker: [ image: circleci/node:10 ] }
   circle-node-9: { <<: *circle-node, docker: [ image: circleci/node:9 ] }
   circle-node-8: { <<: *circle-node, docker: [ image: circleci/node:8 ] }
-  circle-node-7: { <<: *circle-node, docker: [ image: circleci/node:7 ] }
 
   bats: &bats
     docker:
