@@ -42,6 +42,7 @@ jobs:
       - run: PATH="${PATH}:$(npm bin)" sh -c 'npx --version'
       - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats --version'
       - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats "tests/main.bats"'
+      - run: sh 'dependencies/npm/install.sh'
   circle-node-latest: { <<: *circle-node, docker: [ image: circleci/node:latest ] }
   circle-node-10: { <<: *circle-node, docker: [ image: circleci/node:10 ] }
   circle-node-9: { <<: *circle-node, docker: [ image: circleci/node:9 ] }
@@ -77,7 +78,41 @@ jobs:
       - env_info
       - run: bash --version
       - run: bash -c 'source home/shell/custom.bash'
+      - run: sh 'dependencies/apt/install.sh'
   bash-latest: { <<: *bash, docker: [ image: bash:latest ] }
   bash-5: { <<: *bash, docker: [ image: bash:5 ] }
   bash-4: { <<: *bash, docker: [ image: bash:4 ] }
   bash-3: { <<: *bash, docker: [ image: bash:3 ] }
+
+  python: &python
+    docker:
+      - image: circleci/python
+    steps:
+      - checkout
+      - env_info
+      - run: |
+          python --version
+          pip --version
+      - run: sh 'dependencies/pip/install.sh'
+  python-latest: { <<: *python, docker: [ image: circleci/python:latest ] }
+  python-3: { <<: *python, docker: [ image: circleci/python:3 ] }
+  python-35: { <<: *python, docker: [ image: circleci/python:3.5 ] }
+  python-36: { <<: *python, docker: [ image: circleci/python:3.6 ] }
+  python-37: { <<: *python, docker: [ image: circleci/python:3.7 ] }
+
+  ruby: &ruby
+    docker:
+      - image: circleci/ruby
+    steps:
+      - checkout
+      - env_info
+      - run: |
+          ruby --version
+          gem --version
+          bundle --version
+      - run: sh 'dependencies/gem/install.sh'
+  ruby-latest: { <<: *ruby, docker: [ image: circleci/ruby:latest ] }
+  ruby-2: { <<: *ruby, docker: [ image: circleci/ruby:2 ] }
+  ruby-24: { <<: *ruby, docker: [ image: circleci/ruby:2.4 ] }
+  ruby-25: { <<: *ruby, docker: [ image: circleci/ruby:2.5 ] }
+  ruby-26: { <<: *ruby, docker: [ image: circleci/ruby:2.6 ] }
