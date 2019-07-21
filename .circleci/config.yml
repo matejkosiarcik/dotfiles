@@ -16,7 +16,6 @@ workflows:
       - circle-node-10
       - circle-node-9
       - circle-node-8
-      - circle-node-7
       - bats
       - bats-latest
       - bats-1
@@ -27,6 +26,18 @@ workflows:
       - bash-5
       - bash-4
       - bash-3
+      - python
+      - python-latest
+      - python-3
+      - python-35
+      - python-36
+      - python-37
+      - ruby
+      - ruby-latest
+      - ruby-2
+      - ruby-24
+      - ruby-25
+      - ruby-26
 
 jobs:
   circle-node: &circle-node
