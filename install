@@ -1,9 +1,0 @@
-#!/bin/sh
-set -euf
-cd "$(dirname "${0}")"
-
-./bin/install.sh
-./home/install.sh
-./setup/install.sh
-./dependencies/install.sh
-./default-apps/install.sh

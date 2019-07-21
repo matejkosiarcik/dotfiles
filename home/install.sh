@@ -3,8 +3,8 @@ set -euf
 cd "$(dirname "${0}")"
 
 # Install subfolders
-./git/install.sh
-./shell/install
+sh 'git/install.sh'
+sh 'shell/install.sh'
 
 # Reload individual files
 reload() {
