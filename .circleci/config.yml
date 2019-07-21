@@ -16,6 +16,7 @@ workflows:
       - node-10
       - node-9
       - node-8
+      - node-7
       - bats
       - bats-latest
       - bats-1
@@ -53,11 +54,12 @@ jobs:
       - run: PATH="${PATH}:$(npm bin)" sh -c 'npx --version'
       - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats --version'
       - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats "tests/main.bats"'
-      - run: sh 'dependencies/npm/install.sh'
+      - run: cat 'dependencies/npm/npm.txt' | grep -vo '#' | xargs -n1 npm install
   node-latest: { <<: *node, docker: [ image: circleci/node:latest ] }
   node-10: { <<: *node, docker: [ image: circleci/node:10 ] }
   node-9: { <<: *node, docker: [ image: circleci/node:9 ] }
   node-8: { <<: *node, docker: [ image: circleci/node:8 ] }
+  node-7: { <<: *node, docker: [ image: circleci/node:7 ] }
 
   bats: &bats
     docker:
@@ -103,7 +105,7 @@ jobs:
       - run: |
           python --version
           pip --version
-      - run: sh 'dependencies/pip/install.sh'
+      - run: pip install --user 'dependencies/pip/requirements.txt'
   python-latest: { <<: *python, docker: [ image: circleci/python:latest ] }
   python-3: { <<: *python, docker: [ image: circleci/python:3 ] }
   python-35: { <<: *python, docker: [ image: circleci/python:3.5 ] }
