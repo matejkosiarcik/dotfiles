@@ -22,8 +22,6 @@ workflows:
       - bats-1
       - zsh
       - zsh-latest
-      - zsh-4
-      - zsh-5
       - bash
       - bash-latest
       - bash-5
