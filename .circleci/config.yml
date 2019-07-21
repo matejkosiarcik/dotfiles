@@ -11,11 +11,11 @@ workflows:
   version: 2
   test:
     jobs:
-      - circle-node
-      - circle-node-latest
-      - circle-node-10
-      - circle-node-9
-      - circle-node-8
+      - node
+      - node-latest
+      - node-10
+      - node-9
+      - node-8
       - bats
       - bats-latest
       - bats-1
@@ -40,7 +40,7 @@ workflows:
       - ruby-26
 
 jobs:
-  circle-node: &circle-node
+  node: &node
     docker:
       - image: circleci/node
     steps:
@@ -54,10 +54,10 @@ jobs:
       - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats --version'
       - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats "tests/main.bats"'
       - run: sh 'dependencies/npm/install.sh'
-  circle-node-latest: { <<: *circle-node, docker: [ image: circleci/node:latest ] }
-  circle-node-10: { <<: *circle-node, docker: [ image: circleci/node:10 ] }
-  circle-node-9: { <<: *circle-node, docker: [ image: circleci/node:9 ] }
-  circle-node-8: { <<: *circle-node, docker: [ image: circleci/node:8 ] }
+  node-latest: { <<: *node, docker: [ image: circleci/node:latest ] }
+  node-10: { <<: *node, docker: [ image: circleci/node:10 ] }
+  node-9: { <<: *node, docker: [ image: circleci/node:9 ] }
+  node-8: { <<: *node, docker: [ image: circleci/node:8 ] }
 
   bats: &bats
     docker:
