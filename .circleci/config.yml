@@ -16,7 +16,6 @@ workflows:
       - node-10
       - node-9
       - node-8
-      - node-7
       - bats
       - bats-latest
       - bats-1
@@ -59,7 +58,6 @@ jobs:
   node-10: { <<: *node, docker: [ image: circleci/node:10 ] }
   node-9: { <<: *node, docker: [ image: circleci/node:9 ] }
   node-8: { <<: *node, docker: [ image: circleci/node:8 ] }
-  node-7: { <<: *node, docker: [ image: circleci/node:7 ] }
 
   bats: &bats
     docker:
