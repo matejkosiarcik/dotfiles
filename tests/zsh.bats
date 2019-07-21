@@ -13,31 +13,7 @@
 }
 
 @test 'install' {
-    run zsh -n 'install.sh'
-    [ "${status}" -eq '0' ]
-    [ "${output}" = '' ]
-
-    run zsh -n 'home/install.sh'
-    [ "${status}" -eq '0' ]
-    [ "${output}" = '' ]
-
-    run zsh -n 'home/git/install.sh'
-    [ "${status}" -eq '0' ]
-    [ "${output}" = '' ]
-
-    run zsh -n 'home/shell/install.sh'
-    [ "${status}" -eq '0' ]
-    [ "${output}" = '' ]
-
-    run zsh -n 'setup/install.sh'
-    [ "${status}" -eq '0' ]
-    [ "${output}" = '' ]
-
-    run zsh -n 'bin/install.sh'
-    [ "${status}" -eq '0' ]
-    [ "${output}" = '' ]
-
-    run zsh -n 'dependencies/install.sh'
+    run find '.' -name 'install.sh' -exec zsh -n {} \;
     [ "${status}" -eq '0' ]
     [ "${output}" = '' ]
 }
