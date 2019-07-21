@@ -69,7 +69,6 @@ matrix:
 
     - &brew-test
       os: osx
-      language: generic
       env: file=Brewfile.taps
       script: brew bundle --file="dependencies/brew/${file}"
     - <<: *brew-test
@@ -99,6 +98,6 @@ before_script:
 script:
   - bats 'tests/main.bats'
   - bats 'tests/zsh.bats'
-  - sh home/install.sh
-  - sh setup/install.sh
-  - sh bin/install.sh
+  - sh 'home/install.sh'
+  - sh 'setup/install.sh'
+  - sh 'bin/install.sh'
