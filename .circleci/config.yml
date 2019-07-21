@@ -105,7 +105,7 @@ jobs:
       - run: |
           python --version
           pip --version
-      - run: pip install --user 'dependencies/pip/requirements.txt'
+      - run: pip install --user -r 'dependencies/pip/requirements.txt'
   python-latest: { <<: *python, docker: [ image: circleci/python:latest ] }
   python-3: { <<: *python, docker: [ image: circleci/python:3 ] }
   python-35: { <<: *python, docker: [ image: circleci/python:3.5 ] }
