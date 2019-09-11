@@ -20,7 +20,7 @@ brew "python@2"
 brew "python@3"
 brew "ruby"
 cask "adoptopenjdk"
-cask "java"
+# cask "java"
 
 # additional languages
 # brew "emscripten"

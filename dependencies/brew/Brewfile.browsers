@@ -1,10 +1,15 @@
+# terminal
 brew "elinks"
-brew "geckodriver"
 brew "lynx"
-cask "chromedriver"
+
+# gui
 cask "firefox"
 cask "google-chrome"
 cask "opera"
-cask "operadriver"
 cask "tor-browser"
 cask "vivaldi"
+
+# drivers
+brew "geckodriver"
+cask "chromedriver"
+cask "operadriver"
