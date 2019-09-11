@@ -1,10 +1,10 @@
 [user]
     name = 'Matej Košiarčik'
 
-[includeIf "gitdir:~/Dev/"]
+[includeIf "gitdir/i:~/Dev/"]
     path = ~/.personal.gitconfig
 
-[includeIf "gitdir:~/Touch4IT/"]
+[includeIf "gitdir/i:~/Touch4IT/"]
     path = ~/.touch4it.gitconfig
 
 [commit]

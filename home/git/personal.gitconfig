@@ -2,4 +2,4 @@
     email = "matej.kosiarcik@gmail.com"
 
 [include]
-    path = ~/Dev/.gitconfig
+    path = ~/.personal-secret.gitconfig

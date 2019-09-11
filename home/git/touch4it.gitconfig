@@ -2,4 +2,4 @@
     email = "matej.kosiarcik@touch4it.com"
 
 [include]
-    path = ~/Touch4IT/.gitconfig
+    path = ~/.touch4it-secret.gitconfig
