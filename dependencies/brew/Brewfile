@@ -1,15 +1,16 @@
-# Taps
+### Global config ###
 tap "caskroom/cask"
 brew "mas"
 
-# shells/terminals
+### Development ###
+
+# shells
 brew "dash"
 brew "ksh"
 brew "mksh"
 brew "tmux"
 brew "yash"
 brew "zsh"
-cask "iterm2"
 cask "powershell"
 
 # languages
@@ -19,11 +20,12 @@ brew "php", restart_service: true
 brew "python@2"
 brew "python@3"
 brew "ruby"
+brew "rustup-init"
 cask "adoptopenjdk"
-# cask "java"
+# cask "java" # sometimes collides with openjdk
 
 # additional languages
-# brew "emscripten"
+# brew "emscripten" # better to install by hand
 brew "jython"
 brew "micropython"
 brew "pypy"
@@ -55,7 +57,7 @@ brew "swiftlint"
 brew "tidy-html5"
 brew "yamllint"
 
-# dev/other
+# other
 brew "circleci"
 brew "cloc"
 brew "lftp"
@@ -67,6 +69,13 @@ brew "travis"
 brew "wget"
 cask "xquartz"
 
+# version control
+brew "mercurial"
+brew "tig"
+cask "sourcetree"
+
+### Text editing ###
+
 # editors/IDEs
 cask "android-studio"
 cask "atom"
@@ -75,19 +84,14 @@ cask "mactex"
 cask "sublime-text"
 cask "visual-studio-code"
 
-# version control
-brew "mercurial"
-brew "tig"
-cask "sourcetree"
-
 # user tools
 brew "aspell"
-# brew "cliclick"
+brew "cliclick"
 brew "duti"
 brew "tree"
 cask "coconutbattery"
 cask "duet"
 cask "flux"
-# cask "free-ruler"
+cask "free-ruler"
 cask "spectacle"
 cask "transmission"
