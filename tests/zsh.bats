@@ -1,8 +1,10 @@
+#!/usr/bin/env bats
+
 @test 'shell - zsh' {
-    run zsh -c 'source home/shell/custom.zsh'
+    run zsh -c 'source home/shell/config.zsh'
     [ "${status}" -eq '0' ]
 
-    run zsh -c 'source home/shell/custom.sh'
+    run zsh -c 'source home/shell/config.sh'
     [ "${status}" -eq '0' ]
 }
 

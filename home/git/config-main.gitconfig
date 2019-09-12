@@ -1,11 +1,11 @@
 [user]
     name = 'Matej Košiarčik'
 
-[includeIf "gitdir/i:~/Dev/"]
-    path = ~/.personal.gitconfig
+[includeIf "gitdir/i:~/Dev/Personal/"]
+    path = ~/.config-personal.gitconfig
 
-[includeIf "gitdir/i:~/Touch4IT/"]
-    path = ~/.touch4it.gitconfig
+[includeIf "gitdir/i:~/Dev/Touch4IT/"]
+    path = ~/.config-touch4it.gitconfig
 
 [commit]
     gpgsign = true

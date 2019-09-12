@@ -1,15 +1,15 @@
 #!/usr/bin/env bats
 
 @test 'shell - bash' {
-    run bash -c 'source home/shell/custom.bash'
+    run bash -c 'source home/shell/config.bash'
     [ "${status}" -eq '0' ]
 
-    run bash -c 'source home/shell/custom.sh'
+    run bash -c 'source home/shell/config.sh'
     [ "${status}" -eq '0' ]
 }
 
 @test 'shell - sh' {
-    run sh -c '. home/shell/custom.sh'
+    run sh -c '. home/shell/config.sh'
     [ "${status}" -eq '0' ]
 }
 

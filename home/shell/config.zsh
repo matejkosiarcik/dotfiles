@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 # shellcheck source=/dev/null # do not look for sourced files
 
-source "${HOME}/.custom.sh"
+source "${HOME}/.config.sh"
 
 # can not be in ".sh", because builtin is not available in classic sh
 cd() {

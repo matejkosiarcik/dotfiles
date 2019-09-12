@@ -7,6 +7,6 @@ reload() {
     ln -s "${PWD}/${1}" "${HOME}/.${1}"
 }
 
-reload 'custom.gitconfig'
-reload 'personal.gitconfig'
-reload 'touch4it.gitconfig'
+reload 'config-main.gitconfig'
+reload 'config-personal.gitconfig'
+reload 'config-touch4it.gitconfig'

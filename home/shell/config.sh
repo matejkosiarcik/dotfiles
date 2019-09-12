@@ -1,18 +1,20 @@
 # shellcheck shell=sh
 
+export LANG='en_US.UTF-8'
+export LC_ALL='en_US.UTF-8'
+
 # customize PATH
-export PATH="${PATH}:${HOME}/.bin"
+export PATH="${PATH}:${HOME}/.bin" # custom bin directory
 
-# Simple aliases
-alias s="tig status"
-alias t='tig'
+# Aliases
+alias logtree="tree --ignore-case -CI '.build|.git|.venv|*.xcodeproj|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv'"
 
+# Git aliases
 alias df="git df | h"
 alias ds="git ds | h"
-
-# Advanced aliases
 alias h='diff2html -s side -i stdin'
-alias pine="tree --ignore-case -CI '.build|.git|.venv|*.xcodeproj|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv'"
+alias s="tig status"
+alias t='tig'
 
 # Open new terminal at current directory
 tdup() {

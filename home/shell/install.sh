@@ -7,6 +7,6 @@ reload() {
     ln -s "${PWD}/${1}" "${HOME}/.${1}"
 }
 
-reload 'custom.sh'
-reload 'custom.bash'
-reload 'custom.zsh'
+reload 'config.sh'
+reload 'config.bash'
+reload 'config.zsh'
