@@ -77,7 +77,7 @@ jobs:
       - checkout
       - env_info
       - run: zsh --version
-      - run: zsh -c 'source home/shell/custom.zsh'
+      - run: zsh -c 'source home/shell/config.zsh'
   zsh-latest: { <<: *zsh, docker: [ image: zshusers/zsh:latest ] }
 
   bash: &bash
@@ -87,7 +87,7 @@ jobs:
       - checkout
       - env_info
       - run: bash --version
-      - run: bash -c 'source home/shell/custom.bash'
+      - run: bash -c 'source home/shell/config.bash'
       - run: sh 'dependencies/apt/install.sh'
   bash-latest: { <<: *bash, docker: [ image: bash:latest ] }
   bash-5: { <<: *bash, docker: [ image: bash:5 ] }
