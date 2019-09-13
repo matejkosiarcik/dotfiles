@@ -3,6 +3,3 @@ cask "docker"
 
 brew "wine"
 brew "winetricks"
-
-cask "virtualbox"
-cask "virtualbox-extension-pack"

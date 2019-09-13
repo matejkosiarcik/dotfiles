@@ -1,0 +1,5 @@
+# Virtualbox is separate, because it needs additional permissions
+# Go to (System Preferences > Security & Privacy > General) to resolve after installation
+
+cask "virtualbox"
+cask "virtualbox-extension-pack"
