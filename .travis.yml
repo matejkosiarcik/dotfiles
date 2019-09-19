@@ -43,14 +43,13 @@ matrix:
       language: generic
 
     - &npm-test
-      language: node
+      language: node_js
       script: sh 'dependencies/npm/install.sh'
     - <<: *npm-test
       os: osx
       language: node
     - <<: *npm-test
-      os: osx
-      language: generic
+      os: windows
 
     - &pip-test
       language: python
