@@ -47,7 +47,6 @@ matrix:
       script: sh 'dependencies/npm/install.sh'
     - <<: *npm-test
       os: osx
-      language: node
     - <<: *npm-test
       os: windows
 
