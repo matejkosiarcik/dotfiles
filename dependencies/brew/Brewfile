@@ -1,4 +1,4 @@
-### Global config ###
+# config
 tap "caskroom/cask"
 brew "mas"
 
@@ -69,6 +69,9 @@ brew "travis"
 brew "wget"
 cask "xquartz"
 
+brew "docker"
+cask "docker"
+
 # version control
 brew "mercurial"
 brew "tig"
@@ -114,7 +117,9 @@ brew "geckodriver"
 cask "chromedriver"
 cask "operadriver"
 
-### Media creation ###
+### Media ###
+
+# media creation
 brew "cairo"
 brew "imagemagick"
 brew "librsvg"
@@ -124,28 +129,23 @@ brew "svg2png"
 cask "gimp"
 cask "inkscape"
 
-### Media consumption ###
+# media consumption
 brew "ffmpeg"
 brew "youtube-dl"
 cask "handbrake"
 cask "vlc"
 
-### Communication ###
+### User tools ###
 cask "microsoft-teams"
 cask "skype"
 cask "slack"
 cask "mattermost"
+brew "wine"
+brew "winetricks"
 
-### Other ###
+### Other taps ###
 tap "kylef/formulae"
 brew "swiftenv"
 
 tap "heroku/brew"
 brew "heroku"
-
-### Utilities ###
-brew "docker"
-cask "docker"
-
-brew "wine"
-brew "winetricks"
