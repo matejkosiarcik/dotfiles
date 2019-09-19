@@ -59,25 +59,10 @@ matrix:
       os: osx
       language: generic
 
-    - &brew-test
-      os: osx
-      env: file=Brewfile.taps
-      script: brew bundle --file="dependencies/brew/${file}"
-    - <<: *brew-test
-      env: file=Brewfile.browsers
-    - <<: *brew-test
-      env: file=Brewfile.graphics
-    - <<: *brew-test
-      env: file=Brewfile.media
-    - <<: *brew-test
-      env: file=Brewfile.social
-    - <<: *brew-test
-      env: file=Brewfile.vm
-
 install:
   - |
     if [ "${TRAVIS_OS_NAME}" = 'linux' ] && [ "${TRAVIS_LANGUAGE}" = 'generic' ]; then
-      npm install -g bats
+      npm install -g bats bats-support bats-assert
     fi
 
 before_script:

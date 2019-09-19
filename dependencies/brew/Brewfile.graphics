@@ -1,9 +1,0 @@
-brew "cairo"
-brew "imagemagick"
-brew "librsvg"
-brew "openjpeg"
-brew "svg2pdf"
-brew "svg2png"
-
-cask "gimp"
-cask "inkscape"

@@ -1,5 +1,0 @@
-tap "kylef/formulae"
-brew "swiftenv"
-
-tap "heroku/brew"
-brew "heroku"

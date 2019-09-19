@@ -1,4 +1,0 @@
-brew "ffmpeg"
-brew "youtube-dl"
-cask "handbrake"
-cask "vlc"

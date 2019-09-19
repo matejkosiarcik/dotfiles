@@ -1,5 +1,0 @@
-brew "docker"
-cask "docker"
-
-brew "wine"
-brew "winetricks"
