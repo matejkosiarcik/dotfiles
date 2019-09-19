@@ -62,6 +62,7 @@ before_install:
   - | # TODO: rework to choco addon when available
     if [ "${TRAVIS_LANGUAGE}" = 'shell' ] && [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
       choco install nodist
+      refreshenv
       nodist global latest
     fi
 
