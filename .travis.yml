@@ -13,7 +13,6 @@ addons:
   homebrew:
     update: true
     packages:
-      - bats-core
       - duti
       - node
       - python
@@ -58,18 +57,15 @@ matrix:
       os: osx
 
 before_install:
-  - echo ${TRAVIS_OS_NAME}
   - | # TODO: rework to choco addon when available
-    if [ "${TRAVIS_LANGUAGE}" = 'generic' ] && [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
+    if [ "${TRAVIS_LANGUAGE}" = 'shell' ] && [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
       choco install nodejs
     fi
 
 install:
   - |
-    if [ "${TRAVIS_LANGUAGE}" = 'generic' ]; then
-      if [ "${TRAVIS_OS_NAME}" = 'linux' ] || [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
-        npm install -g bats
-      fi
+    if [ "${TRAVIS_LANGUAGE}" = 'shell' ]; then
+      npm install -g bats
     fi
 
 before_script:
