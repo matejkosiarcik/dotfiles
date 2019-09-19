@@ -40,7 +40,6 @@ matrix:
       script: sh 'dependencies/gem/install.sh'
     - <<: *gem-test
       os: osx
-      language: generic
 
     - &npm-test
       language: node_js
@@ -55,7 +54,6 @@ matrix:
       script: sh 'dependencies/pip/install.sh'
     - <<: *pip-test
       os: osx
-      language: generic
 
 install:
   - |
