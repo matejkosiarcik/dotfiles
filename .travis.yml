@@ -59,7 +59,7 @@ matrix:
 install:
   - |
     if [ "${TRAVIS_OS_NAME}" = 'linux' ] && [ "${TRAVIS_LANGUAGE}" = 'generic' ]; then
-      npm install -g bats bats-support bats-assert
+      npm install -g bats
     fi
 
 before_script:
