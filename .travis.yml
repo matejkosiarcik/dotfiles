@@ -61,7 +61,8 @@ matrix:
 before_install:
   - | # TODO: rework to choco addon when available
     if [ "${TRAVIS_LANGUAGE}" = 'shell' ] && [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
-      choco install nodejs-lts
+      choco install nodist
+      nodist global latest
     fi
 
 install:
