@@ -58,6 +58,7 @@ matrix:
       os: osx
 
 before_install:
+  - echo ${TRAVIS_OS_NAME}
   - | # TODO: rework to choco addon when available
     if [ "${TRAVIS_LANGUAGE}" = 'generic' ] && [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
       choco install nodejs
