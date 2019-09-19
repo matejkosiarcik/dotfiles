@@ -48,6 +48,7 @@ matrix:
       os: osx
     - <<: *npm-test
       os: windows
+      node_js: node
 
     - &pip-test
       language: python
