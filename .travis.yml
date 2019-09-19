@@ -3,6 +3,7 @@ language: generic
 os:
   - linux
   - osx
+  - windows
 
 addons:
   apt:
@@ -56,10 +57,18 @@ matrix:
     - <<: *pip-test
       os: osx
 
+before_install:
+  - | # TODO: rework to choco addon when available
+    if [ "${TRAVIS_LANGUAGE}" = 'generic' ] && [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
+      choco install nodejs
+    fi
+
 install:
   - |
-    if [ "${TRAVIS_OS_NAME}" = 'linux' ] && [ "${TRAVIS_LANGUAGE}" = 'generic' ]; then
-      npm install -g bats
+    if [ "${TRAVIS_LANGUAGE}" = 'generic' ]; then
+      if [ "${TRAVIS_OS_NAME}" = 'linux' ] || [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
+        npm install -g bats
+      fi
     fi
 
 before_script:
