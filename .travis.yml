@@ -57,12 +57,14 @@ matrix:
       script: sh 'dependencies/pip/install.sh'
     - <<: *pip-test
       os: osx
+      language: generic
 
 before_install:
   - | # TODO: rework to choco addon when available
     if [ "${TRAVIS_LANGUAGE}" = 'shell' ] && [ "${TRAVIS_OS_NAME}" = 'windows' ]; then
       powershell choco install nodist
       powershell refreshenv
+      powershell unblock-file -path "C:\Program Files (x86)\Nodist\bin\nodist.ps1"
       powershell nodist global latest
     fi
 
