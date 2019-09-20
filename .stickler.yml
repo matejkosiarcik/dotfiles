@@ -2,3 +2,4 @@ linters:
   shellcheck:
   remarklint:
   yamllint:
+    config: .yamllint.yml
