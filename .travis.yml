@@ -50,7 +50,6 @@ matrix:
     - <<: *npm-test
       os: windows
       node_js: node
-      only: branch = master
 
     - &pip-test
       language: python
