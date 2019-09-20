@@ -39,15 +39,18 @@ matrix:
       script: sh 'dependencies/gem/install.sh'
     - <<: *gem-test
       os: osx
+      only: branch = master
 
     - &npm-test
       language: node_js
       script: sh 'dependencies/npm/install.sh'
     - <<: *npm-test
       os: osx
+      only: branch = master
     - <<: *npm-test
       os: windows
       node_js: node
+      only: branch = master
 
     - &pip-test
       language: python
@@ -55,6 +58,7 @@ matrix:
     - <<: *pip-test
       os: osx
       language: generic
+      only: branch = master
 
 install:
   - |
