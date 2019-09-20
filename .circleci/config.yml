@@ -14,7 +14,6 @@ workflows:
       - config-bats
       - config-zsh
       - config-bash
-      - install-apt
       - install-npm
       - install-pip
       - install-gem
@@ -47,14 +46,6 @@ jobs:
       - run: bash --version
       - run: bash -c 'source home/shell/config.sh'
       - run: bash -c 'source home/shell/config.bash'
-
-  install-apt:
-    docker:
-      - image: debian
-    steps:
-      - checkout
-      - env_info
-      - run: cat 'dependencies/apt/apt.txt' | xargs -n1 apt-get install -y
 
   install-npm:
     docker:
