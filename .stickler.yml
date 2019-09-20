@@ -1,5 +1,6 @@
 linters:
   shellcheck:
   remarklint:
+    fixer: true
   yamllint:
     config: .yamllint.yml
