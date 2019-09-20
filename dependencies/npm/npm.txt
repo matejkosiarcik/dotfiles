@@ -1,9 +1,4 @@
 diff2html-cli
-htmlhint
-htmllint-cli
-jsonlint-cli
 markdown-toc
-markdownlint-cli
 npm-check-updates
 npx
-xmllint
