@@ -11,36 +11,52 @@ workflows:
   version: 2
   test:
     jobs:
-      - node
-      - node-latest
-      - node-10
-      - node-9
-      - node-8
-      - bats
-      - bats-latest
-      - bats-1
-      - zsh
-      - zsh-latest
-      - bash
-      - bash-latest
-      - bash-5
-      - bash-4
-      - bash-3
-      - python
-      - python-latest
-      - python-3
-      - python-35
-      - python-36
-      - python-37
-      - ruby
-      - ruby-latest
-      - ruby-2
-      - ruby-24
-      - ruby-25
-      - ruby-26
+      - config-bats
+      - config-zsh
+      - config-bash
+      - install-apt
+      - install-npm
+      - install-pip
+      - install-gem
 
 jobs:
-  node: &node
+  config-bats:
+    docker:
+      - image: bats/bats
+    steps:
+      - checkout
+      - env_info
+      - run: bats --version
+      - run: bats 'tests/main.bats'
+
+  config-zsh:
+    docker:
+      - image: zshusers/zsh
+    steps:
+      - checkout
+      - env_info
+      - run: zsh --version
+      - run: zsh -c 'source home/shell/config.zsh'
+
+  config-bash:
+    docker:
+      - image: bash
+    steps:
+      - checkout
+      - env_info
+      - run: bash --version
+      - run: bash -c 'source home/shell/config.sh'
+      - run: bash -c 'source home/shell/config.bash'
+
+  install-apt:
+    docker:
+      - image: ubuntu
+    steps:
+      - checkout
+      - env_info
+      - run: sh 'dependencies/apt/install.sh'
+
+  install-npm:
     docker:
       - image: circleci/node
     steps:
@@ -49,52 +65,9 @@ jobs:
       - run: |
           node --version
           npm --version
-      - run: npm install bats
-      - run: PATH="${PATH}:$(npm bin)" sh -c 'npx --version'
-      - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats --version'
-      - run: PATH="${PATH}:$(npm bin)" sh -c 'npx bats "tests/main.bats"'
-      - run: cat 'dependencies/npm/npm.txt' | grep -vo '#' | xargs -n1 npm install
-  node-latest: { <<: *node, docker: [ image: circleci/node:latest ] }
-  node-10: { <<: *node, docker: [ image: circleci/node:10 ] }
-  node-9: { <<: *node, docker: [ image: circleci/node:9 ] }
-  node-8: { <<: *node, docker: [ image: circleci/node:8 ] }
+      - run: sh 'dependencies/npm/install.sh'
 
-  bats: &bats
-    docker:
-      - image: bats/bats
-    steps:
-      - checkout
-      - env_info
-      - run: bats --version
-      - run: bats 'tests/main.bats'
-  bats-latest: { <<: *bats, docker: [ image: bats/bats:latest ] }
-  bats-1: { <<: *bats, docker: [ image: bats/bats:1 ] }
-
-  zsh: &zsh
-    docker:
-      - image: zshusers/zsh
-    steps:
-      - checkout
-      - env_info
-      - run: zsh --version
-      - run: zsh -c 'source home/shell/config.zsh'
-  zsh-latest: { <<: *zsh, docker: [ image: zshusers/zsh:latest ] }
-
-  bash: &bash
-    docker:
-      - image: bash
-    steps:
-      - checkout
-      - env_info
-      - run: bash --version
-      - run: bash -c 'source home/shell/config.bash'
-      - run: sh 'dependencies/apt/install.sh'
-  bash-latest: { <<: *bash, docker: [ image: bash:latest ] }
-  bash-5: { <<: *bash, docker: [ image: bash:5 ] }
-  bash-4: { <<: *bash, docker: [ image: bash:4 ] }
-  bash-3: { <<: *bash, docker: [ image: bash:3 ] }
-
-  python: &python
+  install-pip:
     docker:
       - image: circleci/python
     steps:
@@ -104,13 +77,8 @@ jobs:
           python --version
           pip --version
       - run: pip install --user -r 'dependencies/pip/requirements.txt'
-  python-latest: { <<: *python, docker: [ image: circleci/python:latest ] }
-  python-3: { <<: *python, docker: [ image: circleci/python:3 ] }
-  python-35: { <<: *python, docker: [ image: circleci/python:3.5 ] }
-  python-36: { <<: *python, docker: [ image: circleci/python:3.6 ] }
-  python-37: { <<: *python, docker: [ image: circleci/python:3.7 ] }
 
-  ruby: &ruby
+  install-gem:
     docker:
       - image: circleci/ruby
     steps:
@@ -121,8 +89,3 @@ jobs:
           gem --version
           bundle --version
       - run: sh 'dependencies/gem/install.sh'
-  ruby-latest: { <<: *ruby, docker: [ image: circleci/ruby:latest ] }
-  ruby-2: { <<: *ruby, docker: [ image: circleci/ruby:2 ] }
-  ruby-24: { <<: *ruby, docker: [ image: circleci/ruby:2.4 ] }
-  ruby-25: { <<: *ruby, docker: [ image: circleci/ruby:2.5 ] }
-  ruby-26: { <<: *ruby, docker: [ image: circleci/ruby:2.6 ] }
