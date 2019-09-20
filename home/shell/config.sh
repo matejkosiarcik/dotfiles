@@ -23,10 +23,18 @@ tdup() {
     open -a 'Terminal' "${PWD}"
 }
 
-# Create folder if not existed and go to it
+# Create directory (if not exists) and navigate to it
 mcd() {
-    mkdir -p "${1}"
-    cd "${1}"
+    # Validate argument count
+    case "${#}" in
+        0) printf 'No arguments provided\n'; return 1;;
+        1) ;; # Valid
+        *) printf 'Too many arguments provided\n'; return 1;;
+    esac
+
+    # Run function
+    mkdir -p "${1}" || return 1
+    cd "${1}" || return 1
 }
 
 # Normalize 'open' on all systems
