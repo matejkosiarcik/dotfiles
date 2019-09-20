@@ -54,7 +54,7 @@ jobs:
     steps:
       - checkout
       - env_info
-      - run: sh 'dependencies/apt/install.sh'
+      - run: cat 'dependencies/apt/apt.txt' | xargs -n1 apt-get install -y
 
   install-npm:
     docker:
@@ -65,7 +65,7 @@ jobs:
       - run: |
           node --version
           npm --version
-      - run: sh 'dependencies/npm/install.sh'
+      - run: cat 'dependencies/npm/npm.txt' | xargs -n1 npm install
 
   install-pip:
     docker:
