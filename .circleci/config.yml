@@ -50,7 +50,7 @@ jobs:
 
   install-apt:
     docker:
-      - image: ubuntu
+      - image: alpine
     steps:
       - checkout
       - env_info
