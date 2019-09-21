@@ -1,0 +1,5 @@
+[user]
+    email = "matej.kosiarcik@touch4it.com"
+
+[include]
+    path = ~/.config-touch4it-secret.gitconfig

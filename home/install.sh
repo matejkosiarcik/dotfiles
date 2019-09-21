@@ -1,4 +1,4 @@
-# shellcheck shell=sh
+#!/bin/sh
 set -euf
 cd "$(dirname "${0}")"
 
@@ -9,7 +9,7 @@ sh 'shell/install.sh'
 # Reload individual files
 reload() {
     rm -f "${HOME}/${1}"
-    cp "${1}" "${HOME}/${1}"
+    ln -s "${PWD}/${1}" "${HOME}/${1}"
 }
 
 reload '.emacs'

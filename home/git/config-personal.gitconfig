@@ -1,0 +1,5 @@
+[user]
+    email = "matej.kosiarcik@gmail.com"
+
+[include]
+    path = ~/.config-personal-secret.gitconfig

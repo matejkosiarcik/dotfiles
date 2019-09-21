@@ -12,16 +12,56 @@ addons:
   homebrew:
     update: true
     packages:
-      - bats-core
       - duti
+      - node
+      - python
+      - ruby
       - zsh
 
 matrix:
   fast_finish: true
 
+  include:
+    - &apt-test
+      sudo: true
+      script: sh 'dependencies/apt/install.sh'
+    - <<: *apt-test
+      dist: precise
+    - <<: *apt-test
+      dist: trusty
+    - <<: *apt-test
+      dist: xenial
+    - <<: *apt-test
+      dist: bionic
+
+    - &gem-test
+      language: ruby
+      script: sh 'dependencies/gem/install.sh'
+    - <<: *gem-test
+      os: osx
+      if: branch = master
+
+    - &npm-test
+      language: node_js
+      script: sh 'dependencies/npm/install.sh'
+    - <<: *npm-test
+      os: osx
+      if: branch = master
+    - <<: *npm-test
+      os: windows
+      node_js: node
+
+    - &pip-test
+      language: python
+      script: sh 'dependencies/pip/install.sh'
+    - <<: *pip-test
+      os: osx
+      language: generic
+      if: branch = master
+
 install:
   - |
-    if [ "${TRAVIS_OS_NAME}" = 'linux' ]; then
+    if [ "${TRAVIS_LANGUAGE}" = 'generic' ] || [ "${TRAVIS_LANGUAGE}" = 'shell' ]; then
       npm install -g bats
     fi
 
@@ -35,6 +75,6 @@ before_script:
 script:
   - bats 'tests/main.bats'
   - bats 'tests/zsh.bats'
-  - sh home/install.sh
-  - sh setup/install.sh
-  - sh bin/install.sh
+  - sh 'home/install.sh'
+  - sh 'setup/install.sh'
+  - sh 'bin/install.sh'

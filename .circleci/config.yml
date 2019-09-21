@@ -6,32 +6,77 @@ commands:
       - run:
           name: Print env info
           command: uname -a
-  install:
-    steps:
-      - run:
-          name: Install dependencies
-          command: npm install npx bats
-  test:
-    steps:
-      - run:
-          name: Execute tests
-          command: npx bats 'tests/main.bats'
-  all:
-    steps:
-      - checkout
-      - env_info
-      - install
-      - test
 
 workflows:
   version: 2
   test:
     jobs:
-      - test
+      - config-bats
+      - config-zsh
+      - config-bash
+      - install-npm
+      - install-pip
+      - install-gem
 
 jobs:
-  test:
+  config-bats:
     docker:
-      - image: circleci/node:latest
+      - image: bats/bats
     steps:
-      - all
+      - checkout
+      - env_info
+      - run: bats --version
+      - run: bats 'tests/main.bats'
+
+  config-zsh:
+    docker:
+      - image: zshusers/zsh
+    steps:
+      - checkout
+      - env_info
+      - run: zsh --version
+      - run: zsh -c 'source home/shell/config.zsh'
+
+  config-bash:
+    docker:
+      - image: bash
+    steps:
+      - checkout
+      - env_info
+      - run: bash --version
+      - run: bash -c 'source home/shell/config.sh'
+      - run: bash -c 'source home/shell/config.bash'
+
+  install-npm:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - env_info
+      - run: |
+          node --version
+          npm --version
+      - run: cat 'dependencies/npm/npm.txt' | xargs -n1 npm install
+
+  install-pip:
+    docker:
+      - image: circleci/python
+    steps:
+      - checkout
+      - env_info
+      - run: |
+          python --version
+          pip --version
+      - run: pip install --user -r 'dependencies/pip/requirements.txt'
+
+  install-gem:
+    docker:
+      - image: circleci/ruby
+    steps:
+      - checkout
+      - env_info
+      - run: |
+          ruby --version
+          gem --version
+          bundle --version
+      - run: sh 'dependencies/gem/install.sh'
