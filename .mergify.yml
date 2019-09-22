@@ -1,5 +1,5 @@
 pull_request_rules:
-  - name: Merge for Owner
+  - name: Automatic Merge (for Owner)
     conditions:
       - author=matejkosiarcik
       - base=master
