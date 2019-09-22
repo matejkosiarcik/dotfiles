@@ -12,3 +12,9 @@ pull_request_rules:
       merge:
         method: merge
         strict: smart
+    - name: Add WIP label
+      conditions:
+        - title~=^(wip|WIP).*
+      actions:
+        label:
+          add: ["work-in-progress"]
