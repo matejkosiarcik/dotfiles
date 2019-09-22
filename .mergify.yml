@@ -1,14 +1,14 @@
 pull_request_rules:
-  - name: Automatic merge for Owner
+  - name: Merge for Owner
     conditions:
       - author=matejkosiarcik
+      - base=master
+      - label!=work-in-progress
       - status-success=stickler-ci
       - status-success=continuous-integration/travis-ci/pr
       - status-success=continuous-integration/travis-ci/push
       - status-success=test # circle-ci
-      - base=master
     actions:
       merge:
         method: merge
-        strict: true
-      delete_head_branch: {}
+        strict: smart
