@@ -1,3 +1,3 @@
 # Scripts
 
-> Collection of my personal scripts
+> Collection of my personal scripts and config files
