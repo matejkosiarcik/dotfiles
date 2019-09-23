@@ -24,7 +24,7 @@
 
 @test 'config - zsh' {
     if [ "${DISABLE_ZSH}" = 'true' ]; then
-        continue;
+        return;
     fi
 
     run zsh -c 'source home/shell/config.zsh'
