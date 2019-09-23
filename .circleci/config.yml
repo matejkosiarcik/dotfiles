@@ -27,8 +27,7 @@ jobs:
       - checkout
       - env_info
       - run: bats --version
-      - run: DISABLE_ZSH=true bats 'tests/shell.bats'
-      - run: DISABLE_ZSH=true bats 'tests/bin.bats'
+      - run: DISABLE_ZSH=true bats --recursive 'tests'
 
   config-node-bats:
     docker:
@@ -59,6 +58,9 @@ jobs:
       - run: bash --version
       - run: bash -c 'source home/shell/config.sh'
       - run: bash -c 'source home/shell/config.bash'
+      - run: sh 'home/install.sh'
+      - run: sh 'setup/install.sh'
+      - run: sh 'bin/install.sh'
 
   install-npm:
     docker:

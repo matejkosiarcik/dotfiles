@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "bats tests/shell.bats && bats tests/bin.bats"
+    "test": "bats --recursive 'tests'"
   },
   "dependencies": {
     "bats": "^1.1.0"

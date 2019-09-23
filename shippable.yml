@@ -17,3 +17,6 @@ build:
   ci:
     - npm install
     - DISABLE_ZSH=true npm run test
+    - sh 'home/install.sh'
+    - sh 'setup/install.sh'
+    - sh 'bin/install.sh'

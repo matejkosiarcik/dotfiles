@@ -65,7 +65,7 @@ matrix:
 install:
   - |
     if [ "${TRAVIS_LANGUAGE}" = 'generic' ] || [ "${TRAVIS_LANGUAGE}" = 'shell' ]; then
-      npm install -g bats
+      npm install
     fi
 
 before_script:
@@ -76,8 +76,7 @@ before_script:
     fi
 
 script:
-  - bats 'tests/shell.bats'
-  - bats 'tests/bin.bats'
+  - npm run test
   - sh 'home/install.sh'
   - sh 'setup/install.sh'
   - sh 'bin/install.sh'
