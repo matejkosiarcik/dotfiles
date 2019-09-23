@@ -17,4 +17,4 @@ build:
   ci:
     - npm install
     - npm install npx
-    - npx bats 'tests/bin.bats'
+    - DISABLE_ZSH=true npx bats 'tests/bin.bats'
