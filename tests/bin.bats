@@ -1,9 +1,9 @@
 #!/usr/bin/env bats
 
 @test 'bin - cldir' {
-    for shell in sh bash; do
+    for shell in sh bash zsh; do
         if [ "${shell}" = 'zsh' ] && [ "${DISABLE_ZSH}" = 'true' ]; then
-            continue;
+            continue
         fi
 
         run "${shell}" -n 'bin/cldir.sh'
