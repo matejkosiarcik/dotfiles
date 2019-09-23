@@ -27,7 +27,8 @@ jobs:
       - checkout
       - env_info
       - run: bats --version
-      - run: bats 'tests/main.bats'
+      - run: bats 'tests/shell.bats'
+      - run: bats 'tests/bin.bats'
 
   config-node-bats:
     docker:

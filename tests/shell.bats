@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 @test 'config - sh' {
-    for shell in sh ksh bash zsh; do
+    for shell in sh bash; do
         if [ "${shell}" = 'zsh' ] && [ "${DISABLE_ZSH}" = 'true' ]; then
             continue;
         fi
@@ -23,6 +23,10 @@
 }
 
 @test 'config - zsh' {
+    if [ "${shell}" = 'zsh' ] && [ "${DISABLE_ZSH}" = 'true' ]; then
+        continue;
+    fi
+
     run zsh -c 'source home/shell/config.zsh'
     [ "${status}" -eq '0' ]
 
