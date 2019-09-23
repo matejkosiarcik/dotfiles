@@ -23,7 +23,7 @@
 }
 
 @test 'config - zsh' {
-    if [ "${shell}" = 'zsh' ] && [ "${DISABLE_ZSH}" = 'true' ]; then
+    if [ "${DISABLE_ZSH}" = 'true' ]; then
         continue;
     fi
 
