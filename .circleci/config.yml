@@ -12,6 +12,7 @@ workflows:
   test:
     jobs:
       - config-bats
+      - config-node-bats
       - config-zsh
       - config-bash
       - install-npm
@@ -27,6 +28,18 @@ jobs:
       - env_info
       - run: bats --version
       - run: bats 'tests/main.bats'
+
+  config-node-bats:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - env_info
+      - run: node --version
+      - run: npm --version
+      - run: npm install
+      - run: npm run test:main
+      - run: npm run test:zsh
 
   config-zsh:
     docker:
