@@ -16,5 +16,4 @@ build:
     - npm --version
   ci:
     - npm install
-    - npm install npx
-    - DISABLE_ZSH=true npx bats 'tests/bin.bats'
+    - DISABLE_ZSH=true npm run test
