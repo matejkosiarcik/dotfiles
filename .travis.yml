@@ -43,7 +43,10 @@ matrix:
 
     - &npm-test
       language: node_js
-      script: sh 'dependencies/npm/install.sh'
+      install: npm install
+      script:
+        - npm run test
+        - sh 'dependencies/npm/install.sh'
     - <<: *npm-test
       os: osx
       if: branch = master
@@ -73,8 +76,8 @@ before_script:
     fi
 
 script:
-  - bats 'tests/main.bats'
-  - bats 'tests/zsh.bats'
+  - bats 'tests/shell.bats'
+  - bats 'tests/bin.bats'
   - sh 'home/install.sh'
   - sh 'setup/install.sh'
   - sh 'bin/install.sh'

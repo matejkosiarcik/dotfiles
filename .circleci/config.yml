@@ -38,8 +38,7 @@ jobs:
       - run: node --version
       - run: npm --version
       - run: npm install
-      - run: npm run test:main
-      - run: npm run test:zsh
+      - run: DISABLE_ZSH=true npm run test
 
   config-zsh:
     docker:

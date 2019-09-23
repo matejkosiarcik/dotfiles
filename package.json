@@ -1,8 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test:main": "bats tests/main.bats",
-    "test:zsh": "bats tests/zsh.bats"
+    "test": "bats tests/shell.bats && bats tests/bin.bats"
   },
   "dependencies": {
     "bats": "^1.1.0"
