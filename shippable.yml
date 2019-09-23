@@ -16,4 +16,5 @@ build:
     - npm --version
   ci:
     - npm install
-    - npm run test
+    - npm install npx
+    - npx bats 'tests/bin.bats'
