@@ -53,6 +53,12 @@ matrix:
     - <<: *npm-test
       os: windows
       node_js: node
+      install:
+        - npm install
+        - npm install npx cross-env
+      script:
+        - cross-env DISABLE_ZSH=true npx bats tests/bin.bats
+        - sh 'dependencies/npm/install.sh'
 
     - &pip-test
       language: python
