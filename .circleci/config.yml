@@ -95,3 +95,12 @@ jobs:
           gem --version
           bundle --version
       - run: sh 'dependencies/gem/install.sh'
+
+  mac-text:
+    macos:
+      xcode: "11.0.0"
+    steps:
+      - checkout
+      - run: brew install node
+      - run: npm install
+      - run: npm run test
