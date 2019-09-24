@@ -53,12 +53,10 @@ matrix:
     - <<: *npm-test
       os: windows
       node_js: node
-      install:
-        - npm install
-        - npm install npx cross-env
       script:
-        - cross-env DISABLE_ZSH=true npx bats tests/bin.bats
         - sh 'dependencies/npm/install.sh'
+        # TODO: Add bats testing under windows
+        # Currently bats exits with file not found error and status 127
 
     - &pip-test
       language: python
