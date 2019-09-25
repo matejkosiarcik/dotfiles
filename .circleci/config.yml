@@ -15,10 +15,10 @@ workflows:
       - config-node-bats
       - config-zsh
       - config-bash
-      - config-mac
       - install-npm
       - install-pip
       - install-gem
+      # TODO: add mac job
 
 jobs:
   config-bats:
@@ -62,16 +62,6 @@ jobs:
       - run: sh 'home/install.sh'
       - run: sh 'setup/install.sh'
       - run: sh 'bin/install.sh'
-
-  config-mac:
-    macos:
-      xcode: "11.0.0"
-    steps:
-      - checkout
-      - run: brew install node
-      - run: npm install
-      - run: npm run test
-
 
   install-npm:
     docker:
