@@ -1,13 +1,29 @@
 pull_request_rules:
-  - name: Automatic merge for Owner
+  - name: Automatic Merge (for Owner)
     conditions:
       - author=matejkosiarcik
+      - base=master
+      - label!=work-in-progress
       - status-success=stickler-ci
       - status-success=continuous-integration/travis-ci/pr
       - status-success=continuous-integration/travis-ci/push
       - status-success=test # circle-ci
-      - base=master
     actions:
       merge:
         method: merge
-        strict: true
+        strict: smart
+  - name: Remove merged branches (for Owner)
+    conditions:
+      - author=matejkosiarcik
+      - merged
+      - base=master
+      - head~=^(develop|feature-.+)$
+    actions:
+      delete_head_branch: {}
+  - name: Add WIP label
+    conditions:
+      - title~=^(wip|WIP).*
+    actions:
+      label:
+        add:
+          - work-in-progress

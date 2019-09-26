@@ -1,0 +1,22 @@
+language: node_js
+
+node_js:
+  - 12
+  - 11
+  - 10
+  - 9
+  - 8
+  - 7
+  - 6
+
+build:
+  pre_ci:
+    - uname -a
+    - node --version
+    - npm --version
+  ci:
+    - npm install
+    - DISABLE_ZSH=true npm run test
+    - sh 'home/install.sh'
+    - sh 'setup/install.sh'
+    - sh 'bin/install.sh'

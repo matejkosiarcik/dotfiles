@@ -12,11 +12,13 @@ workflows:
   test:
     jobs:
       - config-bats
+      - config-node-bats
       - config-zsh
       - config-bash
       - install-npm
       - install-pip
       - install-gem
+      # TODO: add mac job
 
 jobs:
   config-bats:
@@ -26,7 +28,18 @@ jobs:
       - checkout
       - env_info
       - run: bats --version
-      - run: bats 'tests/main.bats'
+      - run: DISABLE_ZSH=true bats --recursive 'tests'
+
+  config-node-bats:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - env_info
+      - run: node --version
+      - run: npm --version
+      - run: npm install
+      - run: DISABLE_ZSH=true npm run test
 
   config-zsh:
     docker:
@@ -46,6 +59,9 @@ jobs:
       - run: bash --version
       - run: bash -c 'source home/shell/config.sh'
       - run: bash -c 'source home/shell/config.bash'
+      - run: sh 'home/install.sh'
+      - run: sh 'setup/install.sh'
+      - run: sh 'bin/install.sh'
 
   install-npm:
     docker:
