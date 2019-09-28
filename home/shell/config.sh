@@ -3,10 +3,11 @@
 export LANG='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
 
-# customize PATH
+# Customize PATH
 export PATH="${PATH}:${HOME}/.bin" # custom bin directory
 
-. "${HOME}/.config-secret.sh"
+# Include system specific secrets
+[ -f "${HOME}/.config-secret.sh" ] && . "${HOME}/.config-secret.sh"
 
 # Aliases
 alias logtree="tree --ignore-case -CI '.build|.git|.venv|*.xcodeproj|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv'"
