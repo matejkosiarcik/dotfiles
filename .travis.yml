@@ -69,7 +69,7 @@ matrix:
 install:
   - |
     if [ "${TRAVIS_LANGUAGE}" = 'generic' ] || [ "${TRAVIS_LANGUAGE}" = 'shell' ]; then
-      npm --prefix 'tests' install
+      npm install --prefix 'tests'
     fi
 
 before_script:
