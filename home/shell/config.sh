@@ -8,7 +8,9 @@ export LC_ALL='en_US.UTF-8'
 export PATH="${PATH}:${HOME}/bin:${HOME}/.bin:${HOME}/.jetbrains"
 
 # Include other config files
+# shellcheck source=/dev/null
 [ -f "${HOME}/.config-secret.sh" ] && . "${HOME}/.config-secret.sh"
+# shellcheck source=/dev/null
 [ -f "${HOME}/.profile" ] && . "${HOME}/.profile"
 
 # Aliases
