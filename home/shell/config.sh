@@ -1,10 +1,17 @@
 # shellcheck shell=sh
 
+# settings
 export LANG='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
 
-# customize PATH
-export PATH="${PATH}:${HOME}/.bin" # custom bin directory
+# Customize PATH
+export PATH="${PATH}:${HOME}/bin:${HOME}/.bin:${HOME}/.jetbrains"
+
+# Include other config files
+# shellcheck source=/dev/null
+[ -f "${HOME}/.config-secret.sh" ] && . "${HOME}/.config-secret.sh"
+# shellcheck source=/dev/null
+[ -f "${HOME}/.profile" ] && . "${HOME}/.profile"
 
 # Aliases
 alias logtree="tree --ignore-case -CI '.build|.git|.venv|*.xcodeproj|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv'"
