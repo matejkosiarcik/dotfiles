@@ -58,11 +58,11 @@ jobs:
       - env_info
       - run: bash --version
       - run: |
-        bash -c 'source home/shell/config.sh'
-        bash -c 'source home/shell/config.bash'
-        sh 'home/install.sh'
-        sh 'setup/install.sh'
-        sh 'bin/install.sh'
+          bash -c 'source home/shell/config.sh'
+          bash -c 'source home/shell/config.bash'
+          sh 'home/install.sh'
+          sh 'setup/install.sh'
+          sh 'bin/install.sh'
 
   install-npm:
     docker:
