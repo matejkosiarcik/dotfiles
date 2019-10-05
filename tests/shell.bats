@@ -12,7 +12,6 @@ function setup() {
         fi
 
         run "${shell}" -c '. home/shell/config.sh'
-        [ "${output}" = '' ]
         [ "${status}" -eq '0' ]
 
         run "${shell}" 'home/shell/config.sh'
@@ -22,7 +21,6 @@ function setup() {
 
 @test 'config - bash' {
     run bash -c 'source home/shell/config.bash'
-    [ "${output}" = '' ]
     [ "${status}" -eq '0' ]
 
     run bash 'home/shell/config.bash'
@@ -35,7 +33,6 @@ function setup() {
     fi
 
     run zsh -c 'source home/shell/config.zsh'
-    [ "${output}" = '' ]
     [ "${status}" -eq '0' ]
 
     run zsh 'home/shell/config.zsh'
