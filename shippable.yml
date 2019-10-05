@@ -15,8 +15,8 @@ build:
     - node --version
     - npm --version
   ci:
-    - npm install
-    - DISABLE_ZSH=true npm run test
+    - npm install --prefix 'tests'
+    - npm run --prefix 'tests' test
     - sh 'home/install.sh'
     - sh 'setup/install.sh'
     - sh 'bin/install.sh'

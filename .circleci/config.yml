@@ -28,7 +28,7 @@ jobs:
       - checkout
       - env_info
       - run: bats --version
-      - run: DISABLE_ZSH=true bats --recursive 'tests'
+      - run: bats 'tests'
 
   config-node-bats:
     docker:
@@ -38,8 +38,8 @@ jobs:
       - env_info
       - run: node --version
       - run: npm --version
-      - run: npm install
-      - run: DISABLE_ZSH=true npm run test
+      - run: npm install --prefix 'tests'
+      - run: npm run --prefix 'tests' test
 
   config-zsh:
     docker:
@@ -57,11 +57,12 @@ jobs:
       - checkout
       - env_info
       - run: bash --version
-      - run: bash -c 'source home/shell/config.sh'
-      - run: bash -c 'source home/shell/config.bash'
-      - run: sh 'home/install.sh'
-      - run: sh 'setup/install.sh'
-      - run: sh 'bin/install.sh'
+      - run: |
+        bash -c 'source home/shell/config.sh'
+        bash -c 'source home/shell/config.bash'
+        sh 'home/install.sh'
+        sh 'setup/install.sh'
+        sh 'bin/install.sh'
 
   install-npm:
     docker:
