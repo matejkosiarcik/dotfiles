@@ -43,9 +43,9 @@ matrix:
 
     - &npm-test
       language: node_js
-      install: npm install --prefix 'tests'
+      install: npm install --prefix tests
       script:
-        - npm run --prefix 'tests' test
+        - npm run --prefix tests test
         - sh 'dependencies/npm/install.sh'
     - <<: *npm-test
       os: osx
@@ -69,7 +69,7 @@ matrix:
 install:
   - |
     if [ "${TRAVIS_LANGUAGE}" = 'generic' ] || [ "${TRAVIS_LANGUAGE}" = 'shell' ]; then
-      npm install --prefix 'tests'
+      npm install --prefix tests
     fi
 
 before_script:
@@ -80,7 +80,7 @@ before_script:
     fi
 
 script:
-  - npm run --prefix 'tests' test
+  - npm run --prefix tests test
   - sh 'home/install.sh'
   - sh 'setup/install.sh'
   - sh 'bin/install.sh'
