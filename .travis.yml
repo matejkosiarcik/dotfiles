@@ -48,7 +48,7 @@ matrix:
     - <<: *npm-test
       os: windows
       node_js: node
-      install: cd tests && npm install # TODO: install with --prefix seem to fail under nvs
+      install: cd tests && npm install  # TODO: install with --prefix seem to fail under nvs
       script:
         - sh 'dependencies/npm/install.sh'
         # TODO: Add bats testing under windows

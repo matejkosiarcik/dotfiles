@@ -7,7 +7,7 @@ pull_request_rules:
       - status-success=stickler-ci
       - status-success=continuous-integration/travis-ci/pr
       - status-success=continuous-integration/travis-ci/push
-      - status-success=test # circle-ci
+      - status-success=test  # circle-ci
       - status-success=Shippable
     actions:
       merge:
@@ -38,7 +38,7 @@ pull_request_rules:
       - status-success=stickler-ci
       - status-success=continuous-integration/travis-ci/pr
       - status-success=continuous-integration/travis-ci/push
-      - status-success=test # circle-ci
+      - status-success=test  # circle-ci
       - status-success=Shippable
     actions:
       merge:
