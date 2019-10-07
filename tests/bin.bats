@@ -5,7 +5,7 @@ function setup() {
 }
 
 @test 'bin - cldir' {
-    for shell in sh bash; do
+    for shell in sh ksh mksh dash bash zsh yash; do
         if ! command -v "${shell}" >/dev/null 2>&1; then
             printf 'Skipping %s\n' "${shell}" >&3
             continue
