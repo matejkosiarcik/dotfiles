@@ -11,14 +11,7 @@ addons:
       - zsh
   homebrew:
     update: true
-    packages:
-      - duti
-      - node
-      - python
-      - ruby
-      - zsh
-      - yash
-      - dash
+    brewfile: true
 
 matrix:
   fast_finish: true
