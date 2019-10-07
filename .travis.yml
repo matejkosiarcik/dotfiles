@@ -41,7 +41,7 @@ matrix:
       install: npm install --prefix tests
       script:
         - npm run --prefix tests test
-        - sh 'dependencies/npm/install.sh'
+        - set -x && sh 'dependencies/npm/install.sh'
     - <<: *npm-test
       os: osx
       if: branch = master
@@ -50,7 +50,7 @@ matrix:
       node_js: node
       install: cd tests && npm install  # TODO: install with --prefix seem to fail under nvs
       script:
-        - sh 'dependencies/npm/install.sh'
+        - set -x && sh 'dependencies/npm/install.sh'
         # TODO: Add bats testing under windows
         # Currently bats exits with file not found error and status 127
 
