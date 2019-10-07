@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eufx
+set -euf
 cd "$(dirname "${0}")"
 
 # shellcheck disable=SC2046

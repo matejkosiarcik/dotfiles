@@ -48,9 +48,9 @@ matrix:
     - <<: *npm-test
       os: windows
       node_js: node
-      install: cd tests && npm install  # TODO: install with --prefix seem to fail under nvs
+      install: (cd tests && npm install)  # TODO: install with --prefix seem to fail under nvs
       script:
-        - set -x && sh 'dependencies/npm/install.sh'
+        - sh 'dependencies/npm/install.sh'
         # TODO: Add bats testing under windows
         # Currently bats exits with file not found error and status 127
 
