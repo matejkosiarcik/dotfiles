@@ -10,6 +10,7 @@ function setup() {
             printf 'Skipping %s\n' "${shell}" >&3
             continue
         fi
+        printf 'Testing %s\n' "${shell}" >&3
 
         run "${shell}" -n 'bin/cldir.sh'
         [ "${status}" -eq '0' ]
