@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 function setup() {
-    cd "$(dirname ${BATS_TEST_FILENAME})/.."
+    cd "$(dirname "${BATS_TEST_FILENAME}")/.." || exit 1
 }
 
 @test 'bin - cldir' {
