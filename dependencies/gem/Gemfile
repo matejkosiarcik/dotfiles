@@ -1,3 +1,4 @@
 source "https://rubygems.org"
 
-# gem "travis" # is installed through brew
+# gem "travis" # TODO: add (and remove from brew)
+# gem "cocoapods" # TODO: add (and remove from brew)
