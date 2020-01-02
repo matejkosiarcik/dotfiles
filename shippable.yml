@@ -15,6 +15,9 @@ build:
     - node --version
     - npm --version
   ci:
+    - make bootstrap
+    - make test
+    - make
     - npm install --prefix 'tests'
     - npm run --prefix 'tests' test
     - sh 'home/install.sh'

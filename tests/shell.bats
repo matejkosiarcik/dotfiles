@@ -39,3 +39,28 @@ function setup() {
     run zsh 'home/shell/config.zsh'
     [ "${status}" -eq '0' ]
 }
+
+@test 'check support scripts' {
+    for shell in bash 'bash --posix' zsh; do
+        if ! command -v "${shell}" >/dev/null 2>&1; then
+            printf 'Skipping %s\n' "${shell}" >&3
+            continue
+        fi
+        printf 'Testing %s\n' "${shell}" >&3
+
+        run "${shell}" -n './install.sh'
+        [ "${status}" -eq '0' ]
+
+        run "${shell}" -n './bin/install.sh'
+        [ "${status}" -eq '0' ]
+
+        run "${shell}" -n './home/install.sh'
+        [ "${status}" -eq '0' ]
+
+        run "${shell}" -n './home/git/install.sh'
+        [ "${status}" -eq '0' ]
+
+        run "${shell}" -n './home/shell/install.sh'
+        [ "${status}" -eq '0' ]
+    done
+}
