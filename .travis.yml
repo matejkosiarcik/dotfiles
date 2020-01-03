@@ -19,7 +19,8 @@ matrix:
   include:
     - &apt-test
       sudo: true
-      script: sh 'dependencies/apt/install.sh'
+      install: skip
+      script: sed -E 's~(\s*)#(.*)~~' <'dependencies/apt/apt.txt' | grep -vE '^(\s*)$' | xargs -tn1 apt-get install -y
     - <<: *apt-test
       dist: precise
     - <<: *apt-test
@@ -31,6 +32,7 @@ matrix:
 
     - &gem-test
       language: ruby
+      install: skip
       script: sh 'dependencies/gem/install.sh'
     - <<: *gem-test
       os: osx
@@ -38,45 +40,30 @@ matrix:
 
     - &npm-test
       language: node_js
-      install: npm install --prefix tests
-      script:
-        - npm run --prefix tests test
-        - set -x && sh 'dependencies/npm/install.sh'
+      install: skip
+      script: node 'dependencies/npm/install.js'
     - <<: *npm-test
       os: osx
       if: branch = master
     - <<: *npm-test
       os: windows
       node_js: node
-      install: (cd tests && npm install)  # TODO: install with --prefix seem to fail under nvs
-      script:
-        - sh 'dependencies/npm/install.sh'
-        # TODO: Add bats testing under windows
-        # Currently bats exits with file not found error and status 127
 
     - &pip-test
       language: python
-      script: sh 'dependencies/pip/install.sh'
+      install: skip
+      script: pip install -r 'dependencies/pip/requirements.txt'
     - <<: *pip-test
       os: osx
       language: generic
       if: branch = master
 
-install:
-  - |
-    if [ "${TRAVIS_LANGUAGE}" = 'generic' ] || [ "${TRAVIS_LANGUAGE}" = 'shell' ]; then
-      npm install --prefix tests
-    fi
+install: skip
 
 before_script:
   - uname -a
-  - |
-    if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then
-      sw_vers
-    fi
+  - if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then sw_vers; fi
 
 script:
-  - npm run --prefix tests test
   - sh 'home/install.sh'
   - sh 'setup/install.sh'
-  - sh 'bin/install.sh'
