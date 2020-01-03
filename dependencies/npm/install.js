@@ -10,7 +10,7 @@ const fileContent = fs.readFileSync(path.join(__dirname, 'package.json'))
 const fileJSON = JSON.parse(fileContent)
 
 async function sh(cmd, errorHandler) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         cp.exec(cmd, (err, stdout, stderr) => {
             if (err) {
                 resolve({ stdout, stderr })
@@ -22,41 +22,36 @@ async function sh(cmd, errorHandler) {
     })
 }
 
-let installCommand = 'npm install '
+let installCommand = 'npm install --force '
 if (process.argv.length < 3 || process.argv[2] !== 'local') {
     // installation is global by default
     // if 3rd argument is "local", then local install is executed instead
     installCommand += '--global '
 }
 
-const dependencyTypes = {
-    'vanilla': 'dependencies',
-    'dev': 'devDependencies',
-    'peer': 'peerDependencies',
-    'optional': 'optionalDependencies',
-}
+for (let dependencyType of ['', 'dev', 'peer', 'optional']) {
+    const jsonKey = dependencyType === '' ? 'dependencies' : `${dependencyType}Dependencies`
+    const title = dependencyType === '' ? 'vanilla' : dependencyType
 
-const requiredDependencyCallback = (err) => {
-    console.error(`Could not install all ${key} dependencies`)
-    console.error(err)
-    process.exit(1)
-}
+    const requiredDependencyCallback = (err) => {
+        console.error(`Could not install all ${title} dependencies`)
+        console.error(err)
+        process.exit(1)
+    }
 
-const optionalDependencyCallback = (err) => {
-    console.error('Some optional dependencies not installed')
-    console.error(err)
-}
+    const optionalDependencyCallback = (err) => {
+        console.error('Some optional dependencies not installed')
+        console.error(err)
+    }
 
-for (let key in dependencyTypes) {
-    const jsonKey = dependencyTypes[key]
     if (jsonKey in fileJSON) {
         const dependencies = Object.keys(fileJSON[jsonKey])
         if (dependencies.length > 0) {
-            console.info(`Installing ${key} dependencies:`)
+            console.info(`Installing ${title} dependencies:`)
             console.info(dependencies.join(', '))
             console.info()
 
-            const callback = key === 'optional' ? optionalDependencyCallback : requiredDependencyCallback
+            const callback = title === 'optional' ? optionalDependencyCallback : requiredDependencyCallback
             sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), callback)
         }
     }
