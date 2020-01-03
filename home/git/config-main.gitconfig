@@ -4,6 +4,9 @@
 [includeIf "gitdir/i:~/Dev/Personal/"]
     path = ~/.config-personal.gitconfig
 
+[includeIf "gitdir/i:~/Dev/FEI/"]
+    path = ~/.config-personal.gitconfig
+
 [includeIf "gitdir/i:~/Dev/Touch4IT/"]
     path = ~/.config-touch4it.gitconfig
 
@@ -15,12 +18,16 @@
 
 [alias]
     # shortcuts
-    c = commit -m
-    ca = commit --amend
+    amend = commit --amend --no-edit
+    c = commit # -m
     ch = checkout
     d = diff
     ds = diff --staged
-    pl = pull --ff-only
-    pu = push
+    plf = pull --ff-only
+    plm = pull --merge
+    plr = pull --rebase
+    ps = push origin
+    psf = push --force-with-lease
+    psu = "!command() { git push origin "$(git branch | grep \\* | cut -d\\  -f2)" --set-upstream; }; command"
     r = reset
     s = status

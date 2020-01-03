@@ -25,5 +25,5 @@ npm install -g $(sed -E 's~(\s*)#(.*)~~' <'npm.txt' | grep -vE '^(\s*)$' | tr '\
 ## Pip
 
 ```sh #pip
-pip install -r 'requirements.txt' # or pip3
+pip install --requirement 'requirements.txt' # or pip3
 ```

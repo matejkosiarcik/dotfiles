@@ -1,2 +1,20 @@
 set main-options = --exclude=refs/stash --all
+
+bind generic g >git %(prompt)
+
+bind status A >git commit --amend
+bind status C >git commit # because default "C" binding has prompt of type: "press enter to return"
 bind status D @rm %(file)
+bind status h @sh -c "git diff --staged | diff2html -s side -i stdin"
+
+bind stash A @git stash apply %(stash)
+bind stash D @git stash drop %(stash)
+bind stash P @git stash pop %(stash)
+
+bind main c @git checkout %(branch)
+bind main C @git checkout %(commit)
+bind main i >git rebase -i %(branch)
+bind main I >git rebase -i %(commit)
+bind main r @git rebase %(branch)
+bind main R @git rebase %(commit)
+bind main T >git tag %(prompt) %(commit)

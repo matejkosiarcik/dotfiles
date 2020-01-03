@@ -1,0 +1,11 @@
+{
+  "name": "dotfiles-npm",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "diff2html-cli": "*",
+    "markdown-toc": "*",
+    "npm-check-updates": "*",
+    "npx": "*"
+  }
+}

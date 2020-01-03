@@ -1,4 +1,0 @@
-diff2html-cli
-markdown-toc
-npm-check-updates
-npx

@@ -7,8 +7,6 @@ os:
 addons:
   apt:
     update: true
-    packages:
-      - zsh
   homebrew:
     update: true
     brewfile: true
@@ -17,66 +15,41 @@ matrix:
   fast_finish: true
 
   include:
-    - &apt-test
-      sudo: true
-      script: sh 'dependencies/apt/install.sh'
-    - <<: *apt-test
-      dist: precise
-    - <<: *apt-test
-      dist: trusty
-    - <<: *apt-test
-      dist: xenial
-    - <<: *apt-test
-      dist: bionic
-
     - &gem-test
       language: ruby
-      script: sh 'dependencies/gem/install.sh'
+      install: skip
+      script: bundle install --gemfile='dependencies/gem/Gemfile'
     - <<: *gem-test
-      os: osx
       if: branch = master
+      os: osx
 
     - &npm-test
       language: node_js
-      install: npm install --prefix tests
-      script:
-        - npm run --prefix tests test
-        - set -x && sh 'dependencies/npm/install.sh'
-    - <<: *npm-test
-      os: osx
-      if: branch = master
-    - <<: *npm-test
-      os: windows
       node_js: node
-      install: (cd tests && npm install)  # TODO: install with --prefix seem to fail under nvs
-      script:
-        - sh 'dependencies/npm/install.sh'
-        # TODO: Add bats testing under windows
-        # Currently bats exits with file not found error and status 127
+      install: skip
+      script: node 'dependencies/npm/install.js' local
+    - <<: *npm-test
+      if: branch = master
+      os: osx
+    - <<: *npm-test
+      if: branch = master
+      os: windows
 
     - &pip-test
       language: python
-      script: sh 'dependencies/pip/install.sh'
+      install: skip
+      script: pip3 install --requirement 'dependencies/pip/requirements.txt'
     - <<: *pip-test
-      os: osx
-      language: generic
       if: branch = master
+      language: generic
+      os: osx
 
-install:
-  - |
-    if [ "${TRAVIS_LANGUAGE}" = 'generic' ] || [ "${TRAVIS_LANGUAGE}" = 'shell' ]; then
-      npm install --prefix tests
-    fi
+install: skip
 
 before_script:
   - uname -a
-  - |
-    if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then
-      sw_vers
-    fi
+  - if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then sw_vers; fi
 
 script:
-  - npm run --prefix tests test
   - sh 'home/install.sh'
   - sh 'setup/install.sh'
-  - sh 'bin/install.sh'
