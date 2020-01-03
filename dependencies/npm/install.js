@@ -4,8 +4,9 @@
 const fs = require("fs")
 const process = require("process")
 const cp = require("child_process")
+const path = require("path")
 
-const fileContent = fs.readFileSync("package.json")
+const fileContent = fs.readFileSync(path.join(__dirname, 'package.json'))
 const fileJSON = JSON.parse(fileContent)
 
 async function sh(cmd, errorHandler) {
@@ -21,47 +22,52 @@ async function sh(cmd, errorHandler) {
     })
 }
 
+let installCommand = 'npm install '
+if (process.argv.length < 3 || process.argv[2] !== 'local') {
+    installCommand += '--global '
+}
+
 if ('dependencies' in fileJSON) {
     const dependencies = Object.keys(fileJSON['dependencies'])
     if (dependencies.length > 0) {
-        console.err("Installing vanilla dependencies:")
-        console.err(dependencies.join(', '))
-        console.err()
+        console.info("Installing vanilla dependencies:")
+        console.info(dependencies.join(', '))
+        console.info()
 
-        sh("npm install --global " + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.err('Could not install all vanilla dependencies'); console.err(err); process.exit(1) })
+        sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.error('Could not install all vanilla dependencies'); console.error(err); process.exit(1) })
     }
 }
 
 if ('devDependencies' in fileJSON) {
     const dependencies = Object.keys(fileJSON['devDependencies'])
     if (dependencies.length > 0) {
-        console.err("Installingdev dependencies:")
-        console.err(dependencies.join(', '))
-        console.err()
+        console.info("Installing dev dependencies:")
+        console.info(dependencies.join(', '))
+        console.info()
 
-        sh("npm install --global " + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.err('Could not install all dev dependencies'); console.err(err); process.exit(1) })
+        sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.error('Could not install all dev dependencies'); console.error(err); process.exit(1) })
     }
 }
 
 if ('peerDependencies' in fileJSON) {
     const dependencies = Object.keys(fileJSON['peerDependencies'])
     if (dependencies.length > 0) {
-        console.err("Installingpeer dependencies:")
-        console.err(dependencies.join(', '))
-        console.err()
+        console.info("Installingpeer dependencies:")
+        console.info(dependencies.join(', '))
+        console.info()
 
-        sh("npm install --global " + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.err('Could not install all peer dependencies'); console.err(err); process.exit(1) })
+        sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.error('Could not install all peer dependencies'); console.error(err); process.exit(1) })
     }
 }
 
 if ('optionalDependencies' in fileJSON) {
     const dependencies = Object.keys(fileJSON['optionalDependencies'])
     if (dependencies.length > 0) {
-        console.err("Installingoptional dependencies:")
-        console.err(dependencies.join(', '))
-        console.err()
+        console.info("Installingoptional dependencies:")
+        console.info(dependencies.join(', '))
+        console.info()
 
         // optional dependencies can fail without the script failing as well, as they are "optional"
-        sh("npm install --global " + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.err('Some optional dependencies not installed'); console.err(err) })
+        sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.error('Some optional dependencies not installed'); console.error(err) })
     }
 }

@@ -13,11 +13,10 @@ workflows:
     jobs:
       - config-zsh
       - config-bash
-      - install-apt
-      - install-apt2
-      - install-npm
-      - install-pip
-      - install-gem
+      - dependency-apt
+      - dependency-npm
+      - dependency-pip
+      - dependency-gem
       # TODO: add mac job
 
 jobs:
@@ -43,7 +42,7 @@ jobs:
           bash 'home/install.sh'
           bash 'setup/install.sh'
 
-  install-apt:
+  dependency-apt:
     docker:
       - image: ubuntu
     steps:
@@ -52,16 +51,7 @@ jobs:
       - run: apt-get update -y
       - run: sed -E 's~(\s*)#(.*)~~' <'dependencies/apt/apt.txt' | grep -vE '^(\s*)$' | xargs -tn1 apt-get install -y
 
-  install-apt2:
-    docker:
-      - image: debian
-    steps:
-      - checkout
-      - env_info
-      - run: apt-get update -y
-      - run: sed -E 's~(\s*)#(.*)~~' <'dependencies/apt/apt.txt' | grep -vE '^(\s*)$' | xargs -tn1 apt-get install -y
-
-  install-npm:
+  dependency-npm:
     docker:
       - image: circleci/node
     steps:
@@ -70,9 +60,9 @@ jobs:
       - run: |
           node --version
           npm --version
-      - run: node 'dependencies/npm/install.js'
+      - run: node 'dependencies/npm/install.js' local
 
-  install-pip:
+  dependency-pip:
     docker:
       - image: circleci/python
     steps:
@@ -83,7 +73,7 @@ jobs:
           pip --version
       - run: pip install --user -r 'dependencies/pip/requirements.txt'
 
-  install-gem:
+  dependency-gem:
     docker:
       - image: circleci/ruby
     steps:

@@ -7,8 +7,6 @@ os:
 addons:
   apt:
     update: true
-    packages:
-      - zsh
   homebrew:
     update: true
     brewfile: true
@@ -17,19 +15,6 @@ matrix:
   fast_finish: true
 
   include:
-    - &apt-test
-      sudo: true
-      install: skip
-      script: sed -E 's~(\s*)#(.*)~~' <'dependencies/apt/apt.txt' | grep -vE '^(\s*)$' | xargs -tn1 apt-get install -y
-    - <<: *apt-test
-      dist: precise
-    - <<: *apt-test
-      dist: trusty
-    - <<: *apt-test
-      dist: xenial
-    - <<: *apt-test
-      dist: bionic
-
     - &gem-test
       language: ruby
       install: skip
@@ -40,14 +25,14 @@ matrix:
 
     - &npm-test
       language: node_js
+      node_js: node
       install: skip
-      script: node 'dependencies/npm/install.js'
+      script: node 'dependencies/npm/install.js' local
     - <<: *npm-test
       os: osx
       if: branch = master
     - <<: *npm-test
       os: windows
-      node_js: node
 
     - &pip-test
       language: python
