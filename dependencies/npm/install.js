@@ -24,50 +24,40 @@ async function sh(cmd, errorHandler) {
 
 let installCommand = 'npm install '
 if (process.argv.length < 3 || process.argv[2] !== 'local') {
+    // installation is global by default
+    // if 3rd argument is "local", then local install is executed instead
     installCommand += '--global '
 }
 
-if ('dependencies' in fileJSON) {
-    const dependencies = Object.keys(fileJSON['dependencies'])
-    if (dependencies.length > 0) {
-        console.info("Installing vanilla dependencies:")
-        console.info(dependencies.join(', '))
-        console.info()
-
-        sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.error('Could not install all vanilla dependencies'); console.error(err); process.exit(1) })
-    }
+const dependencyTypes = {
+    'vanilla': 'dependencies',
+    'dev': 'devDependencies',
+    'peer': 'peerDependencies',
+    'optional': 'optionalDependencies',
 }
 
-if ('devDependencies' in fileJSON) {
-    const dependencies = Object.keys(fileJSON['devDependencies'])
-    if (dependencies.length > 0) {
-        console.info("Installing dev dependencies:")
-        console.info(dependencies.join(', '))
-        console.info()
-
-        sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.error('Could not install all dev dependencies'); console.error(err); process.exit(1) })
-    }
+const requiredDependencyCallback = (err) => {
+    console.error(`Could not install all ${key} dependencies`)
+    console.error(err)
+    process.exit(1)
 }
 
-if ('peerDependencies' in fileJSON) {
-    const dependencies = Object.keys(fileJSON['peerDependencies'])
-    if (dependencies.length > 0) {
-        console.info("Installingpeer dependencies:")
-        console.info(dependencies.join(', '))
-        console.info()
-
-        sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.error('Could not install all peer dependencies'); console.error(err); process.exit(1) })
-    }
+const optionalDependencyCallback = (err) => {
+    console.error('Some optional dependencies not installed')
+    console.error(err)
 }
 
-if ('optionalDependencies' in fileJSON) {
-    const dependencies = Object.keys(fileJSON['optionalDependencies'])
-    if (dependencies.length > 0) {
-        console.info("Installingoptional dependencies:")
-        console.info(dependencies.join(', '))
-        console.info()
+for (let key in dependencyTypes) {
+    const jsonKey = dependencyTypes[key]
+    if (jsonKey in fileJSON) {
+        const dependencies = Object.keys(fileJSON[jsonKey])
+        if (dependencies.length > 0) {
+            console.info(`Installing ${key} dependencies:`)
+            console.info(dependencies.join(', '))
+            console.info()
 
-        // optional dependencies can fail without the script failing as well, as they are "optional"
-        sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), (err) => { console.error('Some optional dependencies not installed'); console.error(err) })
+            const callback = key === 'optional' ? optionalDependencyCallback : requiredDependencyCallback
+            sh(installCommand + dependencies.map(el => `"${el}"`).join(' '), callback)
+        }
     }
 }
