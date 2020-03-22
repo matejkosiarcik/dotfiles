@@ -29,7 +29,9 @@ fi
 ### Individual language packages ###
 
 gem install bundler
-bundle install --system
+# bundle config set system 'true'
+# bundle install
+# bundle config set system 'false'
 
 pip3 install --requirement 'requirements.txt'
 

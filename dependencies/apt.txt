@@ -5,6 +5,9 @@ libssl-dev
 curl
 tmux
 vim
+gcc
+g++
+make
 
 # shells
 zsh
