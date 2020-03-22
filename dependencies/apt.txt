@@ -17,6 +17,7 @@ mercurial
 python
 python-dev
 python-pip
+ruby
 
 # GUI apps
 chromium-browser

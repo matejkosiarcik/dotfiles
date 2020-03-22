@@ -9,8 +9,10 @@ if command -v apt-get >/dev/null 2>&1; then
     # shellcheck disable=SC2046
     tmpfile="$(mktemp)"
     sed -E 's~(\s*)#(.*)~~' <'apt.txt' | grep -vE '^(\s*)$' >"${tmpfile}"
-    xargs apt-get install -y <"${tmpfile}" || sudo xargs apt-get install -y <"${tmpfile}"
+    xargs apt-get install --yes <"${tmpfile}" || sudo xargs apt-get install --yes <"${tmpfile}"
     rm -f "${tmpfile}"
+    curl -sL https://deb.nodesource.com/setup_13.x | bash -
+    apt-get install --yes nodejs || sudo apt-get install --yes nodejs
 else
     printf 'Skipping APT. Reason: No apt-get found.' >&2
 fi
@@ -26,6 +28,7 @@ fi
 
 ### Individual language packages ###
 
+gem install bundler
 bundle install --system
 
 pip3 install --requirement 'requirements.txt'
