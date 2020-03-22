@@ -19,7 +19,7 @@ fi
 
 if [ "$(uname -s)" = 'Darwin' ]; then
     brew update
-    brew bundle
+    # brew bundle # TODO: this seems to be too long for CI
 else
     printf 'Skipping Homebrew. Reason: Not on macOS.' >&2
 fi

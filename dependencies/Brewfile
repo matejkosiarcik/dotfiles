@@ -1,5 +1,5 @@
 # config
-tap "caskroom/cask"
+tap "homebrew/cask-cask"
 brew "mas"
 
 ### Development ###
