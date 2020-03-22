@@ -149,3 +149,8 @@ brew "swiftenv"
 
 tap "heroku/brew"
 brew "heroku"
+
+# Install following casks manually (because they require additional permissions (probably because of kernel extensions))
+# Then go to (System Preferences > Security & Privacy > General) to resolve permissions after installation
+# cask "virtualbox"
+# cask "virtualbox-extension-pack"

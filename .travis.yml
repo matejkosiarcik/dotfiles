@@ -15,34 +15,10 @@ matrix:
   fast_finish: true
 
   include:
-    - &gem-test
-      language: ruby
-      install: skip
-      script: bundle install --gemfile='dependencies/gem/Gemfile'
-    - <<: *gem-test
-      if: branch = master
-      os: osx
-
-    - &npm-test
-      language: node_js
-      node_js: node
-      install: skip
-      script: node 'dependencies/npm/install.js' local
-    - <<: *npm-test
-      if: branch = master
-      os: osx
-    - <<: *npm-test
-      if: branch = master
-      os: windows
-
-    - &pip-test
-      language: python
-      install: skip
-      script: pip3 install --requirement 'dependencies/pip/requirements.txt'
-    - <<: *pip-test
-      if: branch = master
+    - os: osx
       language: generic
-      os: osx
+      install: skip
+      script: sh 'dependencies/install.sh'
 
 install: skip
 

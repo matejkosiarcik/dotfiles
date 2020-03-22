@@ -1,0 +1,22 @@
+# general
+build-essential
+file
+libssl-dev
+curl
+tmux
+vim
+
+# shells
+zsh
+
+# vcs tools
+git
+mercurial
+
+# languages
+python
+python-dev
+python-pip
+
+# GUI apps
+chromium-browser
