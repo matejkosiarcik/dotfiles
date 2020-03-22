@@ -4,6 +4,7 @@ cd "$(dirname "${0}")"
 
 ### System level packages ###
 
+apt-get update || sudo apt-get update
 if command -v apt-get >/dev/null 2>&1; then
     # shellcheck disable=SC2046
     tmpfile="$(mktemp)"
@@ -14,6 +15,7 @@ else
     printf 'Skipping APT. Reason: No apt-get found.' >&2
 fi
 
+brew update
 if [ "$(uname -s)" = 'Darwin' ]; then
     brew bundle
 else
