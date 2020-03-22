@@ -15,8 +15,8 @@ else
     printf 'Skipping APT. Reason: No apt-get found.' >&2
 fi
 
-brew update
 if [ "$(uname -s)" = 'Darwin' ]; then
+    brew update
     brew bundle
 else
     printf 'Skipping Homebrew. Reason: Not on macOS.' >&2
