@@ -6,7 +6,10 @@ cd "$(dirname "${0}")"
 
 if command -v apt-get >/dev/null 2>&1; then
     # shellcheck disable=SC2046
-    sed -E 's~(\s*)#(.*)~~' <'apt.txt' | grep -vE '^(\s*)$' | xargs sudo apt-get install -y
+    tmpfile="$(mktemp)"
+    sed -E 's~(\s*)#(.*)~~' <'apt.txt' | grep -vE '^(\s*)$' >"${tmpfile}"
+    xargs apt-get install -y <"${tmpfile}" || sudo xargs apt-get install -y <"${tmpfile}"
+    rm -f "${tmpfile}"
 else
     printf 'Skipping APT. Reason: No apt-get found.' >&2
 fi
