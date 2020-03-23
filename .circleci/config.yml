@@ -13,7 +13,8 @@ workflows:
     jobs:
       - config-zsh
       - config-bash
-      - dependencies
+      - dependencies-ubuntu
+      - dependencies-debian
       # TODO: add mac job
 
 jobs:
@@ -39,9 +40,17 @@ jobs:
           bash 'home/install.sh'
           bash 'setup/install.sh'
 
-  dependencies:
+  dependencies-ubuntu:
     docker:
       - image: ubuntu
+    steps:
+      - checkout
+      - env_info
+      - run: sh 'dependencies/install.sh'
+
+  dependencies-debian:
+    docker:
+      - image: debian:testing
     steps:
       - checkout
       - env_info

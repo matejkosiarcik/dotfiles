@@ -13,7 +13,7 @@ if command -v apt-get >/dev/null 2>&1; then
     xargs apt-get install --yes <"${tmpfile}" || sudo xargs apt-get install --yes <"${tmpfile}"
     rm -f "${tmpfile}"
 
-    curl -sL https://deb.nodesource.com/setup_13.x | bash -
+    curl -sL 'https://deb.nodesource.com/setup_13.x' | bash -
     apt-get install --yes nodejs || sudo apt-get install --yes nodejs
 else
     printf 'Skipping APT. Reason: No apt-get found.' >&2
