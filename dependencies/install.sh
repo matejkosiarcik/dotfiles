@@ -4,13 +4,15 @@ cd "$(dirname "${0}")"
 
 ### System level packages ###
 
-apt-get update || sudo apt-get update
 if command -v apt-get >/dev/null 2>&1; then
-    # shellcheck disable=SC2046
+    apt-get update || sudo apt-get update
+
     tmpfile="$(mktemp)"
+    # shellcheck disable=SC2046
     sed -E 's~(\s*)#(.*)~~' <'apt.txt' | grep -vE '^(\s*)$' >"${tmpfile}"
     xargs apt-get install --yes <"${tmpfile}" || sudo xargs apt-get install --yes <"${tmpfile}"
     rm -f "${tmpfile}"
+
     curl -sL https://deb.nodesource.com/setup_13.x | bash -
     apt-get install --yes nodejs || sudo apt-get install --yes nodejs
 else
