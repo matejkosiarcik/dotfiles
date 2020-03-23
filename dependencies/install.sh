@@ -16,14 +16,14 @@ if command -v apt-get >/dev/null 2>&1; then
     curl -sL 'https://deb.nodesource.com/setup_13.x' | bash -
     apt-get install --yes nodejs || sudo apt-get install --yes nodejs
 else
-    printf 'Skipping APT. Reason: No apt-get found.' >&2
+    printf 'Skipping APT. Reason: No apt-get found.\n' >&2
 fi
 
 if [ "$(uname -s)" = 'Darwin' ]; then
     brew update
     # brew bundle # TODO: this seems to be too long for CI
 else
-    printf 'Skipping Homebrew. Reason: Not on macOS.' >&2
+    printf 'Skipping Homebrew. Reason: Not on macOS.\n' >&2
 fi
 
 # TODO: yum, choco
