@@ -7,6 +7,9 @@
 [includeIf "gitdir/i:~/Dev/FEI/"]
     path = ~/.config-personal.gitconfig
 
+[includeIf "gitdir/i:~/Dev/FIIT/"]
+    path = ~/.config-personal.gitconfig
+
 [includeIf "gitdir/i:~/Dev/Touch4IT/"]
     path = ~/.config-touch4it.gitconfig
 
