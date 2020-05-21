@@ -14,7 +14,7 @@ export PATH="${PATH}:${HOME}/bin:${HOME}/.bin:${HOME}/.jetbrains"
 [ -f "${HOME}/.profile" ] && . "${HOME}/.profile"
 
 # Aliases
-alias logtree="tree --ignore-case -CI '.build|.git|.venv|*.xcodeproj|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv'"
+alias logtree="tree --ignore-case -CI '.build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv'"
 
 # Git aliases
 alias df="git df | h"

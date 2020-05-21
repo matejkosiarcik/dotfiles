@@ -10,7 +10,9 @@ esac
 make_default_program() {
     while IFS="" read -r line; do
         filetype="$(printf '%s' "${line}" | sed -E 's~#.+~~;s~ ~~g')"
-        if [ "${filetype}" = '' ]; then continue; fi
+        if [ "${filetype}" = '' ]; then
+            continue;
+        fi
         if [ "$(uname -s)" = 'Darwin' ]; then
             duti -s "${1}" "${filetype}" all
             associated_app="$(duti -x "${filetype}")"
