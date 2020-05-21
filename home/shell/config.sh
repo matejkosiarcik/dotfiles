@@ -29,7 +29,7 @@ gitup() {
     # if [ "$(git branch | grep '*' | cut -d' ' -f2)" = "$(git branch --merged master | grep -v 'master' | grep '*' | cut -d' ' -f2)" ]; then
     #     git rebase master
     # fi
-    git branch --merged master | grep -v '*' | grep -v 'master' | xargs -n1 git branch -d || return 1
+    git branch --merged master | grep -v '\*' | grep -v 'master' | xargs -n1 git branch -d || return 1
 
 }
 

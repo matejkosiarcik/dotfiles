@@ -4,13 +4,12 @@ cd "$(dirname "${0}")"
 
 ### System level packages ###
 
-if command -v apt-get >/dev/null 2>&1; then
+if [ "$(uname -s)" = 'Linux' ] && command -v apt-get >/dev/null 2>&1; then
     apt-get update || sudo apt-get update
 
     tmpfile="$(mktemp)"
-    # shellcheck disable=SC2046
-    sed -E 's~(\s*)#(.*)~~' <'apt.txt' | grep -vE '^(\s*)$' >"${tmpfile}"
-    xargs apt-get install --yes <"${tmpfile}" || sudo xargs apt-get install --yes <"${tmpfile}"
+    sed -E 's~(\s*)#(.*)~~g' <'apt.txt' | grep -vE '^(\s*)$' >"${tmpfile}"
+    xargs apt-get install --yes <"${tmpfile}" || sh -c "sudo xargs apt-get install --yes" <"${tmpfile}"
     rm -f "${tmpfile}"
 
     curl -sL 'https://deb.nodesource.com/setup_13.x' | bash -
