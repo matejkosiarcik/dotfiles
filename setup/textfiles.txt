@@ -55,6 +55,7 @@ Vagrantfile
 .keep
 
 # Documentation
+.bib
 .markdown
 .md
 .mdown
@@ -90,13 +91,17 @@ Vagrantfile
 Jakefile
 
 # Web
+.css
+.haml
+.htmlhintrc
+.htmllintrc
 .less
+.liquid
+.mustache
+.pug
 .sass
 .scss
 .svg
-.css
-.htmlhintrc
-.htmllintrc
 .xhtml
 .xml
 
@@ -122,6 +127,8 @@ Jakefile
 .cc
 .cpp
 .cxx
+.d
+.go
 .h
 .H
 .h++
@@ -134,16 +141,15 @@ Jakefile
 .make
 .mm
 .oclint
-.swift
 BSDMakefile
-Cartfile
-Fastfile
 GNUMakefile
 Makefile
-Podfile
 
-# Preprocessors
-.mustache
+# Apple/Darwin
+.swift
+Cartfile
+Fastfile
+Podfile
 
 # Other languages
 .lisp
