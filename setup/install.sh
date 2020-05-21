@@ -14,7 +14,7 @@ make_default_program() {
             continue;
         fi
         if [ "$(uname -s)" = 'Darwin' ]; then
-            duti -s "${1}" "${filetype}" all
+            duti -s "${1}" "${filetype}" all || true
             associated_app="$(duti -x "${filetype}")"
             if ! printf '%s' "${associated_app}" | grep "${1}" >/dev/null; then
                 printf 'Filetype %s could not be changed from %s\n' "${filetype}" "$(printf '%s' "${associated_app}" | tr '\n' ' ')"

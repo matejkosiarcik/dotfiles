@@ -93,6 +93,8 @@ Jakefile
 # Web
 .css
 .haml
+.htm
+.html
 .htmlhintrc
 .htmllintrc
 .less
@@ -171,8 +173,6 @@ Pipfile
 
 # These file types don't behave
 # .plist # stays associated with Xcode
-# .htm # stays associated with Safari
-# .html # stays associated with Safari
 
 # ---
 # Unused UTI schema

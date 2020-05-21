@@ -79,4 +79,4 @@ defaults write 'com.apple.timemachine' DoNotOfferNewDisksForBackup -bool true
 
 killall Finder
 
-printf 'Some apps (Finder, Mail, TextEdit, Xcode) may need a restart to see changes.\n'
+printf 'Some apps (Mail, TextEdit, Xcode) may need a restart to see changes.\n'
