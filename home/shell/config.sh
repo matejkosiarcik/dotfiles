@@ -1,4 +1,4 @@
-# shellcheck shell=sh
+#!/bin/sh
 
 # settings
 export LANG='en_US.UTF-8'
