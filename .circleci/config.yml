@@ -21,9 +21,10 @@ workflows:
 jobs:
   azlint:
     docker:
-      - image: matejkosiarcik/azlint
+      - image: matejkosiarcik/azlint:dev-all
     steps:
       - checkout
+      - setup_remote_docker
       - run: azlint
 
   config-zsh:
