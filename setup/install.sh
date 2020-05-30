@@ -11,7 +11,7 @@ make_default_program() {
     while IFS="" read -r line; do
         filetype="$(printf '%s' "${line}" | sed -E 's~#.+~~;s~ ~~g')"
         if [ "${filetype}" = '' ]; then
-            continue;
+            continue
         fi
         if [ "$(uname -s)" = 'Darwin' ]; then
             duti -s "${1}" "${filetype}" all || true

@@ -30,7 +30,12 @@ gitup() {
     #     git rebase master
     # fi
     git branch --merged master | grep -v '\*' | grep -v 'master' | xargs -n1 git branch -d || return 1
+}
 
+update_defaults_all() {
+    find "${HOME}/Dev/Personal" -depth 1 -type d -name "*" | while read -r project; do
+        update_defaults --cwd "${project}" --verbose
+    done
 }
 
 # Open new terminal at current directory
@@ -44,9 +49,15 @@ tdup() {
 mcd() {
     # Validate argument count
     case "${#}" in
-        0) printf 'No arguments provided\n'; return 1;;
-        1) ;; # Valid
-        *) printf 'Too many arguments provided\n'; return 1;;
+    0)
+        printf 'No arguments provided\n'
+        return 1
+        ;;
+    1) ;; # Valid
+    *)
+        printf 'Too many arguments provided\n'
+        return 1
+        ;;
     esac
 
     # Run function
@@ -67,8 +78,8 @@ fi
 # which also accepts no options to open current directory
 o() {
     if [ "${#}" -eq 0 ]; then
-        open '.';
+        open '.'
     else
-        open "${@}";
-    fi;
+        open "${@}"
+    fi
 }
