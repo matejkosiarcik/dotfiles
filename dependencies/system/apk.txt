@@ -1,0 +1,23 @@
+# general
+alpine-sdk
+build-base
+
+# system development
+gcc
+g++
+clang
+gdb
+lldb
+
+# VCS
+git
+mercurial
+
+# other languages
+nodejs
+npm
+python3
+ruby
+
+# other
+tidyhtml
