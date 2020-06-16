@@ -1,4 +1,4 @@
-# shellcheck shell=sh
+#!/bin/sh
 # This file setups fresh macOS installation
 set -euf
 
