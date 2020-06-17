@@ -37,3 +37,11 @@ mint list >Mintfile
 
 printf 'Apps\n'
 ls -1 /Applications >apps.txt
+
+printf 'Editors\n'
+code --list-extensions >vscode-extensions.txt
+case "$(uname -s)" in
+    Darwin) cp "${HOME}/Library/Application Support/Code/User/settings.json" 'vscode-settings.json';;
+    Windows) cp %APPDATA%\Code\User\settings.json vscode-settings.json;;
+    Linux) cp "${HOME}/.config/Code/User/settings.json" 'vscode-settings.json';;
+esac
