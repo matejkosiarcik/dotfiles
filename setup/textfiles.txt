@@ -10,6 +10,7 @@
 .scpt
 .session
 .sh
+.sh_history
 .tcsh
 .yash
 .zprofile
@@ -27,6 +28,7 @@
 .conf
 .lock
 .log
+.pub
 .resolved
 .text
 .tmp
@@ -35,6 +37,8 @@
 .yaml
 .yml
 Brewfile
+id_rsa
+known_hosts
 Procfile
 rc # config for lftp
 
@@ -53,6 +57,7 @@ Vagrantfile
 .hgignore
 .hgkeep
 .keep
+.tig_history
 
 # Documentation
 .bib
@@ -79,12 +84,14 @@ Vagrantfile
 
 # JavaScript
 .coffee
+.emscripten
 .js
 .json
 .json5
 .jsx
 .node-version
 .npm-version
+.npmrc
 .nvmrc
 .ts
 .tsx
@@ -156,20 +163,24 @@ Podfile
 # Other languages
 .lisp
 .lsp
+.mysql_history
+.netrc
 .nim
 .perl
 .py
 .py2
 .py3
+.python_history
 .python-version
 .rb
 .ruby
 .ruby-gemset
 .ruby-version
 .rvmrc
+.sqlite_history
 Gemfile
-Rakefile
 Pipfile
+Rakefile
 
 # These file types don't behave
 # .plist # stays associated with Xcode

@@ -7,6 +7,8 @@ cd backup-list
 
 printf 'Brew\n'
 [ "$(uname -s)" = 'Darwin' ] && brew bundle dump # >Brewfile
+brew cask ls -1 >brew-cask.txt
+brew ls -1 >brew.txt
 ([ "$(uname -s)" = 'Linux' ] || [ "$(uname -s)" = 'Windows' ]) && command -v apt >/dev/null 2>&1 && apt list --installed >apt.txt
 ([ "$(uname -s)" = 'Linux' ]) && command -v dnf >/dev/null 2>&1 && dnf list installed >dnf.txt
 
@@ -32,3 +34,6 @@ ghc-pkg list >ghc-pkg.txt
 
 printf 'Swift\n'
 mint list >Mintfile
+
+printf 'Apps\n'
+ls -1 /Applications >apps.txt
