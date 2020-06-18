@@ -1,15 +1,19 @@
 #!/bin/sh
 set -euf
 
-[ "$(uname -s)" = 'Darwin' ] && \
-    brew update && \
-    brew upgrade && \
-    brew cask upgrade && \
+if [ "$(uname -s)" = 'Darwin' ]; then
+    brew update
+    brew upgrade
+    brew cask upgrade
     brew cleanup
+fi
 
-[ "$(uname -s)" = 'Linux' ] && command -v apt-get >/dev/null 2>&1 && \
-    apt-get update --yes && \
-    apt-get upgrade --yes
+if [ "$(uname -s)" = 'Linux' ]; then
+    if command -v apt-get >/dev/null 2>&1; then
+        apt-get update --yes
+        apt-get upgrade --yes
+    fi
+fi
 
 pip install --upgrade pip setuptools wheel
 pip3 install --upgrade pip setuptools wheel

@@ -2,6 +2,16 @@
 set -euf
 cd "$(dirname "${0}")"
 
-rm -f "${HOME}/.bin/update-defaults"
-printf '#!/bin/sh\npython3 %s/update-defaults.py ${@}\n' "${PWD}" >"${HOME}/.bin/update-defaults"
-chmod +x "${HOME}/.bin/update-defaults"
+if [ -z "${DESTDIR+x}" ]; then
+    DESTDIR="${HOME}/.bin"
+fi
+rm -rf "${DESTDIR:?}/*"
+
+cp 'update-defaults.py' "${DESTDIR}/update-defaults"
+chmod a+x "${DESTDIR}/update-defaults"
+
+cp 'backup.sh' "${DESTDIR}/backup"
+chmod a+x "${DESTDIR}/backup"
+
+cp 'gupdate.sh' "${DESTDIR}/gupdate"
+chmod a+x "${DESTDIR}/gupdate"

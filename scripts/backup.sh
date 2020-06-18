@@ -6,11 +6,19 @@ mkdir backup-list
 cd backup-list
 
 printf 'Brew\n'
-[ "$(uname -s)" = 'Darwin' ] && brew bundle dump # >Brewfile
-brew cask ls -1 >brew-cask.txt
-brew ls -1 >brew.txt
-([ "$(uname -s)" = 'Linux' ] || [ "$(uname -s)" = 'Windows' ]) && command -v apt >/dev/null 2>&1 && apt list --installed >apt.txt
-([ "$(uname -s)" = 'Linux' ]) && command -v dnf >/dev/null 2>&1 && dnf list installed >dnf.txt
+if [ "$(uname -s)" = 'Darwin' ]; then
+    brew bundle dump # >Brewfile
+    brew cask ls -1 >brew-cask.txt
+    brew ls -1 >brew.txt
+fi
+if [ "$(uname -s)" = 'Linux' ]; then
+    if command -v apt >/dev/null 2>&1; then
+        apt list --installed >apt.txt
+    fi
+    if command -v dnf >/dev/null 2>&1; then
+        dnf list installed >dnf.txt
+    fi
+fi
 
 printf 'Python\n'
 pip list --format=freeze --quiet >requirements-pip.txt
@@ -41,7 +49,7 @@ ls -1 /Applications >apps.txt
 printf 'Editors\n'
 code --list-extensions >vscode-extensions.txt
 case "$(uname -s)" in
-    Darwin) cp "${HOME}/Library/Application Support/Code/User/settings.json" 'vscode-settings.json';;
-    Windows) cp %APPDATA%\Code\User\settings.json vscode-settings.json;;
-    Linux) cp "${HOME}/.config/Code/User/settings.json" 'vscode-settings.json';;
+Darwin) cp "${HOME}/Library/Application Support/Code/User/settings.json" 'vscode-settings.json' ;;
+Windows) cp %APPDATA%\\Code\\User\\settings.json vscode-settings.json ;;
+Linux) cp "${HOME}/.config/Code/User/settings.json" 'vscode-settings.json' ;;
 esac
