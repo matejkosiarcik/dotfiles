@@ -3,6 +3,7 @@ language: generic
 os:
   - linux
   - osx
+  - windows
 
 addons:
   apt:
@@ -13,12 +14,6 @@ addons:
 
 matrix:
   fast_finish: true
-
-  include:
-    - os: osx
-      language: generic
-      install: skip
-      script: sh 'dependencies/install.sh'
 
 install: skip
 

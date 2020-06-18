@@ -1,66 +1,26 @@
 version: 2.1
 
-commands:
-  env_info:
-    steps:
-      - run:
-          name: Print env info
-          command: uname -a
-
 workflows:
   version: 2
   test:
     jobs:
       - azlint
-      - config-zsh
-      - config-bash
-      - dependencies-ubuntu
-      - dependencies-debian
-      # TODO: add mac job
+      - debian
 
 jobs:
   azlint:
     docker:
-      - image: matejkosiarcik/azlint:dev-all
+      - image: matejkosiarcik/azlint
     steps:
       - checkout
       - setup_remote_docker
       - run: azlint
 
-  config-zsh:
+  debian:
     docker:
-      - image: zshusers/zsh
+      - image: debian:stable
     steps:
       - checkout
-      - env_info
-      - run: zsh --version
       - run: |
-          zsh 'home/install.sh'
-          zsh 'setup/install.sh'
-
-  config-bash:
-    docker:
-      - image: bash
-    steps:
-      - checkout
-      - env_info
-      - run: bash --version
-      - run: |
-          bash 'home/install.sh'
-          bash 'setup/install.sh'
-
-  dependencies-ubuntu:
-    docker:
-      - image: ubuntu
-    steps:
-      - checkout
-      - env_info
-      - run: sh 'dependencies/install.sh'
-
-  dependencies-debian:
-    docker:
-      - image: debian
-    steps:
-      - checkout
-      - env_info
-      - run: sh 'dependencies/install.sh'
+          sh 'home/install.sh'
+          sh 'setup/install.sh'
