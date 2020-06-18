@@ -1,5 +1,5 @@
 # config
-tap "caskroom/cask"
+tap "homebrew/cask-cask"
 brew "mas"
 
 ### Development ###
@@ -15,10 +15,10 @@ cask "powershell"
 
 # languages
 brew "gcc"
+brew "gdb"
 brew "node"
 brew "php", restart_service: true
-brew "python@2"
-brew "python@3"
+brew "python"
 brew "ruby"
 brew "rustup-init"
 cask "adoptopenjdk"
@@ -39,8 +39,8 @@ brew "rbenv"
 
 # package managers
 brew "carthage"
-brew "cocoapods"
 brew "composer"
+brew "mint"
 
 # generators
 brew "autoconf"
@@ -50,12 +50,10 @@ brew "swiftgen"
 brew "xcodegen"
 
 # linters/formatters
-brew "shellcheck"
 brew "shfmt"
-brew "svgcleaner"
 brew "swiftlint"
 brew "tidy-html5"
-brew "yamllint"
+brew "clang-format"
 
 # other
 brew "circleci"
@@ -65,7 +63,6 @@ brew "libssh2"
 brew "ncurses"
 brew "openssl"
 brew "plantuml"
-brew "travis"
 brew "wget"
 cask "xquartz"
 
@@ -149,3 +146,8 @@ brew "swiftenv"
 
 tap "heroku/brew"
 brew "heroku"
+
+# Install following casks manually (because they require additional permissions (probably because of kernel extensions))
+# Then go to (System Preferences > Security & Privacy > General) to resolve permissions after installation
+# cask "virtualbox"
+# cask "virtualbox-extension-pack"

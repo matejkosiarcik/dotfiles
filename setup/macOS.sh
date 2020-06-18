@@ -1,4 +1,4 @@
-# shellcheck shell=sh
+#!/bin/sh
 # This file setups fresh macOS installation
 set -euf
 
@@ -16,7 +16,27 @@ sudo systemsetup -setrestartfreeze on
 sudo nvram SystemAudioVolume=' '
 
 #
-# Modifying defaults of applications
+# Defaults of whole system
+#
+
+# show filename extensions
+defaults write 'NSGlobalDomain' AppleShowAllExtensions -bool true
+
+# disable this "smart" witchcraft
+defaults write 'NSGlobalDomain' NSAutomaticDashSubstitutionEnabled -bool false
+defaults write 'NSGlobalDomain' NSAutomaticQuoteSubstitutionEnabled -bool false
+
+# disable autocorrect
+defaults write 'NSGlobalDomain' NSAutomaticSpellingCorrectionEnabled -bool false
+
+# expand save panel by default
+defaults write 'NSGlobalDomain' NSNavPanelExpandedStateForSaveMode -bool true
+
+# quit windows when quitting app
+defaults write 'NSGlobalDomain' NSQuitAlwaysKeepsWindows -bool false
+
+#
+# Defaults of specific apps
 #
 
 # do not create .DS_Store on network volumes
@@ -54,27 +74,9 @@ defaults write 'com.apple.textedit' RichText -int 0
 defaults write 'com.apple.timemachine' DoNotOfferNewDisksForBackup -bool true
 
 #
-# Modifying defaults of whole system
-#
-
-# show filename extensions
-defaults write 'NSGlobalDomain' AppleShowAllExtensions -bool true
-
-# disable this "smart" witchcraft
-defaults write 'NSGlobalDomain' NSAutomaticDashSubstitutionEnabled -bool false
-defaults write 'NSGlobalDomain' NSAutomaticQuoteSubstitutionEnabled -bool false
-
-# disable autocorrect
-defaults write 'NSGlobalDomain' NSAutomaticSpellingCorrectionEnabled -bool false
-
-# expand save panel by default
-defaults write 'NSGlobalDomain' NSNavPanelExpandedStateForSaveMode -bool true
-
-# quit windows when quitting app
-defaults write 'NSGlobalDomain' NSQuitAlwaysKeepsWindows -bool false
-
-#
 # Reload changes
 #
 
-printf 'Some apps (Finder, Mail, TextEdit, Xcode) may need a restart to see changes.\n'
+killall Finder
+
+printf 'Some apps (Mail, TextEdit, Xcode) may need a restart to see changes.\n'

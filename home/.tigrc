@@ -1,7 +1,5 @@
 set main-options = --exclude=refs/stash --all
 
-bind generic g >git %(prompt)
-
 bind status A >git commit --amend
 bind status C >git commit # because default "C" binding has prompt of type: "press enter to return"
 bind status D @rm %(file)

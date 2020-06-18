@@ -1,86 +1,26 @@
 version: 2.1
 
-commands:
-  env_info:
-    steps:
-      - run:
-          name: Print env info
-          command: uname -a
-
 workflows:
   version: 2
   test:
     jobs:
-      - config-zsh
-      - config-bash
-      - dependency-apt
-      - dependency-npm
-      - dependency-pip
-      - dependency-gem
-      # TODO: add mac job
+      - azlint
+      - debian
 
 jobs:
-  config-zsh:
+  azlint:
     docker:
-      - image: zshusers/zsh
+      - image: matejkosiarcik/azlint
     steps:
       - checkout
-      - env_info
-      - run: zsh --version
-      - run: |
-          zsh 'home/install.sh'
-          zsh 'setup/install.sh'
+      - setup_remote_docker
+      - run: azlint
 
-  config-bash:
+  debian:
     docker:
-      - image: bash
+      - image: debian:stable
     steps:
       - checkout
-      - env_info
-      - run: bash --version
       - run: |
-          bash 'home/install.sh'
-          bash 'setup/install.sh'
-
-  dependency-apt:
-    docker:
-      - image: ubuntu
-    steps:
-      - checkout
-      - env_info
-      - run: apt-get update -y
-      - run: sed -E 's~(\s*)#(.*)~~' <'dependencies/apt/apt.txt' | grep -vE '^(\s*)$' | xargs -tn1 apt-get install -y
-
-  dependency-npm:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - env_info
-      - run: |
-          node --version
-          npm --version
-      - run: node 'dependencies/npm/install.js' local
-
-  dependency-pip:
-    docker:
-      - image: circleci/python
-    steps:
-      - checkout
-      - env_info
-      - run: |
-          python --version
-          pip --version
-      - run: pip install --user --requirement 'dependencies/pip/requirements.txt'
-
-  dependency-gem:
-    docker:
-      - image: circleci/ruby
-    steps:
-      - checkout
-      - env_info
-      - run: |
-          ruby --version
-          gem --version
-          bundle --version
-      - run: bundle install --gemfile='dependencies/gem/Gemfile'
+          sh 'home/install.sh'
+          sh 'setup/install.sh'

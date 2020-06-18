@@ -1,31 +1,85 @@
+# video
+.3g2
+.3gp
+.amv
+.avi
+.m2ts
+.m2v
+.m4p
+.m4v
+.mkv
+.mov
+.mp4
+.mpe
+.mpeg
+.mpg
+.mpv
+.mts
+.ogm
+.ogv
+.qt
+.rm
+.rmvb
+.ts
+.vob
+.webm
+.wmv
+.wmx
+
+# audio
+.aac
+.adt
+.adts
+.aif
+.aifc
+.aiff
+.flac
+.mp1
+.mp2
+.mp3
+.oga
+.wma
+
+# mixed
+.ogg
+.ogx
+.opus
+.spx
+.wm
+
+# consider either having this as separate entry, or add this automatically to every extension, such as .mp4.part
 .part
-com.apple.coreaudio-format
-com.apple.protected-mpeg-4-audio
-com.apple.quicktime-movie
-com.digidesign.sd2-audio
-com.microsoft.advanced-stream-redirector
-com.microsoft.advanced-systems-format
-com.microsoft.waveform-audio
-com.microsoft.windows-media-wax
-com.microsoft.windows-media-wm
-com.microsoft.windows-media-wma
-com.microsoft.windows-media-wmp
-com.microsoft.windows-media-wmv
-com.microsoft.windows-media-wmx
-com.microsoft.windows-media-wvx
-com.real.realaudio
-com.real.realmedia
-public.3gpp
-public.3gpp2
-public.aifc-audio
-public.aiff-audio
-public.audio
-public.audiovisual-content
-public.avi
-public.movie
-public.mp3
-public.mpeg-4-audio
-public.mpeg-4
-public.mpeg
-public.ulaw-audio
-public.video
+
+# ---
+# Unused UTI schema
+# ---
+# com.apple.coreaudio-format
+# com.apple.protected-mpeg-4-audio
+# com.apple.quicktime-movie
+# com.digidesign.sd2-audio
+# com.microsoft.advanced-stream-redirector
+# com.microsoft.advanced-systems-format
+# com.microsoft.waveform-audio
+# com.microsoft.windows-media-wax
+# com.microsoft.windows-media-wm
+# com.microsoft.windows-media-wma
+# com.microsoft.windows-media-wmp
+# com.microsoft.windows-media-wmv
+# com.microsoft.windows-media-wmx
+# com.microsoft.windows-media-wvx
+# com.real.realaudio
+# com.real.realmedia
+# public.3gpp
+# public.3gpp2
+# public.aifc-audio
+# public.aiff-audio
+# public.audio
+# public.audiovisual-content
+# public.avi
+# public.movie
+# public.mp3
+# public.mpeg-4-audio
+# public.mpeg-4
+# public.mpeg
+# public.ulaw-audio
+# public.video
