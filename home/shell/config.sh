@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# settings
-export LANG='en_US.UTF-8'
-export LC_ALL='en_US.UTF-8'
-
 # Customize PATH
 export PATH="${HOME}/.bin:${PATH}:${HOME}/.jetbrains"
 
