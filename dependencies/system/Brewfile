@@ -1,5 +1,4 @@
 # config
-tap "homebrew/cask-cask"
 brew "mas"
 
 ### Development ###
@@ -26,13 +25,13 @@ cask "adoptopenjdk"
 
 # additional languages
 # brew "emscripten" # better to install by hand
-brew "jython"
-brew "micropython"
-brew "pypy"
-brew "pypy3"
+# brew "jython"
+# brew "micropython"
+# brew "pypy"
+# brew "pypy3"
 
 # languages support
-brew "pipenv"
+# brew "pipenv"
 brew "pyenv"
 brew "nvm"
 brew "rbenv"
@@ -40,18 +39,18 @@ brew "rbenv"
 # package managers
 brew "carthage"
 brew "composer"
-brew "mint"
+# brew "mint"
 
 # generators
 brew "autoconf"
 brew "cmake"
-brew "sourcery"
-brew "swiftgen"
-brew "xcodegen"
+# brew "sourcery"
+# brew "swiftgen"
+# brew "xcodegen"
 
 # linters/formatters
-brew "shfmt"
-brew "swiftlint"
+# brew "shfmt"
+# brew "swiftlint"
 brew "tidy-html5"
 brew "clang-format"
 
@@ -66,7 +65,7 @@ brew "plantuml"
 brew "wget"
 cask "xquartz"
 
-brew "docker"
+# brew "docker"
 cask "docker"
 
 # version control
@@ -77,7 +76,7 @@ cask "sourcetree"
 ### Text editing ###
 
 # editors/IDEs
-cask "android-studio"
+# cask "android-studio"
 cask "atom"
 cask "jetbrains-toolbox"
 cask "mactex"
@@ -108,6 +107,7 @@ cask "google-chrome"
 cask "opera"
 cask "tor-browser"
 cask "vivaldi"
+cask "brave-browser"
 
 # drivers
 brew "geckodriver"
@@ -133,16 +133,17 @@ cask "handbrake"
 cask "vlc"
 
 ### User tools ###
-cask "microsoft-teams"
+# cask "microsoft-teams"
 cask "skype"
-cask "slack"
-cask "mattermost"
-brew "wine"
+# cask "slack"
+# cask "mattermost"
+cask "wine-stable"
 brew "winetricks"
+cask "ferdi"
 
 ### Other taps ###
-tap "kylef/formulae"
-brew "swiftenv"
+# tap "kylef/formulae"
+# brew "swiftenv"
 
 tap "heroku/brew"
 brew "heroku"
