@@ -32,6 +32,7 @@
 .resolved
 .text
 .tmp
+.toml
 .txt
 .workflow
 .yaml

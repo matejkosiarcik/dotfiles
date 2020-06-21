@@ -5,7 +5,7 @@ export LANG='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
 
 # Customize PATH
-export PATH="${PATH}:${HOME}/bin:${HOME}/.bin:${HOME}/.jetbrains"
+export PATH="${HOME}/.bin:${PATH}:${HOME}/.jetbrains"
 
 # Include other config files
 # shellcheck source=/dev/null
