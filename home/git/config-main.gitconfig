@@ -14,10 +14,14 @@
     path = ~/.config-touch4it.gitconfig
 
 [commit]
+    gpsign = true
     gpgsign = true
 
 [core]
     excludesfile = ~/.gitignore
+
+[credential]
+	helper = osxkeychain
 
 [alias]
     # shortcuts
