@@ -21,7 +21,7 @@
     excludesfile = ~/.gitignore
 
 [credential]
-	helper = osxkeychain
+    helper = osxkeychain
 
 [alias]
     # shortcuts
