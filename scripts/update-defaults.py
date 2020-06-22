@@ -7,11 +7,24 @@ import shutil
 import argparse
 
 
+files = [
+    '.editorconfig',
+    '.markdownlint.json',
+    '.remarkrc',
+    '.swiftlint.yml',
+    '.yamllint.yml',
+    '.pylintrc',
+    'setup.cfg',
+    os.path.join('.github', 'toc.yml'),
+    os.path.join('.mergify', 'config.yml'),
+]
+
+
 def main(argv: List[str]):
     # parse arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cwd', type=str, help='Path to project to update')
-    parser.add_argument('--defaults', type=str, help='Path to defaults')
+    parser.add_argument('--cwd', type=str, default='.', help='Path to project to update')
+    parser.add_argument('--defaults', type=str, required=True, help='Path to defaults')
     parser.add_argument('-n', '--dry-run', action='store_true', default=False, help='Dry run')
     parser.add_argument('--init', action='store_true', default=False, help='Copy everything')
     parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Additional logging')
@@ -19,25 +32,13 @@ def main(argv: List[str]):
     args = parser.parse_args(argv)
 
     # get source/target directories
-    cwd = args.cwd or '.'
+    cwd = args.cwd
     defaults_dir = args.defaults
     assert os.path.exists(defaults_dir) and os.path.isdir(os.path.realpath(defaults_dir))
-    dry_run = args.dry_run or False
-    init = args.init or False
-    verbose = args.verbose or False
-    interactive = args.interactive or False
-
-    files = [
-        '.editorconfig',
-        '.markdownlint.json',
-        '.remarkrc',
-        '.swiftlint.yml',
-        '.yamllint.yml',
-        '.pylintrc',
-        'setup.cfg',
-        os.path.join('.github', 'toc.yml'),
-        os.path.join('.mergify', 'config.yml'),
-    ]
+    dry_run = args.dry_run
+    init = args.init
+    verbose = args.verbose
+    interactive = args.interactive
 
     def copy(source: str, target: str):
         if dry_run or verbose:
