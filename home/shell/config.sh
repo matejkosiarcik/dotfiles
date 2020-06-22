@@ -4,7 +4,8 @@
 export PATH="${HOME}/.bin:${PATH}"
 
 # gpg
-export GPG_TTY=$(tty)
+GPG_TTY="$(tty)"
+export GPG_TTY
 
 # Include other config files
 # shellcheck source=/dev/null
