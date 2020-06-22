@@ -11,7 +11,7 @@ bundle config set system 'false'
 
 pip3 install --requirement 'other/requirements.txt'
 
-sed -E 's~(\s*)#(.*)~~' <'other/npm.txt' | grep -vE '^(\s*)$' | xargs npm install --force --global
+sed -E 's~(\s*)#(.*)~~' <'other/npm.txt' | grep -vE '^(\s*)$' | xargs npm install --global
 
 sed -E 's~(\s*)#(.*)~~' <'other/cargo.txt' | grep -vE '^(\s*)$' | xargs cargo install
 

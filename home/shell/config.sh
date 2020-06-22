@@ -1,7 +1,10 @@
 #!/bin/sh
 
 # Customize PATH
-export PATH="${HOME}/.bin:${PATH}:${HOME}/.jetbrains"
+export PATH="${HOME}/.bin:${PATH}"
+
+# gpg
+export GPG_TTY=$(tty)
 
 # Include other config files
 # shellcheck source=/dev/null

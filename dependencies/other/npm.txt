@@ -1,4 +1,5 @@
 diff2html-cli
-markdown-toc
 npm-check-updates
-npx
+
+# npx # probably installed by default?
+# markdown-toc
