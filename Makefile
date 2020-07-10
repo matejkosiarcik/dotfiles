@@ -31,4 +31,4 @@ install:
 	if $(ACTIVATE_VENV); then \
 		dotbot -c install.conf.yaml
 	;else exit 1; fi
-	sh 'setup/install.sh'
+	sh 'setup/setup.sh'
