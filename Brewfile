@@ -1,11 +1,1 @@
 brew "duti"
-brew "node"
-brew "python"
-brew "ruby"
-
-# brew "bash"
-# brew "dash"
-# brew "ksh"
-# brew "mksh"
-# brew "yash"
-# brew "zsh"

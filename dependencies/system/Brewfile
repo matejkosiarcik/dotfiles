@@ -24,34 +24,26 @@ cask "adoptopenjdk"
 # cask "java" # sometimes collides with openjdk
 
 # additional languages
-# brew "emscripten" # better to install by hand
-# brew "jython"
-# brew "micropython"
-# brew "pypy"
-# brew "pypy3"
+brew "jython"
+brew "micropython"
+brew "pypy"
+brew "pypy3"
+brew "jruby"
 
 # languages support
-# brew "pipenv"
 brew "pyenv"
 brew "nvm"
 brew "rbenv"
 brew "ruby-build"
 
 # package managers
-brew "carthage"
 brew "composer"
-# brew "mint"
 
 # generators
 brew "autoconf"
 brew "cmake"
-# brew "sourcery"
-# brew "swiftgen"
-# brew "xcodegen"
 
 # linters/formatters
-# brew "shfmt"
-# brew "swiftlint"
 brew "tidy-html5"
 brew "clang-format"
 
@@ -77,7 +69,7 @@ cask "sourcetree"
 ### Text editing ###
 
 # editors/IDEs
-# cask "android-studio"
+cask "android-studio"
 cask "atom"
 cask "jetbrains-toolbox"
 cask "mactex"
@@ -143,11 +135,7 @@ brew "winetricks"
 cask "ferdi"
 
 ### Other taps ###
-# tap "kylef/formulae"
-# brew "swiftenv"
-
-tap "heroku/brew"
-brew "heroku"
+brew "heroku/brew/heroku"
 
 # Install following casks manually (because they require additional permissions (probably because of kernel extensions))
 # Then go to (System Preferences > Security & Privacy > General) to resolve permissions after installation

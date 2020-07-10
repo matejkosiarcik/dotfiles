@@ -1,6 +1,7 @@
 # TODO: cleanup dependencies
 grip
 yamllint
+pipenv
 
 # bashate
 # autopep8
