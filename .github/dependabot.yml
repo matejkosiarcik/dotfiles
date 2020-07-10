@@ -1,0 +1,15 @@
+version: 2
+
+updates:
+  # Python
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "03:00"
+      timezone: "Europe/Bratislava"
+    open-pull-requests-limit: 10
+    reviewers:
+      - matejkosiarcik
+    assignees:
+      - matejkosiarcik
