@@ -21,6 +21,4 @@ jobs:
       - image: debian:stable
     steps:
       - checkout
-      - run: |
-          sh 'home/install.sh'
-          sh 'setup/install.sh'
+      - run: make

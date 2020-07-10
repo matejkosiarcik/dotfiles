@@ -21,5 +21,4 @@ before_script:
   - if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then sw_vers; fi
 
 script:
-  - sh 'home/install.sh'
-  - sh 'setup/install.sh'
+  - make

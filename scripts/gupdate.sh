@@ -1,36 +1,26 @@
 #!/bin/sh
 set -euf
 
-# macOS system
 if [ "$(uname -s)" = 'Darwin' ]; then
     brew update
     brew upgrade
     brew cask upgrade
     brew cleanup
-
     softwareupdate --install --all
-fi
-
-# Linux system
-if [ "$(uname -s)" = 'Linux' ]; then
+elif [ "$(uname -s)" = 'Linux' ]; then
     if command -v apt-get >/dev/null 2>&1; then
         apt-get update
         apt-get upgrade --yes
         apt-get clean
-    fi
-    if command -v apk >/dev/null 2>&1; then
+    elif command -v apk >/dev/null 2>&1; then
         apk update
-    fi
-    if command -v yum >/dev/null 2>&1 && ! command -v dnf >/dev/null 2>&1; then
+    elif command -v dnf >/dev/null 2>&1; then
+        dnf upgrade
+    elif command -v yum >/dev/null 2>&1 && ! command -v dnf >/dev/null 2>&1; then
         yum update
         yum upgrade
     fi
-    if command -v dnf >/dev/null 2>&1; then
-        dnf upgrade
-    fi
-fi
-
-if [ "$(uname -s)" = 'Windows' ]; then
+elif [ "$(uname -s)" = 'Windows' ]; then
     choco upgrade chocolatey
     choco upgrade all
 fi
