@@ -28,9 +28,7 @@ jobs:
 
   linux:
     parameters:
-      base:
-        type: string
-      tag:
+      image:
         type: string
     docker:
       - image: "<< parameters.image >>"
