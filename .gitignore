@@ -936,3 +936,5 @@ MigrationBackup/
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/node,python,venv,virtualenv,xcode,jetbrains+all,visualstudiocode,sublimetext,emacs,vim,visualstudio,slickedit,backup,macos,windows,linux
+
+!/scripts/
