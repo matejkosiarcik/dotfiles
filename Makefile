@@ -29,6 +29,6 @@ bootstrap:
 .PHONY: install
 install:
 	if $(ACTIVATE_VENV); then \
-		dotbot -c install.conf.yaml
+		dotbot -c install.conf.yaml \
 	;else exit 1; fi
 	sh 'setup/setup.sh'
