@@ -15,7 +15,7 @@ elif [ "$(uname -s)" = 'Linux' ]; then
     elif command -v apk >/dev/null 2>&1; then
         apk update
     elif command -v dnf >/dev/null 2>&1; then
-        dnf upgrade
+        dnf upgrade -y
     elif command -v yum >/dev/null 2>&1 && ! command -v dnf >/dev/null 2>&1; then
         yum update
         yum upgrade

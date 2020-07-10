@@ -18,7 +18,7 @@ commands:
               command -v dnf >/dev/null 2>&1 || yum install -y dnf;
             fi
             if command -v dnf >/dev/null 2>&1; then
-              dnf upgrade;
+              dnf upgrade -y;
               dnf install -y make python3 python3-pip python3-setuptools;
             fi
 workflows:
