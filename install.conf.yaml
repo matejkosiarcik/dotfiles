@@ -38,7 +38,7 @@
     # custom scripts
     ~/.bin/backup-packages: scripts/backup-packages.sh
     ~/.bin/update-defaults: scripts/update-defaults.py
-    ~/.bin/gupdate: scripts/gupdate.sh
+    ~/.bin/system-update: scripts/system-update.sh
 
 - shell:
     - printf 'Manually run `sh setup/setup.sh`\n'
