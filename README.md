@@ -2,6 +2,10 @@
 
 > Collection of my personal scripts and config files
 
+<!-- toc -->
+
+<!-- tocstop -->
+
 ## License
 
 This project is licensed under the MIT License, see [LICENSE.txt](LICENSE.txt)
