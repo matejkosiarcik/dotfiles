@@ -34,7 +34,7 @@ npm update -g
 
 # Rust
 rustup update
-rustup self update || true  # when installed with package manager fails to self-update
+rustup self update || true # when installed with package manager fails to self-update
 cargo install-update -a
 
 # Haskell
