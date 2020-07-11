@@ -4,6 +4,8 @@
 
 <!-- toc -->
 
+- [License](#license)
+
 <!-- tocstop -->
 
 ## License
