@@ -1,32 +1,29 @@
 #!/bin/sh
 set -euf
 
-[ -d backup-list ] && rm -rf backup-list
-mkdir backup-list
-cd backup-list
+tmpdir="$(mktemp -d)"
+cd "${tmpdir}"
 
-printf 'Brew\n'
 if [ "$(uname -s)" = 'Darwin' ]; then
-    brew bundle dump # >Brewfile
+    printf 'Brew\n'
+    brew bundle dump --file Brewfile
     brew cask ls -1 >brew-cask.txt
     brew ls -1 >brew.txt
-fi
-if [ "$(uname -s)" = 'Linux' ]; then
+elif [ "$(uname -s)" = 'Linux' ]; then
     if command -v apt >/dev/null 2>&1; then
+        printf 'Apt\n'
         apt list --installed >apt.txt
-    fi
-    if command -v dnf >/dev/null 2>&1; then
+    elif command -v dnf >/dev/null 2>&1; then
+        printf 'Dnf\n'
         dnf list installed >dnf.txt
     fi
 fi
 
 printf 'Python\n'
-pip list --format=freeze --quiet >requirements-pip.txt
-pip2 list --format=freeze --quiet >requirements-pip2.txt
-pip3 list --format=freeze --quiet >requirements-pip3.txt
+pip3 list --format=freeze >requirements.txt
 
-printf 'JS\n'
-npm list -g --depth 0 >npm.txt || true
+printf 'JavaScript\n'
+npm list -g --depth 0 >npm.txt
 
 printf 'Ruby\n'
 gem list --quiet >Gemfile
@@ -53,3 +50,9 @@ Darwin) cp "${HOME}/Library/Application Support/Code/User/settings.json" 'vscode
 Windows) cp %APPDATA%\\Code\\User\\settings.json vscode-settings.json ;;
 Linux) cp "${HOME}/.config/Code/User/settings.json" 'vscode-settings.json' ;;
 esac
+
+computername="$(scutil --get ComputerName || cat /etc/hostname || uname -n)"
+target="${HOME}/Dropbox/Backup/${computername}/packages"
+[ -e "${target}" ] && rm -rf "${target}"
+mkdir -p "${target}"
+cp -r "${tmpdir}/" "${target}/"

@@ -1,1 +1,2 @@
-# svgcleaner
+svgcleaner
+cargo-update
