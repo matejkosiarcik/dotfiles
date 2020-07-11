@@ -51,7 +51,8 @@ Windows) cp %APPDATA%\\Code\\User\\settings.json vscode-settings.json ;;
 Linux) cp "${HOME}/.config/Code/User/settings.json" 'vscode-settings.json' ;;
 esac
 
-target="${HOME}/Dropbox/Backup/packages"
+computername="$(scutil --get ComputerName || cat /etc/hostname || uname -n)"
+target="${HOME}/Dropbox/Backup/${computername}/packages"
 [ -e "${target}" ] && rm -rf "${target}"
-mkdir "${target}"
+mkdir -p "${target}"
 cp -r "${tmpdir}/" "${target}/"
