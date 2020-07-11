@@ -21,12 +21,37 @@ commands:
               dnf upgrade -y;
               dnf install -y make python3 python3-pip python3-setuptools;
             fi
+            if command -v pacman >/dev/null 2>&1; then
+              pacman --noconfirm -Suy python python-pip make;
+            fi
+            if command -v swupd >/dev/null 2>&1; then
+              swupd update;
+              swupd bundle-add python-basic make;
+            fi
+            if command -v zypper >/dev/null 2>&1; then
+              zypper update;
+              zypper --non-interactive install python3 make
+            fi
 workflows:
   version: 2
   test:
     jobs:
       - azlint
-      - linux: { matrix: { parameters: { image: [ debian:stable, ubuntu:latest, ubuntu:rolling, elementary/docker:stable, alpine, fedora, centos ] }}}
+      - linux:
+          matrix:
+            parameters:
+              image:
+                - debian:stable
+                - ubuntu
+                - ubuntu:rolling
+                - elementary/docker:stable
+                - alpine
+                - fedora
+                - centos
+                - archlinux
+                - clearlinux
+                - opensuse/tumbleweed
+                - opensuse/leap
 
 jobs:
   azlint:
