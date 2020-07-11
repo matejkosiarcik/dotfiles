@@ -1,8 +1,7 @@
-language: c
+language: python
 
 build:
   pre_ci:
     - uname -a
   ci:
-    - sh 'home/install.sh'
-    - sh 'setup/install.sh'
+    - make

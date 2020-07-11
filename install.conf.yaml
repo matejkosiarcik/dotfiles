@@ -1,0 +1,44 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+      force: true
+    clean:
+      force: true
+
+- clean:
+    - '~'
+    - '~/.bin'
+
+- link:
+    # general config
+    ~/.vimrc: home/.vimrc
+    ~/.tigrc: home/.tigrc
+    ~/.emacs: home/.emacs
+    ~/.lftp/rc: home/.lftp/rc
+
+    # only link gnupg when it already exists
+    ~/.gnupg/gpg.conf:
+      path: home/.gnupg/gpg.conf
+      if: 'test -d ~/.gnupg'
+    ~/.gnupg/gpg-agent.conf:
+      path: home/.gnupg/gpg-agent.conf
+      if: 'test -d ~/.gnupg'
+
+    # shell config
+    ~/.config.sh: home/shell/config.sh
+    ~/.config.bash: home/shell/config.bash
+    ~/.config.zsh: home/shell/config.zsh
+
+    # git config
+    ~/.config-main.gitconfig: home/git/config-main.gitconfig
+    ~/.config-personal.gitconfig: home/git/config-personal.gitconfig
+    ~/.config-touch4it.gitconfig: home/git/config-touch4it.gitconfig
+
+    # custom scripts
+    ~/.bin/backup-packages: scripts/backup-packages.sh
+    ~/.bin/update-defaults: scripts/update-defaults.py
+    ~/.bin/gupdate: scripts/gupdate.sh
+
+- shell:
+    - printf 'Manually run `sh setup/setup.sh`\n'

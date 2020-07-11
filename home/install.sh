@@ -16,11 +16,15 @@ reload '.emacs'
 reload '.tigrc'
 reload '.vimrc'
 
+if [ -d "${HOME}/.gnupg" ]; then
+    reload '.gnupg/gpg.conf'
+    reload '.gnupg/gpg-agent.conf'
+fi
+
 # Reload nested files
 reload_nested() {
     mkdir -p "$(dirname "${HOME}/${1}")"
     reload "${1}"
 }
 
-reload_nested '.gnupg/gpg.conf'
 reload_nested '.lftp/rc'

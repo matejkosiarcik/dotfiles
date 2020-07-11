@@ -1,8 +1,9 @@
 # TODO: cleanup dependencies
 grip
 yamllint
-bashate
+pipenv
 
+# bashate
 # autopep8
 # Click
 # Cython

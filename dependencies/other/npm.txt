@@ -1,4 +1,10 @@
 diff2html-cli
-markdown-toc
 npm-check-updates
-npx
+xmllint
+gitignore-to-dockerignore
+stylelint
+stylelint-find-rules
+zopflipng-bin
+
+# npx # probably installed by default?
+# markdown-toc
