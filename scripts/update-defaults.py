@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# This file updates default config files in projects
 from typing import List
 import sys
 import os

@@ -1,4 +1,5 @@
 #!/bin/sh
+# This file backs up all system installed packages to Dropbox
 set -euf
 
 tmpdir="$(mktemp -d)"

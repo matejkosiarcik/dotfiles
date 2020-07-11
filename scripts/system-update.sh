@@ -1,4 +1,5 @@
 #!/bin/sh
+# This file backs updates all package-managers on system
 set -euf
 
 update_brew() {
