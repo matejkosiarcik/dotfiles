@@ -42,7 +42,7 @@ workflows:
             parameters:
               image:
                 - debian:stable
-                - ubuntu:latest
+                - ubuntu
                 - ubuntu:rolling
                 - elementary/docker:stable
                 - alpine
