@@ -24,12 +24,16 @@ commands:
             if command -v pacman >/dev/null 2>&1; then
               pacman --noconfirm -Suy python python-pip make;
             fi
+            if command -v swupd >/dev/null 2>&1; then
+              swupd update;
+              swupd bundle-add python-basic make;
+            fi
 workflows:
   version: 2
   test:
     jobs:
       - azlint
-      - linux: { matrix: { parameters: { image: [ debian:stable, ubuntu:latest, ubuntu:rolling, elementary/docker:stable, alpine, fedora, centos, archlinux ] }}}
+      - linux: { matrix: { parameters: { image: [ debian:stable, ubuntu:latest, ubuntu:rolling, elementary/docker:stable, alpine, fedora, centos, archlinux, clearlinux ] }}}
 
 jobs:
   azlint:
