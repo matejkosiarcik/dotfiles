@@ -18,6 +18,10 @@ addons:
 
 matrix:
   fast_finish: true
+  include:
+    - { os: linux, dist: focal }
+    - { os: linux, dist: bionic }
+    - { os: linux, dist: xenial }
 
 install: skip
 
