@@ -77,3 +77,6 @@ cabal update
 # cabal install cabal-install
 printf '%s\n' '--- Stack ---'
 stack update
+
+# TODO: ruby?
+# TODO: nix?
