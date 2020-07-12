@@ -34,7 +34,7 @@ elif [ "$(uname -s)" = 'Linux' ]; then
         dnf upgrade -y
     elif command -v pacman >/dev/null 2>&1; then
         printf '%s\n' '--- Pacman ---'
-        pacman --noconfirm -Suy python python-pip make;
+        pacman --noconfirm -Suy python python-pip make
     elif command -v swupd >/dev/null 2>&1; then
         printf '%s\n' '--- Swupd ---'
         swupd update
