@@ -56,8 +56,8 @@ fi
 
 # Python
 printf '%s\n' '--- Pip ---'
-pip3 install --upgrade pip setuptools wheel
-pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install --upgrade
+python3 -m pip install --upgrade pip setuptools wheel
+python3 -m pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 python3 -m pip install --upgrade
 
 # JavaScript
 printf '%s\n' '--- Npm ---'
