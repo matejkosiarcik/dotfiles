@@ -1,6 +1,7 @@
 #!/bin/sh
 # This file backs updates all package-managers on system
 set -euf
+cd "${HOME}" # to be sure we don't update project instead of system
 
 update_brew() {
     brew update
@@ -54,15 +55,19 @@ elif [ "$(uname -s)" = 'Windows' ]; then
     choco upgrade all
 fi
 
+# JavaScript
+printf '%s\n' '--- Npm ---'
+npm update -g
+# TODO: denoland?
+
 # Python
 printf '%s\n' '--- Pip ---'
 python3 -m pip install --upgrade pip setuptools wheel
 python3 -m pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 python3 -m pip install --upgrade
 
-# JavaScript
-printf '%s\n' '--- Npm ---'
-npm update -g
-# TODO: denoland?
+# Ruby
+gem update --system --quiet
+gem update --quiet
 
 # Rust
 printf '%s\n' '--- Rustup ---'
@@ -78,5 +83,4 @@ cabal update
 printf '%s\n' '--- Stack ---'
 stack update
 
-# TODO: ruby?
 # TODO: nix?
