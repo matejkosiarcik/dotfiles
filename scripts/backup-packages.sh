@@ -20,11 +20,12 @@ elif [ "$(uname -s)" = 'Linux' ]; then
     fi
 fi
 
-printf 'Python\n'
-pip3 list --format=freeze >requirements.txt
-
 printf 'JavaScript\n'
 npm list -g --depth 0 >npm.txt
+# TODO: denoland?
+
+printf 'Python\n'
+pip3 list --format=freeze >requirements.txt
 
 printf 'Ruby\n'
 gem list --quiet >Gemfile
@@ -40,6 +41,8 @@ ghc-pkg list >ghc-pkg.txt
 
 printf 'Swift\n'
 mint list >Mintfile
+
+# TODO: nix?
 
 printf 'Apps\n'
 ls -1 /Applications >apps.txt

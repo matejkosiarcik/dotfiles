@@ -1,9 +1,5 @@
 language: generic
 
-os:
-  - linux
-  - osx
-
 addons:
   apt:
     update: true
@@ -19,12 +15,8 @@ addons:
 matrix:
   fast_finish: true
   include:
-    - { os: linux, dist: focal, if: branch == master }
-    - { os: linux, dist: bionic, if: branch == master }
-    - { os: linux, dist: xenial, if: branch == master }
-    - { os: osx, osx_image: xcode12, if: branch == master }
-    - { os: osx, osx_image: xcode11, if: branch == master }
-    - { os: osx, osx_image: xcode10, if: branch == master }
+    - { os: linux }
+    - { os: osx, if: branch == master }
 
 install: skip
 

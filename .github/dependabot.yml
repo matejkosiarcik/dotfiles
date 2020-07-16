@@ -6,7 +6,7 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-      time: "03:00"
+      time: "02:00"
       timezone: "Europe/Bratislava"
     open-pull-requests-limit: 10
     reviewers:

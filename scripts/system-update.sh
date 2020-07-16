@@ -1,6 +1,7 @@
 #!/bin/sh
 # This file backs updates all package-managers on system
 set -euf
+cd "${HOME}" # to be sure we don't update project instead of system
 
 update_brew() {
     brew update
@@ -49,34 +50,35 @@ elif [ "$(uname -s)" = 'Linux' ]; then
         update_brew
     fi
 elif [ "$(uname -s)" = 'Windows' ]; then
-    printf '%s\n' '--- Choco ---'
+    printf '%s\n' '--- Chocolatey ---'
     choco upgrade chocolatey
     choco upgrade all
 fi
 
-# Python
-printf '%s\n' '--- Pip ---'
-python3 -m pip install --upgrade pip setuptools wheel
-python3 -m pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 python3 -m pip install --upgrade
-
 # JavaScript
-printf '%s\n' '--- Npm ---'
+printf '%s\n' '--- NodeJS ---'
 npm update -g
 # TODO: denoland?
 
+# Python
+printf '%s\n' '--- Python ---'
+python3 -m pip install --upgrade pip setuptools wheel
+python3 -m pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 python3 -m pip install --upgrade
+
+# Ruby
+printf '%s\n' '--- Ruby ---'
+gem update --system --quiet
+gem update --quiet
+
 # Rust
-printf '%s\n' '--- Rustup ---'
+printf '%s\n' '--- Rust ---'
 rustup update
 rustup self update || true # when installed with package manager fails to self-update
-printf '%s\n' '--- Cargo ---'
 cargo install-update -a
 
 # Haskell
-printf '%s\n' '--- Cabal ---'
+printf '%s\n' '--- Haskell ---'
 cabal update
-# cabal install cabal-install
-printf '%s\n' '--- Stack ---'
 stack update
 
-# TODO: ruby?
 # TODO: nix?
