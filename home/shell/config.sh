@@ -15,6 +15,7 @@ export GPG_TTY
 
 # Aliases
 alias logtree="tree --ignore-case -CI '.build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv'"
+alias m='make'
 
 # Git aliases
 alias df="git df | h"
@@ -24,18 +25,20 @@ alias s="tig status"
 alias t='tig'
 
 gitup() {
-    git fetch origin master:master || return 1
-    git remote prune origin || return 1
-    # if [ "$(git branch | grep '*' | cut -d' ' -f2)" = "$(git branch --merged master | grep -v 'master' | grep '*' | cut -d' ' -f2)" ]; then
-    #     git rebase master
-    # fi
-    git branch --merged master | grep -v '\*' | grep -v 'master' | xargs -n1 git branch -d || return 1
-}
+    git fetch --all --tags --prune --prune-tags
 
-update_defaults_all() {
-    find "${HOME}/Dev/Personal" -depth 1 -type d -name "*" | while read -r project; do
-        update_defaults --cwd "${project}" --verbose
-    done
+    if (git branch --list | grep -q master); then # check if master exists
+        if [ "$(git rev-parse --abbrev-ref HEAD)" = master ]; then
+            git pull --ff-only || return 1 # update master when we it's checked
+        else
+            git fetch origin master:master || return 1 # update master when we are on different branch
+        fi
+
+        git branch --merged master | grep -ve '\*' -e 'master' | xargs -n1 git branch -d || return 1
+        if [ "$(git rev-parse --abbrev-ref HEAD)" != master ]; then
+            git rebase master || return 1
+        fi
+    fi
 }
 
 # Open new terminal at current directory
@@ -75,11 +78,21 @@ if [ "$(uname)" != 'Darwin' ]; then
 fi
 
 # Smart alias for 'open'
-# which also accepts no options to open current directory
 o() {
     if [ "${#}" -eq 0 ]; then
-        open '.'
+        open .
     else
-        open "${@}"
+        # shellcheck disable=SC2086
+        open ${@}
+    fi
+}
+
+# Smart alias for `code`
+c() {
+    if [ "${#}" -eq 0 ]; then
+        code .
+    else
+        # shellcheck disable=SC2086
+        code ${@}
     fi
 }

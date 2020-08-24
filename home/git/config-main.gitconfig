@@ -23,6 +23,9 @@
 [credential]
     helper = osxkeychain
 
+[fetch]
+    prune = true
+
 [alias]
     # shortcuts
     amend = commit --amend --no-edit
