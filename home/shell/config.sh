@@ -82,7 +82,7 @@ o() {
     if [ "${#}" -eq 0 ]; then
         open .
     else
-        # shellcheck disable=SC2086
+        # shellcheck disable=SC2086,SC2068
         open ${@}
     fi
 }
@@ -92,7 +92,7 @@ c() {
     if [ "${#}" -eq 0 ]; then
         code .
     else
-        # shellcheck disable=SC2086
+        # shellcheck disable=SC2086,SC2068
         code ${@}
     fi
 }

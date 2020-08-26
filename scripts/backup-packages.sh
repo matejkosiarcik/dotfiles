@@ -16,7 +16,7 @@ elif [ "$(uname -s)" = 'Linux' ]; then
         printf '%s\n' '-- Apt --'
         apt list --installed >apt.txt
     elif command -v dnf >/dev/null 2>&1; then
-        printf ''%s\n' -- Dnf --'
+        printf '%s\n' '-- Dnf --'
         dnf list installed >dnf.txt
     fi
 fi
