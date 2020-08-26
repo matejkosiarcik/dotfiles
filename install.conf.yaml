@@ -37,7 +37,6 @@
 
     # custom scripts
     ~/.bin/backup-packages: scripts/backup-packages.sh
-    ~/.bin/update-defaults: scripts/update-defaults.py
     ~/.bin/system-update: scripts/system-update.sh
 
 - shell:
