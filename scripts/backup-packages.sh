@@ -45,8 +45,10 @@ mint list >Mintfile
 
 # TODO: nix?
 
-printf '%s\n' '-- Apps --'
-ls -1 /Applications >apps.txt
+if [ "$(uname -s)" = 'Darwin' ]; then
+    printf '%s\n' '-- Apps --'
+    ls -1 /Applications >apps.txt
+fi
 
 printf '%s\n' '-- Editors --'
 code --list-extensions >vscode-extensions.txt
@@ -56,7 +58,7 @@ Windows) cp %APPDATA%\\Code\\User\\settings.json vscode-settings.json ;;
 Linux) cp "${HOME}/.config/Code/User/settings.json" 'vscode-settings.json' ;;
 esac
 
-touch ".$(date '+%Y-%m-%d')"
+touch ".$(date '+%Y-%m-%d %H-%M-%S%z')"
 
 computername="$(scutil --get ComputerName || cat /etc/hostname || uname -n)"
 target="${HOME}/Dropbox/Packages/${computername}"
