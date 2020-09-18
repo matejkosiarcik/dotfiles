@@ -1,2 +1,0 @@
-# ShellCheck
-# hadolint
