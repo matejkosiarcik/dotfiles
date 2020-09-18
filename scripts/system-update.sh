@@ -6,7 +6,6 @@ cd "${HOME}" # to be sure we don't update project instead of system
 update_brew() {
     brew update
     brew upgrade
-    brew cask upgrade
     brew cleanup
 }
 

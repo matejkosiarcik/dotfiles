@@ -16,6 +16,9 @@ export GPG_TTY
 # Aliases
 alias logtree="tree --ignore-case -CI '.build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv'"
 alias m='make'
+alias d='docker'
+alias dr='docker run'
+alias db='docker build'
 
 # Git aliases
 alias df="git df | h"

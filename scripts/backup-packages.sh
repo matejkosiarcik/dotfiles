@@ -9,8 +9,8 @@ printf 'Running packages backup...\n'
 if [ "$(uname -s)" = 'Darwin' ]; then
     printf '%s\n' '-- Brew --'
     brew bundle dump --file Brewfile
-    brew cask ls -1 >brew-cask.txt
-    brew ls -1 >brew.txt
+    brew list --formula -1 >brew.txt
+    brew list --cask-1 >brew-cask.txt
 elif [ "$(uname -s)" = 'Linux' ]; then
     if command -v apt >/dev/null 2>&1; then
         printf '%s\n' '-- Apt --'
@@ -57,6 +57,9 @@ Darwin) cp "${HOME}/Library/Application Support/Code/User/settings.json" 'vscode
 Windows) cp %APPDATA%\\Code\\User\\settings.json vscode-settings.json ;;
 Linux) cp "${HOME}/.config/Code/User/settings.json" 'vscode-settings.json' ;;
 esac
+
+printf '%s\n' '-- Cron --'
+crontab -l >cron.txt
 
 touch ".$(date '+%Y-%m-%d %H-%M-%S%z')"
 
