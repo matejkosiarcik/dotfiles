@@ -4,7 +4,7 @@ set -euf
 sudo -v
 
 # Close any open System Preferences panes, to prevent them from overriding
-# settings we’re about to change
+# settings we're about to change
 osascript -e 'tell application "System Preferences" to quit'
 
 #
@@ -62,7 +62,7 @@ defaults write com.apple.dock mouse-over-hilite-stack -bool true
 defaults write com.apple.dock tilesize -int 36
 
 # change minimize/maximize window effect
-defaults write com.apple.dock mineffect -string "scale"
+defaults write com.apple.dock mineffect -string 'scale'
 
 # minimize windows into their app's icon
 defaults write com.apple.dock minimize-to-application -bool true
@@ -111,8 +111,8 @@ defaults write 'NSGlobalDomain' NSTableViewDefaultSizeMode -int 2
 ## Safari ##
 #
 
-# disable opening 'safe' (ou right) files after download
-defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+# disable opening "safe" files after download
+defaults write 'com.apple.Safari' AutoOpenSafeDownloads -bool false
 
 #
 ## Xcode ##
