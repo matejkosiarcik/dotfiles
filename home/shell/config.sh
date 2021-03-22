@@ -70,12 +70,12 @@ mcd() {
     # Validate argument count
     case "${#}" in
     0)
-        printf 'No arguments provided\n'
+        printf 'No arguments provided\n' >&2
         return 1
         ;;
     1) ;; # Valid
     *)
-        printf 'Too many arguments provided\n'
+        printf 'Too many arguments provided\n' >&2
         return 1
         ;;
     esac
@@ -117,7 +117,7 @@ c() {
 # runs specified commnand N times
 runN() {
     if [ "${#}" -lt 2 ]; then
-        printf 'Not enough arguments. Run like "runN 2 echo foo".\n'
+        printf 'Not enough arguments. Run like "runN 2 echo foo".\n' >&2
         return 1
     fi
 
