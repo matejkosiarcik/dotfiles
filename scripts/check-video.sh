@@ -12,7 +12,7 @@ find "${root}" \( -iname '*.mp4' -or -iname '*.mkv' -or -iname '*.avi' -or -inam
     printf '%s' "${infoline}" >&2
 
     printf '%s\n' "${file}" >>"${logfile}"
-    file_status="$( ( ffmpeg -v error -i "${file}" -f null - >>"${logfile}" 2>&1 && printf '✓' ) || printf '✘' )"
+    file_status="$( true && ( ffmpeg -v error -i "${file}" -f null - >>"${logfile}" 2>&1 && printf '-y-' ) || printf 'XXX' )"
     printf '\n\n\n' >>"${logfile}"
 
     printf '\r%s' "${infoline}" | sed -E 's~.~ ~g' | tr -d '\n' >&2 # must wipe previous line before printing new line, otherwise old characters see through
