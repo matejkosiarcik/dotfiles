@@ -7,7 +7,7 @@ if [ "${#}" -ge 1 ]; then
 fi
 logfile=errors.txt
 
-find "${root}" \( -iname '*.mp4' -or -iname '*.mkv' -or -iname '*.avi' -or -iname '*.ts' \) -print0 | while read -r -d $'\0' file; do
+find "${root}" \( -iname '*.mp4' -or -iname '*.mkv' -or -iname '*.avi' -or -iname '*.ts' \) | while read -r file; do
     infoline="$(printf 'Checking %s...' "${file}")"
     printf '%s' "${infoline}" >&2
 

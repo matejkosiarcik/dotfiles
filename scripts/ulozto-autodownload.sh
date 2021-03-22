@@ -16,6 +16,7 @@ while getopts "h?l:b:" opt; do
     h) print_help; exit 0;;
     b) browser="${OPTARG}";;
     l) limit="${OPTARG}";;
+    *) printf 'Unsupported argument.' >&2; exit 1;;
     esac
 done
 
@@ -40,8 +41,6 @@ while [ "${window_i}" -le "${windows_count}" ]; do
 
     window_i="$(("${window_i}"+1))"
 done
-
-exit 0
 
 # Download collected URLs
 if [ "$(wc -l <"${urls_file}")" -gt 0 ]; then

@@ -15,7 +15,7 @@ update_directory() {
     rm -rf "${directory}/node_modules"
 }
 
-find . -type f -name 'package-lock.json' -not -path '*node_modules/*' -print0 | while read -rd $'\0' lockfile; do
+find . -type f -name 'package-lock.json' -not -path '*node_modules/*' | while read -r lockfile; do
     directory="$(dirname "${lockfile}")"
     directory="$(node -e "console.log(require('path').resolve('.', '${directory}'))")"
 

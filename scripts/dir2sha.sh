@@ -2,7 +2,7 @@
 set -euf
 
 if [ "${#}" -lt 1 ]; then
-    printf 'Not enough arguments. Expected dirpath.\n' "${PWD}" >&2
+    printf 'Not enough arguments. Expected dirpath.\n' >&2
 fi
 input="${1}"
 
