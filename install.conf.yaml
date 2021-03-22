@@ -37,7 +37,11 @@
 
     # custom scripts
     ~/.bin/backup-packages: scripts/backup-packages.sh
+    ~/.bin/dir2sha: scripts/dir2sha.sh
+    ~/.bin/dirs2sha: scripts/dirs2sha.sh
+    ~/.bin/relock: scripts/relock.sh
     ~/.bin/system-update: scripts/system-update.sh
+    ~/.bin/ulozto-autodownload: scripts/ulozto-autodownload.sh
 
 - shell:
     - printf 'Manually run `sh setup/setup.sh`\n'
