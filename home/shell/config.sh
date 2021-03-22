@@ -132,7 +132,7 @@ runN() {
     i='0'
     while [ "${i}" -le "${count}" ]; do
         printf '\n'
-        printf '--- %s. run ---\n' "$((i+1))"
+        printf '%s %s. run ---\n' '---' "$((i+1))"
         printf '\n'
 
         (set -euf && time "${@}")
@@ -141,7 +141,7 @@ runN() {
             printf 'Command "%s" returned %s. Stopping.\n' "${*}" "${statuscode}"
             return 1
         fi
-        i="$(expr "${i}" + 1)"
+        i="$(("${i}"+1))"
     done
 }
 
