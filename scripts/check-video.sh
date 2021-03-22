@@ -1,11 +1,15 @@
 #!/bin/sh
 set -euf
 
+# This file iterates video files in a given directory
+# and checks them for errors - useful for example after downloading
+
 root="."
 if [ "${#}" -ge 1 ]; then
     root="${1}"
 fi
-logfile=errors.txt
+logfile='errors.txt'
+rm -f "${logfile}"
 
 find "${root}" \( -iname '*.mp4' -or -iname '*.mkv' -or -iname '*.avi' -or -iname '*.ts' \) | while read -r file; do
     infoline="$(printf 'Checking %s...' "${file}")"

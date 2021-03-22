@@ -1,6 +1,10 @@
 #!/bin/sh
 set -euf
 
+# This script works mostly:
+# - Takes open uloz.to URLs in a browser of your choice
+# - Open each URL in a new Terminal.app window using ulozto-downloader
+
 print_help() {
     printf 'ulozto-autodownload\n'
     printf '%s\n' '-h           Get help'
