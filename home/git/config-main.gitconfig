@@ -13,9 +13,9 @@
 [includeIf "gitdir/i:~/Dev/Touch4IT/"]
     path = ~/.config-touch4it.gitconfig
 
-[commit]
-    gpsign = true
-    gpgsign = true
+# [commit]
+#     gpsign = true
+#     gpgsign = true
 
 [core]
     excludesfile = ~/.gitignore
