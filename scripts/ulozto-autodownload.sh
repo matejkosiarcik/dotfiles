@@ -36,10 +36,10 @@ while [ "${window_i}" -le "${windows_count}" ]; do
     tab_i=1
     while [ "${tab_i}" -le "${tabs_count}" ]; do
         osascript -e "tell application \"${browser}\" to get URL of tab ${tab_i} of window ${window_i}" | { grep -E '^https://uloz.to/file/' || true; } >>"${urls_file}"
-        tab_i="$(("${tab_i}"+1))"
+        tab_i="$((tab_i+1))"
     done
 
-    window_i="$(("${window_i}"+1))"
+    window_i="$((window_i+1))"
 done
 
 # Download collected URLs
@@ -57,7 +57,7 @@ if [ "$(wc -l <"${urls_file}")" -gt 0 ]; then
         # so manual timeout should help it not overload this service hopefully
         sleep 60
 
-        i="$(("${i}"+1))"
+        i="$((i+1))"
     done
 else
     printf 'No urls found.\n'
