@@ -5,4 +5,22 @@ set -euf
 # Works in CWD
 
 find . \( -type d -name 'node_modules' -prune \) -exec rm -rf {} \;
-find . -type f -name 'package-lock.json' -print0 | xargs -0 -n1 sh -c 'printf "Relocking %s\n" "${1}" && rm -f "${1}" && npm install --prefix "$(dirname "${1}")" && npm dedupe --prefix "$(dirname "${1}")"' _
+
+update_directory() {
+    directory="${1}"
+    docker run --interactive --volume "${directory}:/src" node:lts sh -c 'cd /src && npm install && npm dedupe'
+    # TODO: check directory (and recursively to root) for presence of .node-version to use specific project's version of node
+
+    # remove node_modules (when on non-Linux, the node_modules are not usable anyway)
+    rm -rf "${directory}/node_modules"
+}
+
+find . -type f -name 'package-lock.json' -not -path '*node_modules/*' -print0 | while read -rd $'\0' lockfile; do
+    directory="$(dirname "${lockfile}")"
+    directory="$(node -e "console.log(require('path').resolve('.', '${directory}'))")"
+
+    if [ -e "${directory}/package.json" ]; then
+        rm -f "${lockfile}"
+        update_directory "${directory}"
+    fi
+done
