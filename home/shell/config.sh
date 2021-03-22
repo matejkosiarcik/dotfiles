@@ -26,7 +26,7 @@ alias ds='git ds | h'
 alias h='diff2html -s side -i stdin'
 alias s='tig status'
 alias t='tig'
-alias pbfix'pbpaste | pbcopy'
+alias pbfix='pbpaste | pbcopy'
 
 # Create Pull-Request on github
 # alias ghpr='hub pull-request -a matejkosiarcik -l automerge,autoupdate -m "Automated PR"'

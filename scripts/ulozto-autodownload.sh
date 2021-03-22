@@ -51,9 +51,9 @@ if [ "$(wc -l <"${urls_file}")" -gt 0 ]; then
         # close the tab afterwards
         osascript -e "tell application \"${browser}\" to close every tab of every window whose url equals \"${url}\""
 
-        # when opening multiple ulozto download at once
+        # when opening multiple simultaneous ulozto downloads at once
         # it seems to fail with tor-socker-timeout
-        # so manual timeout should help it
+        # so manual timeout should help it not overload this service hopefully
         sleep 60
 
         i="$(expr "${i}" + 1)"
