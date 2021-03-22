@@ -10,6 +10,6 @@ input="${1}"
 # [sorted by filenames]
 find "${input}" -type f -print0 | \
     xargs -0n1 shasum | \
-    sed -E "s~^([0-9a-f]+)  ${1}(.+)$~\2 \1~" | \
+    sed -E "s~^([0-9a-f]+)  ${input}(.+)$~\2 \1~" | \
     sort -n | \
     sed -E 's~^(.+) ([0-9a-f]+)$~\2 \1~'
