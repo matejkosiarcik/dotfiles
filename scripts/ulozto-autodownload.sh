@@ -46,7 +46,7 @@ if [ "$(wc -l <"${urls_file}")" -gt 0 ]; then
     i=0
     sort <"${urls_file}" | uniq | while read -r url && [ "${i}" -lt "${limit}" ]; do
         # download the file in new Terminal.app window
-        osascript -e "tell application \"Terminal\" to do script \"cd ~/Downloads && uloztod ${url}\""
+        osascript -e "tell application \"Terminal\" to do script \"cd ~/Downloads && uloztod \\\"${url}\\\"\""
 
         # close the tab afterwards
         osascript -e "tell application \"${browser}\" to close every tab of every window whose url equals \"${url}\""
