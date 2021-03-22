@@ -10,7 +10,7 @@ if [ "$(uname -s)" = 'Darwin' ]; then
     printf '%s\n' '-- Brew --'
     brew bundle dump --file Brewfile
     brew list --formula -1 >brew.txt
-    brew list --cask-1 >brew-cask.txt
+    brew list --cask -1 >brew-cask.txt
 elif [ "$(uname -s)" = 'Linux' ]; then
     if command -v apt >/dev/null 2>&1; then
         printf '%s\n' '-- Apt --'
@@ -36,9 +36,9 @@ cargo install --list >cargo.txt
 printf '\n\n' >>cargo.txt
 cargo --list >>cargo.txt
 
-printf '%s\n' '-- Haskell --'
-cabal list --installed >cabal.txt
-ghc-pkg list >ghc-pkg.txt
+# printf '%s\n' '-- Haskell --'
+# cabal list --installed >cabal.txt
+# ghc-pkg list >ghc-pkg.txt
 
 printf '%s\n' '-- Swift --'
 mint list >Mintfile
