@@ -45,10 +45,10 @@ workflows:
                 - alpine
                 - fedora
                 - centos
-                - archlinux
                 - clearlinux
                 - opensuse/tumbleweed
                 - opensuse/leap
+                # - archlinux
 
 jobs:
   azlint:
