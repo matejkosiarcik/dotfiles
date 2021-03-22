@@ -9,8 +9,8 @@ printf 'Running packages backup...\n'
 if [ "$(uname -s)" = 'Darwin' ]; then
     printf '%s\n' '-- Brew --'
     brew bundle dump --file Brewfile
-    brew cask ls -1 >brew-cask.txt
-    brew ls -1 >brew.txt
+    brew list --formula -1 >brew.txt
+    brew list --cask -1 >brew-cask.txt
 elif [ "$(uname -s)" = 'Linux' ]; then
     if command -v apt >/dev/null 2>&1; then
         printf '%s\n' '-- Apt --'
@@ -36,17 +36,19 @@ cargo install --list >cargo.txt
 printf '\n\n' >>cargo.txt
 cargo --list >>cargo.txt
 
-printf '%s\n' '-- Haskell --'
-cabal list --installed >cabal.txt
-ghc-pkg list >ghc-pkg.txt
+# printf '%s\n' '-- Haskell --'
+# cabal list --installed >cabal.txt
+# ghc-pkg list >ghc-pkg.txt
 
 printf '%s\n' '-- Swift --'
 mint list >Mintfile
 
 # TODO: nix?
 
-printf '%s\n' '-- Apps --'
-ls -1 /Applications >apps.txt
+if [ "$(uname -s)" = 'Darwin' ]; then
+    printf '%s\n' '-- Apps --'
+    ls -1 /Applications >apps.txt
+fi
 
 printf '%s\n' '-- Editors --'
 code --list-extensions >vscode-extensions.txt
@@ -56,7 +58,10 @@ Windows) cp %APPDATA%\\Code\\User\\settings.json vscode-settings.json ;;
 Linux) cp "${HOME}/.config/Code/User/settings.json" 'vscode-settings.json' ;;
 esac
 
-touch ".$(date '+%Y-%m-%d')"
+printf '%s\n' '-- Cron --'
+crontab -l >cron.txt
+
+touch ".$(date '+%Y-%m-%d %H-%M-%S%z')"
 
 computername="$(scutil --get ComputerName || cat /etc/hostname || uname -n)"
 target="${HOME}/Dropbox/Packages/${computername}"
