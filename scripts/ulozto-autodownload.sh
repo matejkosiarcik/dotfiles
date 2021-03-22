@@ -70,5 +70,5 @@ if [ "$(wc -l <"${urls_file}")" -gt 0 ]; then
         i="$((i + 1))"
     done
 else
-    printf 'No urls found.\n' >&2
+    printf 'No URLs found.\n' >&2
 fi
