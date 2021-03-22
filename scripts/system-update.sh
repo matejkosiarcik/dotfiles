@@ -76,8 +76,6 @@ rustup self update || true # when installed with package manager fails to self-u
 cargo install-update -a
 
 # Haskell
-printf '%s\n' '--- Haskell ---'
-cabal update
-stack update
-
-# TODO: nix?
+# printf '%s\n' '--- Haskell ---'
+# cabal update
+# stack update
