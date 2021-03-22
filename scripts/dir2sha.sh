@@ -1,6 +1,8 @@
 #!/bin/sh
 set -euf
 
+# Usage is mainly for external HDDs to convert files into sha hashes for comparison with internal HDDs
+
 if [ "${#}" -lt 1 ]; then
     printf 'Not enough arguments. Expected dirpath.\n' >&2
 fi

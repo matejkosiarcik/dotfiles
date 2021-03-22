@@ -1,6 +1,7 @@
 #!/bin/sh
-# This file backs up all system installed packages to Dropbox
 set -euf
+
+# This script backs up all system installed packages to Dropbox
 
 tmpdir="$(mktemp -d)"
 cd "${tmpdir}"
@@ -61,8 +62,9 @@ esac
 printf '%s\n' '-- Cron --'
 crontab -l >cron.txt
 
-touch ".$(date '+%Y-%m-%d %H-%M-%S%z')"
+touch ".$(date '+%Y-%m-%d %H-%M-%S%z')" # mark datetime of current export
 
+# Copy created directory to Dropbox under this computer's name
 computername="$(scutil --get ComputerName || cat /etc/hostname || uname -n)"
 target="${HOME}/Dropbox/Packages/${computername}"
 [ -e "${target}" ] && rm -rf "${target}"
