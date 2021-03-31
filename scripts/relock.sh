@@ -44,8 +44,8 @@ update_directory() {
 }
 
 if [ "${is_recursive}" -gt 0 ]; then
-    find . -type f -name 'package-lock.json' \( -not -path '*node_modules/*' -prune \) | while read -r lockfile; do
-        directory="$(dirname "${lockfile}")"
+    find . -type f -name 'package-lock.json' -or -name 'package.json' \( -not -path '*node_modules/*' -prune \) | while read -r package_file; do
+        directory="$(dirname "${package_file}")"
         directory="$(node -e "console.log(require('path').resolve('.', '${directory}'))")"
         update_directory "${directory}"
     done
