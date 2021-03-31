@@ -7,8 +7,8 @@
       force: true
 
 - clean:
-    - '~'
-    - '~/.bin'
+    - "~"
+    - "~/.bin"
 
 - link:
     # general config
@@ -20,10 +20,10 @@
     # only link gnupg when it already exists
     ~/.gnupg/gpg.conf:
       path: home/.gnupg/gpg.conf
-      if: 'test -d ~/.gnupg'
+      if: "test -d ~/.gnupg"
     ~/.gnupg/gpg-agent.conf:
       path: home/.gnupg/gpg-agent.conf
-      if: 'test -d ~/.gnupg'
+      if: "test -d ~/.gnupg"
 
     # shell config
     ~/.config.sh: home/shell/config.sh
