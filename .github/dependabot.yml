@@ -6,10 +6,12 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-      time: "02:00"
+      time: "01:00"
       timezone: "Europe/Bratislava"
-    open-pull-requests-limit: 10
     reviewers:
       - matejkosiarcik
     assignees:
       - matejkosiarcik
+    open-pull-requests-limit: 1
+    labels:
+      - automerge
