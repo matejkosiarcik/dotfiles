@@ -1,5 +1,8 @@
 #!/bin/sh
 # This file setups fresh macOS installation
+# Inspirations:
+# - https://github.com/mathiasbynens/dotfiles
+
 set -euf
 sudo -v
 
@@ -34,14 +37,11 @@ defaults write 'NSGlobalDomain' NSQuitAlwaysKeepsWindows -bool false
 defaults write 'NSGlobalDomain' NSNavPanelExpandedStateForSaveMode -bool true
 defaults write 'NSGlobalDomain' NSNavPanelExpandedStateForSaveMode2 -bool true
 
-# do not create .DS_Store on network volumes
-defaults write 'com.apple.desktopservices' DSDontWriteNetworkStores -bool true
-
 # do not ask to backup into new disk
 defaults write 'com.apple.timemachine' DoNotOfferNewDisksForBackup -bool true
 
 #
-## Keyboard ##
+## Keyboard/Typing ##
 #
 
 # disable this "smart" quoting witchcraft
@@ -85,6 +85,9 @@ defaults write com.apple.dock show-recents -bool false
 #
 ## Finder ##
 #
+
+# do not create .DS_Store on network volumes
+defaults write 'com.apple.desktopservices' DSDontWriteNetworkStores -bool true
 
 # show filename extensions
 defaults write 'NSGlobalDomain' AppleShowAllExtensions -bool true

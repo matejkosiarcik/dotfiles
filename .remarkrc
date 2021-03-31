@@ -1,5 +1,10 @@
 {
-    "plugins": [
-        "remark-preset-lint-recommended"
-    ]
+  "settings": {
+    "emphasis": "_",
+    "strong": "*"
+  },
+  "plugins": [
+    "remark-lint",
+    "remark-preset-lint-recommended"
+  ]
 }

@@ -34,6 +34,7 @@ workflows:
   test:
     jobs:
       - azlint
+      - lint
       - linux:
           matrix:
             parameters:
@@ -58,6 +59,13 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: azlint
+
+  lint:
+    docker:
+      - image: node:lts
+    steps:
+      - checkout
+      - run: npm ci && npm run lint
 
   linux:
     parameters:

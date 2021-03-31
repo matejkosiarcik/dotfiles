@@ -13,14 +13,13 @@
 
 Repository is split into these parts:
 
-Directory | Purpose
---- | ---
-home | Config files from $HOME
-setup | Scripts to run during computer setup
-scripts | Runtime scripts under $PATH
-dependencies | List of useful installed packages
+| Directory    | Purpose                              |
+| ------------ | ------------------------------------ |
+| home         | Config files from $HOME              |
+| setup        | Scripts to run during computer setup |
+| scripts      | Runtime scripts under $PATH          |
+| dependencies | List of useful installed packages    |
 
 ## License
 
-This project is licensed under the MIT License, see [LICENSE.txt](LICENSE.txt)
-file for full license details.
+This project is licensed under the MIT License, see [LICENSE.txt](LICENSE.txt) for full license details.
