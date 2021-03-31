@@ -21,7 +21,7 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-      time: "07:00"
+      time: "01:30"
       timezone: "Europe/Bratislava"
     reviewers:
       - matejkosiarcik
