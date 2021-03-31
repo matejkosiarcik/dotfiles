@@ -16,7 +16,7 @@ find "${root}" \( -iname '*.mp4' -or -iname '*.mkv' -or -iname '*.avi' -or -inam
     printf '%s' "${infoline}" >&2
 
     printf '%s\n' "${file}" >>"${logfile}"
-    if ffmpeg -v error -i "${file}" -f null - >>"${logfile}" 2>&1; then
+    if ffmpeg -nostdin -v error -i "${file}" -f null - >>"${logfile}" 2>&1; then
         filestatus='-y-'
     else
         filestatus='XXX'
