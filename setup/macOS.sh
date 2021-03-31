@@ -3,7 +3,6 @@
 # Inspirations:
 # - https://github.com/mathiasbynens/dotfiles
 
-
 set -euf
 sudo -v
 
