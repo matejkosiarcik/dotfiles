@@ -23,6 +23,6 @@ find "${root}" \( -iname '*.mp4' -or -iname '*.mkv' -or -iname '*.avi' -or -inam
     fi
     printf '\n\n\n' >>"${logfile}"
 
-    printf '\r%s' "${infoline}" | sed -E 's~.~ ~g' | tr -d '\n' >&2 # must wipe previous line before printing new line, otherwise old characters see through
+    printf '\r%s' "${infoline}" | sed -E 's~.~ ~g' | tr -d '\n' >&2 # must wipe previous line before printing new line, otherwise old characters see through
     printf '\r%s \t%s\n' "${filestatus}" "${file}" >&2
 done
