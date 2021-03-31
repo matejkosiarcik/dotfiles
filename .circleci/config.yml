@@ -1,7 +1,7 @@
 version: 2.1
 
 commands:
-  install-system-packages:
+  install-system-dependencies:
     steps:
       - run:
           name: Install system packages
@@ -31,25 +31,16 @@ commands:
 
 workflows:
   version: 2
-  test:
+  circleci-build:
     jobs:
       - azlint
       - lint
-      - linux:
+      - test:
           matrix:
             parameters:
               image:
                 - debian:stable
-                - ubuntu
-                - ubuntu:rolling
-                - elementary/docker:stable
                 - alpine
-                - fedora
-                - centos
-                - clearlinux
-                - opensuse/tumbleweed
-                - opensuse/leap
-                # - archlinux
 
 jobs:
   azlint:
@@ -65,9 +56,11 @@ jobs:
       - image: node:lts
     steps:
       - checkout
-      - run: npm ci && npm run lint
+      - run: |
+          npm ci
+          npm run lint
 
-  linux:
+  test:
     parameters:
       image:
         type: string
@@ -75,5 +68,5 @@ jobs:
       - image: "<< parameters.image >>"
     steps:
       - checkout
-      - install-system-packages
+      - install-system-dependencies
       - run: make
