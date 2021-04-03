@@ -20,5 +20,4 @@ while [ "${window_i}" -le "${windows_count}" ]; do
     window_i="$((window_i + 1))"
 done
 
-
 printf '%s,%s\n' "${current_date}" "${total_tab_count}"

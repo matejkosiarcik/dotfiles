@@ -119,7 +119,7 @@ defaults write 'NSGlobalDomain' NSTableViewDefaultSizeMode -int 3
 defaults write 'NSGlobalDomain' NSToolbarTitleViewRolloverDelay -float 0
 
 #
-## Screenshoots ##
+## Screenshots ##
 #
 
 # No shadow for screenshots
