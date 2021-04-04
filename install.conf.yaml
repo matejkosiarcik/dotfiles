@@ -41,6 +41,7 @@
     ~/.bin/dir2sha: scripts/dir2sha.sh
     ~/.bin/dirs2sha: scripts/dirs2sha.sh
     ~/.bin/relock: scripts/relock.sh
+    ~/.bin/report-tabs: scripts/report-tabs.sh
     ~/.bin/system-update: scripts/system-update.sh
     ~/.bin/ulozto-autodownload: scripts/ulozto-autodownload.sh
 

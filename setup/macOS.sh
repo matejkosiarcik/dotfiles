@@ -13,128 +13,150 @@ osascript -e 'tell application "System Preferences" to quit'
 # General system setup
 #
 
-# show ~/Library
+# Show ~/Library
 chflags nohidden "${HOME}/Library"
 
-# show /Volumes
+# Show /Volumes
 sudo chflags nohidden /Volumes
 
-# set system to restart when it freezes
+# Set system to restart when it freezes
 sudo systemsetup -setrestartfreeze on
 
-# disable startup sound
+# Disable startup sound
 sudo nvram SystemAudioVolume=' '
 
 #
 ## Global ##
 #
 
-# quit windows when quitting app
+# Quit all windows when quitting app
 defaults write 'NSGlobalDomain' NSQuitAlwaysKeepsWindows -bool false
 
-# expand save panel by default
+# Expand save panel by default
 defaults write 'NSGlobalDomain' NSNavPanelExpandedStateForSaveMode -bool true
 defaults write 'NSGlobalDomain' NSNavPanelExpandedStateForSaveMode2 -bool true
 
-# do not ask to backup into new disk
+# Do not ask to backup into new disk
 defaults write 'com.apple.timemachine' DoNotOfferNewDisksForBackup -bool true
+
+# Save to disk, not iCloud
+defaults write 'NSGlobalDomain' NSDocumentSaveNewDocumentsToCloud -bool false
 
 #
 ## Keyboard/Typing ##
 #
 
-# disable this "smart" quoting witchcraft
+# Disable this "smart" quoting witchcraft
 defaults write 'NSGlobalDomain' NSAutomaticDashSubstitutionEnabled -bool false
 defaults write 'NSGlobalDomain' NSAutomaticQuoteSubstitutionEnabled -bool false
 
-# disable autocorrect
+# Disable autocorrect
 defaults write 'NSGlobalDomain' NSAutomaticSpellingCorrectionEnabled -bool false
 
 #
 ## Dock ##
 #
 
-# highlight hover effect
+# Highlight hover effect
 defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
-# set icon size for Dock items 36px
-defaults write com.apple.dock tilesize -int 36
+# Show at botton of the screen
+defaults write com.apple.dock orientation -string bottom
 
-# change minimize/maximize window effect
+# Set icon size for Dock items
+defaults write com.apple.dock tilesize -int 48
+
+# Change minimize/maximize window effect
 defaults write com.apple.dock mineffect -string 'scale'
 
-# minimize windows into their app's icon
+# Minimize windows into their app's icon
 defaults write com.apple.dock minimize-to-application -bool true
 
-# enable spring loading
+# Enable spring loading
 defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
 
-# show indicator lights for open apps
+# Show indicator lights for open apps
 defaults write com.apple.dock show-process-indicators -bool true
 
-# wipe all default apps
+# Wipe all default apps
 defaults write com.apple.dock persistent-apps -array
 
-# always show dock
+# Always show dock
 defaults write com.apple.dock autohide -bool false
 
-# don't show recent apps in Dock
+# Don't show recent apps in Dock
 defaults write com.apple.dock show-recents -bool false
 
 #
 ## Finder ##
 #
 
-# do not create .DS_Store on network volumes
+# Do not create .DS_Store on network volumes
 defaults write 'com.apple.desktopservices' DSDontWriteNetworkStores -bool true
 
-# show filename extensions
+# Show filename extensions
 defaults write 'NSGlobalDomain' AppleShowAllExtensions -bool true
 
-# show hidden files in finder
+# Show hidden files in finder
 defaults write 'com.apple.finder' AppleShowAllFiles -bool true
 
-# do not warn before emptying trash
+# Do not warn before emptying trash
 defaults write 'com.apple.finder' WarnOnEmptyTrash -bool false
 
-# show path bar (bottom)
+# Show path bar (bottom)
 defaults write 'com.apple.finder' ShowPathbar -bool true
 
-# display full POSIX path as window title
+# Display full POSIX path as window title
 defaults write 'com.apple.finder' _FXShowPosixPathInTitle -bool true
 
-# disable warning when changing a file extension
+# Disable warning when changing a file extension
 defaults write 'com.apple.finder' FXEnableExtensionChangeWarning -bool false
 
-# sidebar icon size
-defaults write 'NSGlobalDomain' NSTableViewDefaultSizeMode -int 2
+# Big sidebar icons
+defaults write 'NSGlobalDomain' NSTableViewDefaultSizeMode -int 3
+
+# Show icons immediately in header
+defaults write 'NSGlobalDomain' NSToolbarTitleViewRolloverDelay -float 0
+
+#
+## Screenshots ##
+#
+
+# No shadow for screenshots
+defaults write 'com.apple.screencapture' disable-shadow -bool false
+
+# Save to ~/Pictures instead of ~/Desktop
+defaults write 'com.apple.screencapture' location -string ~/Pictures
+
+# Do not display thumbnail - mainly with multiple monitors
+defaults write com.apple.screencapture show-thumbnail -bool false
 
 #
 ## Safari ##
 #
 
-# disable opening "safe" files after download
+# Disable opening "safe" files after download
 defaults write 'com.apple.Safari' AutoOpenSafeDownloads -bool false
 
 #
 ## Xcode ##
 #
 
-# show whitespace in xcode
+# Show whitespace in xcode
 defaults write 'com.apple.dt.xcode' DVTTextShowInvisibleCharacters -int 1
 
 #
 ## Unused Apple apps ;) ##
 #
 
-# copy address as 'foo@bar.com' instead of 'Foo <foo@bar.com>'
+# Copy address as 'foo@bar.com' instead of 'Foo <foo@bar.com>'
 defaults write 'com.apple.mail' AddressesIncludeNameOnPasteboard -bool false
 
-# save files as UTF-8
+# Save files as UTF-8
 defaults write 'com.apple.textedit' PlainTextEncoding -int 4
 defaults write 'com.apple.textedit' PlainTextEncodingForWrite -int 4
 
-# save new files in plain text
+# Save new files in plain text
 defaults write 'com.apple.textedit' RichText -int 0
 
 #
@@ -142,5 +164,6 @@ defaults write 'com.apple.textedit' RichText -int 0
 #
 
 killall Finder
+killall Dock
 
 printf 'Some apps (Mail, TextEdit, Xcode) may need a restart to see changes.\n'
