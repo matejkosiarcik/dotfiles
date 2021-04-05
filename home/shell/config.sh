@@ -18,7 +18,7 @@ alias logtree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.
 alias m='make'
 alias d='docker'
 alias dr='docker run --interactive --tty'
-alias db='docker build'
+alias db='docker build . --tag'
 
 # Git aliases
 alias df='git df | h'
