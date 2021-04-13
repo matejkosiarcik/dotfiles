@@ -17,8 +17,8 @@ export GPG_TTY
 alias logtree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv"'
 alias m='make'
 alias d='docker'
-alias dr='docker run --interactive --tty'
-alias db='docker build . --tag'
+alias dr='docker run --interactive --tty --rm'
+alias db='docker build . --rm  --tag'
 
 # Git aliases
 alias df='git df | h'
@@ -38,7 +38,7 @@ alias ytdv='youtube-dl --ignore-error --format "bestvideo[ext=mp4]+bestaudio[ext
 alias ytda='youtube-dl --ignore-error --format "bestaudio[ext=m4a]" --'
 
 # download from uloz.to using ulozto-downloader wrapped in docker
-alias uloztod='docker run --interactive --tty --volume "${PWD}:/downloads" matejkosiarcik/ulozto-downloader:dev --output /downloads --auto-captcha --parts 10'
+alias uloztod='docker run --interactive --tty --rm --volume "${PWD}:/downloads" matejkosiarcik/ulozto-downloader:dev --output /downloads --auto-captcha --parts 10'
 
 # Update local repository
 gitup() {

@@ -35,7 +35,7 @@ update_directory() {
 
     printf 'Installing %s\n' "${directory}" >&2
     rm -rf "${directory}/package-lock.json" "${directory}/node_modules"
-    docker run --interactive --volume "${directory}:/src" node:lts sh -c 'cd /src && npm install && npm dedupe'
+    docker run --interactive --rm --volume "${directory}:/src" node:lts sh -c 'cd /src && npm install && npm dedupe'
     # TODO: check for .node-version to use specific project's version of node
 
     # remove node_modules (when on non-Linux, the node_modules are not usable anyway)
