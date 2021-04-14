@@ -132,7 +132,8 @@ runN() {
     i='0'
     while [ "${i}" -le "${count}" ]; do
         printf '\n'
-        printf '%s %s. run ---\n' '---' "$((i + 1))"
+        printf '%s\n' "--- $((i + 1)). run ---"
+        printf '%s\n' "Start at: $(date +'%Y-%m-%d %H:%M:%S')"
         printf '\n'
 
         (set -euf && time "${@}")
@@ -142,6 +143,8 @@ runN() {
             return 1
         fi
         i="$((i + 1))"
+
+        printf '%s\n' "End at: $(date +'%Y-%m-%d %H:%M:%S')"
     done
 }
 
