@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Customize PATH
-export PATH="${HOME}/.bin:${PATH}"
+export PATH="$HOME/.bin:$PATH"
 
 # gpg
 GPG_TTY="$(tty)"
@@ -9,9 +9,9 @@ export GPG_TTY
 
 # Include other config files
 # shellcheck source=/dev/null
-[ -f "${HOME}/.config-secret.sh" ] && . "${HOME}/.config-secret.sh"
+[ -f "$HOME/.config-secret.sh" ] && . "$HOME/.config-secret.sh"
 # shellcheck source=/dev/null
-[ -f "${HOME}/.profile" ] && . "${HOME}/.profile"
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 # Aliases
 alias logtree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv"'
@@ -62,7 +62,7 @@ gitup() {
 tdup() {
     # TODO: make iterm2, hyper.js compatible
     # TODO: make ubuntu compatible
-    open -a 'Terminal' "${PWD}"
+    open -a 'Terminal' "$PWD"
 }
 
 # Create directory (if not exists) and navigate to it
@@ -99,8 +99,7 @@ o() {
     if [ "${#}" -eq 0 ]; then
         open .
     else
-        # shellcheck disable=SC2086,SC2068
-        open ${@}
+        open "${@}"
     fi
 }
 
@@ -109,8 +108,7 @@ c() {
     if [ "${#}" -eq 0 ]; then
         code .
     else
-        # shellcheck disable=SC2086,SC2068
-        code ${@}
+        code "${@}"
     fi
 }
 
@@ -122,29 +120,32 @@ runN() {
     fi
 
     count="${1}"
-    if [ "${count}" -lt 0 ]; then
+    if [ "$count" -lt 0 ]; then
         printf "Can't repeat command negative amount of times." >&2
         return 1
     fi
     shift
 
-    printf 'Executing "%s" for %s times.\n' "${*}" "${count}" >&2
-    i='0'
-    while [ "${i}" -le "${count}" ]; do
+    printf 'Executing "%s" for %s times.\n' "${*}" "$count" >&2
+    i='1'
+    while [ "$i" -le "$count" ]; do
         printf '\n'
-        printf '%s\n' "--- $((i + 1)). run ---"
+        printf '%s\n' "--- $i. run ---"
         printf '%s\n' "Start at: $(date +'%Y-%m-%d %H:%M:%S')"
         printf '\n'
 
         (set -euf && time "${@}")
         statuscode="${?}"
-        if [ "${statuscode}" != 0 ]; then
-            printf 'Command "%s" returned %s. Stopping.\n' "${*}" "${statuscode}"
+        if [ "$statuscode" != 0 ]; then
+            printf 'Command "%s" returned %s. Stopping.\n' "${*}" "$statuscode"
             return 1
         fi
-        i="$((i + 1))"
 
+        printf '\n'
         printf '%s\n' "End at: $(date +'%Y-%m-%d %H:%M:%S')"
+        printf '%s\n' "^^^ $i. run ^^^"
+
+        i="$((i + 1))"
     done
 }
 

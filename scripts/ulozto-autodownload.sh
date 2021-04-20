@@ -16,13 +16,13 @@ print_help() {
 limit=1
 browser='Safari'
 while getopts "h?l:b:" opt; do
-    case "${opt}" in
+    case "$opt" in
     h)
         print_help
         exit 0
         ;;
-    b) browser="${OPTARG}" ;;
-    l) limit="${OPTARG}" ;;
+    b) browser="$OPTARG" ;;
+    l) limit="$OPTARG" ;;
     *)
         printf 'Unsupported argument.' >&2
         exit 1
@@ -35,17 +35,17 @@ urls_file="$(mktemp)"
 trap 'rm -rf "${urls_file}"; trap - EXIT; exit' EXIT INT HUP TERM
 
 # First collect URLs to download
-printf 'Checking %s\n' "${browser}" >&2
-windows_count="$(osascript -e "tell application \"${browser}\" to get number of windows")"
-printf 'Got %s open windows\n' "${windows_count}" >&2
+printf 'Checking %s\n' "$browser" >&2
+windows_count="$(osascript -e "tell application \"$browser\" to get number of windows")"
+printf 'Got %s open windows\n' "$windows_count" >&2
 window_i=1
-while [ "${window_i}" -le "${windows_count}" ]; do
-    tabs_count="$(osascript -e "tell application \"${browser}\" to get number of tabs in window ${window_i}")"
-    printf 'Got %s tabs in window %s\n' "${tabs_count}" "${window_i}"
+while [ "$window_i" -le "$windows_count" ]; do
+    tabs_count="$(osascript -e "tell application \"$browser\" to get number of tabs in window $window_i")"
+    printf 'Got %s tabs in window %s\n' "$tabs_count" "$window_i"
 
     tab_i=1
-    while [ "${tab_i}" -le "${tabs_count}" ]; do
-        osascript -e "tell application \"${browser}\" to get URL of tab ${tab_i} of window ${window_i}" | { grep -E '^https://uloz.to/file/' || true; } >>"${urls_file}"
+    while [ "$tab_i" -le "$tabs_count" ]; do
+        osascript -e "tell application \"$browser\" to get URL of tab $tab_i of window $window_i" | { grep -E '^https://uloz.to/file/' || true; } >>"$urls_file"
         tab_i="$((tab_i + 1))"
     done
 
@@ -53,14 +53,14 @@ while [ "${window_i}" -le "${windows_count}" ]; do
 done
 
 # Download collected URLs
-if [ "$(wc -l <"${urls_file}")" -gt 0 ]; then
+if [ "$(wc -l <"$urls_file")" -gt 0 ]; then
     i=0
-    sort <"${urls_file}" | uniq | while read -r url && [ "${i}" -lt "${limit}" ]; do
+    sort <"$urls_file" | uniq | while read -r url && [ "$i" -lt "$limit" ]; do
         # download the file in new Terminal.app window
-        osascript -e "tell application \"Terminal\" to do script \"cd ~/Downloads && uloztod \\\"${url}\\\"\""
+        osascript -e "tell application \"Terminal\" to do script \"cd ~/Downloads && uloztod \\\"$url\\\"\""
 
         # close the tab afterwards
-        osascript -e "tell application \"${browser}\" to close every tab of every window whose url equals \"${url}\""
+        osascript -e "tell application \"$browser\" to close every tab of every window whose url equals \"$url\""
 
         # when opening multiple simultaneous ulozto downloads at once
         # it seems to fail with tor-socker-timeout

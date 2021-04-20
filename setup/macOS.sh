@@ -14,7 +14,7 @@ osascript -e 'tell application "System Preferences" to quit'
 #
 
 # Show ~/Library
-chflags nohidden "${HOME}/Library"
+chflags nohidden "$HOME/Library"
 
 # Show /Volumes
 sudo chflags nohidden /Volumes
