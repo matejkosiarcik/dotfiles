@@ -129,10 +129,10 @@ runN() {
     shift
 
     printf 'Executing "%s" for %s times.\n' "${*}" "${count}" >&2
-    i='0'
+    i='1'
     while [ "${i}" -le "${count}" ]; do
         printf '\n'
-        printf '%s\n' "--- $((i + 1)). run ---"
+        printf '%s\n' "--- ${i}. run ---"
         printf '%s\n' "Start at: $(date +'%Y-%m-%d %H:%M:%S')"
         printf '\n'
 
@@ -142,9 +142,12 @@ runN() {
             printf 'Command "%s" returned %s. Stopping.\n' "${*}" "${statuscode}"
             return 1
         fi
-        i="$((i + 1))"
 
+        printf '\n'
         printf '%s\n' "End at: $(date +'%Y-%m-%d %H:%M:%S')"
+        printf '%s\n' "^^^ ${i}. run ^^^"
+
+        i="$((i + 1))"
     done
 }
 
