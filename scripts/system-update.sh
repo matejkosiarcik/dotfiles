@@ -3,7 +3,7 @@ set -euf
 # This file updates all package-managers
 # both system type and language specific
 
-cd "${HOME}" # to be sure we don't update project instead of system
+cd "$HOME" # to be sure we don't update project instead of system
 
 update_brew() {
     brew update
