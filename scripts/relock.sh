@@ -35,19 +35,20 @@ update_directory() {
 
     printf 'Installing %s\n' "$directory" >&2
     rm -rf "$directory/package-lock.json" "$directory/node_modules"
-    docker run --interactive --rm --volume "$directory:/src" node:lts sh -c 'cd /src && export CYPRESS_INSTALL_BINARY=0 && npm install && npm dedupe'
+    docker run --rm --volume "$directory:/src" node:lts sh -c 'cd /src && export CYPRESS_INSTALL_BINARY=0 && npm install && npm dedupe'
     # TODO: check for .node-version to use specific project's version of node
 
     # remove node_modules (when on non-Linux, the node_modules are not usable anyway)
     rm -rf "$directory/node_modules"
-    printf 'Installing %s - DONE\n' "$directory" >&2
+    printf 'Installing %s - \033[32mDONE\033[0m\n' "$directory" >&2
 }
 
 if [ "$is_recursive" -gt 0 ]; then
     # `grep .` is for returning non-0 when no match is found
-    find . -type f -name 'package-lock.json' -or -name 'package.json' \( -not -path '*node_modules/*' -prune \) | grep . | while read -r package_file; do
+    find . -type f -name 'package.json' \( -not -path '*node_modules/*' -prune \) | sort --version-sort | while read -r package_file; do
         directory="$(dirname "$package_file")"
         directory="$(node -e "console.log(require('path').resolve('.', '$directory'))")"
+        # directory="$(python -c "import os; print(os.path.abspath('$directory'))")"
         update_directory "$directory"
     done
 else
