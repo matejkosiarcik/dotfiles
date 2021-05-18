@@ -28,9 +28,15 @@ alias s='tig status'
 alias t='tig'
 alias pbfix='pbpaste | pbcopy'
 
-# Create Pull-Request on github
+# Create GitHub PR
 # alias ghpr='hub pull-request -a matejkosiarcik -l automerge,autoupdate -m "Automated PR"'
 alias ghpr='gh pr create --assignee matejkosiarcik --title "Automated PR" --body ""'
+
+# New GitLab MR to somebody else
+# alias glmr='gh mr create --description ""'
+
+# New Gitlab MR to myself and automatically merge it
+alias glmr='glab mr create --assignee matej.kosiarcik --title "Automated MR" --description "" --remove-source-branch && sleep 2 && glab mr merge "$(git branch --show-current)" --when-pipeline-succeeds --remove-source-branch'
 
 # download video/audio from youtube with best quality
 # -f best is not enough, because it is limited to 1080p (IIRC)
@@ -39,6 +45,10 @@ alias ytda='youtube-dl --ignore-error --format "bestaudio[ext=m4a]" --'
 
 # download from uloz.to using ulozto-downloader wrapped in docker
 alias uloztod='docker run --interactive --tty --rm --volume "${PWD}:/downloads" matejkosiarcik/ulozto-downloader:dev --output /downloads --auto-captcha --parts 10'
+
+# azlint
+alias azlint='docker run --interactive --tty --volume "$PWD:/project" matejkosiarcik/azlint:dev lint'
+alias azfmt='docker run --interactive --tty --volume "$PWD:/project" matejkosiarcik/azlint:dev fmt'
 
 # Update local repository
 gitup() {
