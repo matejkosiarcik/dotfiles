@@ -35,8 +35,13 @@ update_directory() {
 
     printf 'Installing %s\n' "$directory" >&2
     rm -rf "$directory/package-lock.json" "$directory/node_modules"
-    docker run --rm --volume "$directory:/src" node:lts sh -c 'cd /src && export CYPRESS_INSTALL_BINARY=0 && npm install && npm dedupe'
+
+    tmpdir="$(mktemp -d)"
+    cp "$directory/package.json" "$tmpdir/"
     # TODO: check for .node-version to use specific project's version of node
+    docker run --rm --volume "$tmpdir:/src" -e CYPRESS_INSTALL_BINARY=0 node:lts sh -c 'cd /src && npm install --ignore-scripts && npm dedupe'
+    cp "$tmpdir/package-lock.json" "$directory/"
+    rm -rf "$tmpdir"
 
     # remove node_modules (when on non-Linux, the node_modules are not usable anyway)
     rm -rf "$directory/node_modules"
