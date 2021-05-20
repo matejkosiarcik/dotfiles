@@ -34,7 +34,6 @@ workflows:
   circleci-build:
     jobs:
       - azlint
-      - lint
       - test:
           matrix:
             parameters:
@@ -49,15 +48,6 @@ jobs:
     steps:
       - checkout
       - run: azlint
-
-  lint:
-    docker:
-      - image: node:lts
-    steps:
-      - checkout
-      - run: |
-          npm ci
-          npm run lint
 
   test:
     parameters:
