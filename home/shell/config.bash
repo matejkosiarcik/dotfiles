@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck source=/dev/null
-source "${HOME}/.config.sh"
+source "$HOME/.config.sh"
 
 # can not be in ".sh", because builtin is not available in classic sh
 cd() {
