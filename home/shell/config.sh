@@ -47,7 +47,11 @@ alias ytda='youtube-dl --ignore-error --format "bestaudio[ext=m4a]" --'
 alias uloztod='docker run --interactive --tty --rm --volume "${PWD}:/downloads" matejkosiarcik/ulozto-downloader:dev --output /downloads --auto-captcha --parts 10'
 
 # azlint
-alias azlint='docker run --interactive --tty --volume "$PWD:/project" matejkosiarcik/azlint:dev'
+alias azlint='docker run --interactive --tty --volume "$PWD:/project:ro" matejkosiarcik/azlint:dev lint'
+alias azfmt='docker run --interactive --tty --volume "$PWD:/project" matejkosiarcik/azlint:dev fmt'
+alias azc='azfmt --only-changed && azlint --only-changed'
+alias az='azfmt && azlint'
+alias whatsmyip='curl ipinfo.io'
 
 # Update local repository
 gitup() {
