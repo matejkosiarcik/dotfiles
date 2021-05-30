@@ -48,7 +48,7 @@ mint list >Mintfile
 
 if [ "$(uname -s)" = 'Darwin' ]; then
     printf '%s\n' '-- Apps --'
-    ls -1 /Applications >apps.txt
+    ls -1 '/Applications' >apps.txt
 fi
 
 printf '%s\n' '-- Editors --'
