@@ -121,15 +121,19 @@ defaults write 'NSGlobalDomain' NSToolbarTitleViewRolloverDelay -float 0
 #
 ## Screenshots ##
 #
+mkdir "~/Screenshots"
 
 # No shadow for screenshots
 defaults write 'com.apple.screencapture' disable-shadow -bool false
 
 # Save to ~/Pictures instead of ~/Desktop
-defaults write 'com.apple.screencapture' location -string ~/Pictures
+defaults write 'com.apple.screencapture' location -string "~/Screenshots"
 
 # Do not display thumbnail - mainly with multiple monitors
-defaults write com.apple.screencapture show-thumbnail -bool false
+defaults write 'com.apple.screencapture' show-thumbnail -bool false
+
+# Default name
+defaults write 'com.apple.screencapture' name 'Screenshot'
 
 #
 ## Safari ##
@@ -164,6 +168,7 @@ defaults write 'com.apple.textedit' RichText -int 0
 #
 
 killall Finder
+killall SystemUIServer
 killall Dock
 
 printf 'Some apps (Mail, TextEdit, Xcode) may need a restart to see changes.\n'
