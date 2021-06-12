@@ -1,6 +1,6 @@
 # Scripts
 
-> Collection of my personal scripts and config files
+> Collection of my personal system config files
 
 <!-- toc -->
 
@@ -11,14 +11,13 @@
 
 ## About
 
-Repository is split into these parts:
+Repository is split into these important parts:
 
-| Directory    | Purpose                              |
-| ------------ | ------------------------------------ |
-| home         | Config files from $HOME              |
-| setup        | Scripts to run during computer setup |
-| scripts      | Runtime scripts under $PATH          |
-| dependencies | List of useful installed packages    |
+| Directory | Purpose                              |
+| --------- | ------------------------------------ |
+| home      | Config files from $HOME              |
+| setup     | Scripts to run during computer setup |
+| scripts   | Runtime scripts under $PATH          |
 
 ## License
 
