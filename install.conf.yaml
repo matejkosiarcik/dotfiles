@@ -44,6 +44,7 @@
     ~/.bin/report-tabs: scripts/report-tabs.sh
     ~/.bin/system-update: scripts/system-update.sh
     ~/.bin/ulozto-autodownload: scripts/ulozto-autodownload.sh
+    ~/.bin/update-project: scripts/update-project.sh
 
 - shell:
     - printf 'Manually run `sh setup/setup.sh`\n'
