@@ -8,8 +8,8 @@ if [ "${#}" -lt 1 ]; then
 fi
 root="${1}"
 
-find "$root" -type d -mindepth 1 -maxdepth 1 -not -iname '.git' | while read -r file; do
-    filename="$(printf '%s\n' "$file" | sed "s~$root~~" | tr '/' '|')"
+find "$root" -mindepth 1 -maxdepth 1 -type d -not -iname '.git' | while read -r file; do
+    filename="$(basename "$file")"
     printf 'filename: %s\n' "$filename"
     dir2sha "$file" >"$filename.txt"
 done
