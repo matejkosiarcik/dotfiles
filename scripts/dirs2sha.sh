@@ -8,8 +8,8 @@ if [ "${#}" -lt 1 ]; then
 fi
 root="${1}"
 
-find "$root" -mindepth 1 -maxdepth 1 -type d -not -iname '.git' | while read -r file; do
-    filename="$(basename "$file")"
-    printf 'filename: %s\n' "$filename"
-    dir2sha "$file" >"$filename.txt"
+find "$root" -mindepth 1 -maxdepth 1 -type d -not -iname '.git' | sort --version-sort --ignore-case -s | while read -r directory; do
+    filename="$(basename "$directory")"
+    printf 'Reading: %s\n' "$filename"
+    dir2sha "$directory" >"$filename.txt"
 done
