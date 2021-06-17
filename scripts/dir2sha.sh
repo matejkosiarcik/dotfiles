@@ -11,6 +11,6 @@ input="${1}"
 # traverse directory, for each file output it's name and sha1 hash
 # [sorted by filenames]
 find "$input" -type f -print0 |
-    xargs -0 -n1 shasum |
-    sed -E "s~^([0-9a-f]+)  $input(.+)\$~\1 \2~" |
+    xargs -0 -n1 shasum --binary |
+    sed -E "s~^([0-9a-f]+) [ *]$input(.+)\$~\1 \2~" |
     sort --key=2 --version-sort --ignore-case -s
