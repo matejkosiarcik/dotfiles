@@ -51,9 +51,8 @@ update_directory() {
 if [ "$is_recursive" -gt 0 ]; then
     # `grep .` is for returning non-0 when no match is found
     find . -type f -name 'package.json' \( -not -path '*node_modules/*' -prune \) | sort --version-sort | while read -r package_file; do
+        package_file="$(node -e "console.log(require('path').resolve('.', '$package_file'))")"
         directory="$(dirname "$package_file")"
-        directory="$(node -e "console.log(require('path').resolve('.', '$directory'))")"
-        # directory="$(python -c "import os; print(os.path.abspath('$directory'))")"
         update_directory "$directory"
     done
 else

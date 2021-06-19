@@ -4,13 +4,16 @@ import unicodedata
 from typing import List
 
 
+# Basically just list files in a given directory
+# - normalizes unicode output encoding
+# - sorts files alphabetically (case insensitive)
 def main(args: List[str]):
-    output = []
+    output_files = []
     for root, _, files in os.walk(args[0], topdown=False):
         for file in files:
-            output.append(unicodedata.normalize("NFC", os.path.join(root, file)))
-    output.sort(key=str.casefold)
-    for file in output:
+            output_files.append(unicodedata.normalize("NFC", os.path.join(root, file)))
+    output_files.sort(key=str.casefold)
+    for file in output_files:
         print(file, end="\0")
 
 
