@@ -6,7 +6,7 @@ set -euf
 if [ "${#}" -lt 1 ]; then
     printf 'Not enough arguments. Expected dirpath.\n' >&2
 fi
-input="${1}"
+input="$(printf '%s' "$1" | sed 's~/$~~' | tr -d '\n')"
 
 # traverse directory, for each file output it's name and sha1 hash
 python3 "$(dirname "$(python3 -c "import os; print(os.path.realpath('$0'))")")/dir2sha.py" "$input" |
