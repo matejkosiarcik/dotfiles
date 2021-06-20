@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
+import hashlib
 import os
 import re
-import subprocess
 import sys
 import unicodedata
+from os import path
 from typing import List
 
 
@@ -18,17 +19,22 @@ def main(args: List[str]):
     found_files = []
     for root, _, files in os.walk(root_dir, topdown=False):
         for file in files:
-            found_files.append(unicodedata.normalize("NFC", os.path.join(root, file)))
+            filepath = unicodedata.normalize("NFC", os.path.join(root, file))
+            if path.exists(filepath) and path.isfile(filepath):
+                found_files.append(filepath)
 
     print(f"Found {len(found_files)} files", file=sys.stderr)
     found_files.sort(key=str.casefold)
     print("Sorted files", file=sys.stderr)
 
     for file in found_files:
-        output = subprocess.check_output(["shasum", "--binary", file], shell=False).decode("utf-8")
-        # output = unicodedata.normalize("NFC", output)
-        output = re.sub(fr"^([0-9a-f]+) [ *]{root_dir}(.+)$", r"\1 \2", output).strip()
-        print(output)
+        with open(file, "rb") as open_file:
+            sha = hashlib.sha1()
+            while buffer := open_file.read(1024 * 1024):
+                sha.update(buffer)
+            output_hash = sha.hexdigest()
+            output_file = re.sub(fr"^{root_dir}/?", "", file)
+            print(f"{output_hash} {output_file}")
 
 
 if __name__ == "__main__":
