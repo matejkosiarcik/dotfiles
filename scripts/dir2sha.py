@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import hashlib
 import os
 import re
@@ -15,15 +16,20 @@ from typing import List
 # - Sorts files alphabetically (case insensitive)
 # - Computes sha1 hash of individual files
 # - Outputs in format "HASH FILE"
-def main(args: List[str]):
-    # TODO: argparse
-    root_dir = os.path.abspath(os.path.realpath(args[0]))
+def main(argv: List[str]):
+    # parse arguments
+    parser = argparse.ArgumentParser(prog="dir2sha")
+    parser.add_argument("directory", type=str, help="Root directory to search and analyze")
+    args = parser.parse_args(argv)
+
+    assert path.exists(args.directory), "Root directory should exist"
+    root_dir = path.abspath(path.realpath(args.directory))
     print(f"Searching {root_dir}", file=sys.stderr)
 
     found_files = []
     for root, _, files in os.walk(root_dir, topdown=False):
         for file in files:
-            filepath = unicodedata.normalize("NFC", os.path.join(root, file))
+            filepath = unicodedata.normalize("NFC", path.join(root, file))
             if path.exists(filepath) and path.isfile(filepath):
                 found_files.append(filepath)
 

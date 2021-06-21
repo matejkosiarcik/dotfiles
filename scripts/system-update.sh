@@ -59,7 +59,6 @@ fi
 # JavaScript
 printf '%s\n' '--- NodeJS ---'
 npm update -g
-# TODO: denoland?
 
 # Python
 printf '%s\n' '--- Python ---'

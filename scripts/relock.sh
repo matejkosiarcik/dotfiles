@@ -38,7 +38,6 @@ update_directory() {
 
     tmpdir="$(mktemp -d)"
     cp "$directory/package.json" "$tmpdir/"
-    # TODO: check for .node-version to use specific project's version of node
     docker run --rm --volume "$tmpdir:/src" -e CYPRESS_INSTALL_BINARY=0 node:lts sh -c 'cd /src && npm install --ignore-scripts && npm dedupe'
     cp "$tmpdir/package-lock.json" "$directory/"
     rm -rf "$tmpdir"
