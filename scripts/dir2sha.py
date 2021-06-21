@@ -21,13 +21,14 @@ def main(argv: List[str]):
     parser.add_argument("directory", type=str, help="Root directory to search and analyze")
     args = parser.parse_args(argv)
 
-    root_dir = os.path.abspath(os.path.realpath(args.directory))
+    assert path.exists(args.directory), "Root directory should exist"
+    root_dir = path.abspath(path.realpath(args.directory))
     print(f"Searching {root_dir}", file=sys.stderr)
 
     found_files = []
     for root, _, files in os.walk(root_dir, topdown=False):
         for file in files:
-            filepath = unicodedata.normalize("NFC", os.path.join(root, file))
+            filepath = unicodedata.normalize("NFC", path.join(root, file))
             if path.exists(filepath) and path.isfile(filepath):
                 found_files.append(filepath)
 
