@@ -100,6 +100,7 @@ mcd() {
 }
 
 mchanges() {
+    # shellcheck disable=SC2016
     find . -mindepth 1 -maxdepth 1 -type d -print0 |
         xargs -0 -n1 sh -c 'cd "$0" && printf "%s\n" "$(basename $0)" && git status --short'
 }
