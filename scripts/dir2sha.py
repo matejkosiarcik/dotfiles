@@ -9,10 +9,14 @@ from os import path
 from typing import List
 
 
-# Basically just list files in a given directory
-# - normalizes unicode output encoding
-# - sorts files alphabetically (case insensitive)
+# Basically does:
+# - Search files in given directory
+# - Normalizes unicode encoding for all files (important when running this on multiple systems to get the same output)
+# - Sorts files alphabetically (case insensitive)
+# - Computes sha1 hash of individual files
+# - Outputs in format "HASH FILE"
 def main(args: List[str]):
+    # TODO: argparse
     root_dir = os.path.abspath(os.path.realpath(args[0]))
     print(f"Searching {root_dir}", file=sys.stderr)
 
