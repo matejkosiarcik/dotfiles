@@ -46,7 +46,7 @@ block_comment_end = -->
 block_comment_start = <!--
 
 # C-style languages multiline comments
-[{*.{c,h}{,pp,xx,++},*.{m,cc,hh,mm,C,H,M},*.swift,*.{js,ts}{,x},*.php{,4,5,7},*.{java,scala,sc,kt,ktm,kts},*.{cs,fs}{,x}}]
+[*.{c,cc,C,cpp,cxx,c++,h,hh,H,hpp,hxx,h++,m,mm,M,swift,js,ts,jsx,tsx,php,java,scala,sc,kt,ktm,kts,cs,fs}]
 block_comment = *
 block_comment_end = */
 block_comment_start = /*
