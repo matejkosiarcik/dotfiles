@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
+import argparse
 import hashlib
 import os
 import re
 import sys
 import unicodedata
-import argparse
 from os import path
 from typing import List
 
