@@ -24,7 +24,6 @@ fi
 
 printf '%s\n' '-- JavaScript --'
 npm list -g --depth 0 >npm.txt
-# TODO: denoland?
 
 printf '%s\n' '-- Python --'
 pip3 list --format=freeze >requirements.txt
@@ -43,8 +42,6 @@ cargo --list >>cargo.txt
 
 printf '%s\n' '-- Swift --'
 mint list >Mintfile
-
-# TODO: nix?
 
 if [ "$(uname -s)" = 'Darwin' ]; then
     printf '%s\n' '-- Apps --'
