@@ -1,12 +1,12 @@
 # Helper Makefile to group scripts for development
 
 MAKEFLAGS += --warn-undefined-variables
-.POSIX:
-
-PROJECT_DIR := $(dir $(abspath $(MAKEFILE_LIST)))
 SHELL := /bin/sh
 .SHELLFLAGS := -ec
+PROJECT_DIR := $(dir $(abspath $(MAKEFILE_LIST)))
 ACTIVATE_VENV := [ -n "$${VIRTUAL_ENV+x}" ] || . venv/bin/activate
+
+.POSIX:
 
 .DEFAULT: all
 .PHONY: all
