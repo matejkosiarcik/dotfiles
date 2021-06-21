@@ -9,6 +9,7 @@ import argparse
 from os import path
 from typing import List
 
+
 # Basically does:
 # - Search files in given directory
 # - Normalizes unicode encoding for all files (important when running this on multiple systems to get the same output)
