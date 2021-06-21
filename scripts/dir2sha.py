@@ -5,9 +5,9 @@ import os
 import re
 import sys
 import unicodedata
+import argparse
 from os import path
 from typing import List
-
 
 # Basically does:
 # - Search files in given directory
@@ -15,9 +15,13 @@ from typing import List
 # - Sorts files alphabetically (case insensitive)
 # - Computes sha1 hash of individual files
 # - Outputs in format "HASH FILE"
-def main(args: List[str]):
-    # TODO: argparse
-    root_dir = os.path.abspath(os.path.realpath(args[0]))
+def main(argv: List[str]):
+    # parse arguments
+    parser = argparse.ArgumentParser(prog="dir2sha")
+    parser.add_argument("directory", type=str, help="Root directory to search and analyze")
+    args = parser.parse_args(argv)
+
+    root_dir = os.path.abspath(os.path.realpath(args.directory))
     print(f"Searching {root_dir}", file=sys.stderr)
 
     found_files = []
