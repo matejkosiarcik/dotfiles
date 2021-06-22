@@ -40,11 +40,11 @@
     ~/.bin/check-video: scripts/check-video.sh
     ~/.bin/dir2sha: scripts/dir2sha.py
     ~/.bin/dirs2sha: scripts/dirs2sha.sh
+    ~/.bin/project-update: scripts/project-update.sh
     ~/.bin/relock: scripts/relock.sh
     ~/.bin/report-tabs: scripts/report-tabs.sh
     ~/.bin/system-update: scripts/system-update.sh
     ~/.bin/ulozto-autodownload: scripts/ulozto-autodownload.sh
-    ~/.bin/update-project: scripts/update-project.sh
 
 - shell:
     - printf 'Manually run `sh setup/setup.sh`\n'
