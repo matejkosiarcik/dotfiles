@@ -13,18 +13,18 @@ print_help() {
 
 target='major'
 while getopts "h?t:" o; do
-    case "${o}" in
-        t)
-            target="${OPTARG}"
-            ;;
-        h)
-            print_help
-            exit 0
-            ;;
-        *)
-            print_help
-            exit 1
-            ;;
+    case "$o" in
+    t)
+        target="$OPTARG"
+        ;;
+    h)
+        print_help
+        exit 0
+        ;;
+    *)
+        print_help
+        exit 1
+        ;;
     esac
 done
 
@@ -53,7 +53,7 @@ glob 'package.json' | while read -r file; do
         continue
     fi
     ncu --cwd "$(dirname "$file")" --target "$ncu_target" --upgrade # main
-    (cd "$(dirname "$file")" && relock)                      # lock
+    (cd "$(dirname "$file")" && relock)                             # lock
 done
 
 # Python
