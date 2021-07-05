@@ -7,7 +7,34 @@ import re
 import sys
 import unicodedata
 from os import path
-from typing import List
+from typing import Iterable, List
+
+
+def get_files(dir_path: str) -> List[str]:
+    assert path.exists(dir_path), "Root directory should exist"
+    dir_path = path.abspath(path.realpath(dir_path))
+    print(dir_path, file=sys.stderr)
+
+    found_files = []
+    for root, _, files in os.walk(dir_path, topdown=False):
+        for file in files:
+            filepath = unicodedata.normalize("NFC", path.join(root, file))
+            if path.exists(filepath) and path.isfile(filepath):
+                found_files.append(filepath)
+
+    found_files.sort(key=str.casefold)
+    return found_files
+
+
+def get_file_hashes(files: Iterable[str], root: str) -> Iterable[str]:
+    for file_path in files:
+        with open(file_path, "rb") as open_file:
+            sha = hashlib.sha1()
+            while buffer := open_file.read(1024 * 1024):
+                sha.update(buffer)
+            output_hash = sha.hexdigest()
+            output_file = re.sub(fr"^{root}/?", "", file_path)
+            yield f"{output_hash} {output_file}"
 
 
 # Basically does:
@@ -22,33 +49,21 @@ def main(argv: List[str]):
     parser.add_argument("directory", type=str, help="Root directory to search and analyze")
     args = parser.parse_args(argv)
 
-    assert path.exists(args.directory), "Root directory should exist"
-    root_dir = path.abspath(path.realpath(args.directory))
+    root_dir = args.directory
+    assert path.exists(root_dir), "Root directory should exist"
+    root_dir = path.abspath(path.realpath(root_dir))
     print(root_dir, file=sys.stderr)
 
-    found_files = []
-    for root, _, files in os.walk(root_dir, topdown=False):
-        for file in files:
-            filepath = unicodedata.normalize("NFC", path.join(root, file))
-            if path.exists(filepath) and path.isfile(filepath):
-                found_files.append(filepath)
-
-    found_files.sort(key=str.casefold)
+    found_files = get_files(args.directory)
     files_count = len(found_files)
     files_progress = 0
 
     print(f"\r{files_progress}/{files_count}\t\t", end="", file=sys.stderr)
-    for file_path in found_files:
-        with open(file_path, "rb") as open_file:
-            sha = hashlib.sha1()
-            while buffer := open_file.read(1024 * 1024):
-                sha.update(buffer)
-            output_hash = sha.hexdigest()
-            output_file = re.sub(fr"^{root_dir}/?", "", file_path)
-            print(f"{output_hash} {output_file}")
+    for file_hash in get_file_hashes(found_files, root_dir):
+        print(file_hash)
         files_progress += 1
         print(f"\r{files_progress}/{files_count}\t\t", end="", file=sys.stderr)
-    print('Done', file=sys.stderr)
+    print("Done", file=sys.stderr)
 
 
 if __name__ == "__main__":
