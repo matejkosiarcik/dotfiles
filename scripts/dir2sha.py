@@ -24,7 +24,7 @@ def main(argv: List[str]):
 
     assert path.exists(args.directory), "Root directory should exist"
     root_dir = path.abspath(path.realpath(args.directory))
-    print(f"Searching {root_dir}", file=sys.stderr)
+    print(root_dir, file=sys.stderr)
 
     found_files = []
     for root, _, files in os.walk(root_dir, topdown=False):
@@ -33,10 +33,11 @@ def main(argv: List[str]):
             if path.exists(filepath) and path.isfile(filepath):
                 found_files.append(filepath)
 
-    print(f"Found {len(found_files)} files", file=sys.stderr)
     found_files.sort(key=str.casefold)
-    print("Sorted files", file=sys.stderr)
+    files_count = len(found_files)
+    files_progress = 0
 
+    print(f"\r{files_progress}/{files_count}\t\t", end="", file=sys.stderr)
     for file_path in found_files:
         with open(file_path, "rb") as open_file:
             sha = hashlib.sha1()
@@ -45,6 +46,9 @@ def main(argv: List[str]):
             output_hash = sha.hexdigest()
             output_file = re.sub(fr"^{root_dir}/?", "", file_path)
             print(f"{output_hash} {output_file}")
+        files_progress += 1
+        print(f"\r{files_progress}/{files_count}\t\t", end="", file=sys.stderr)
+    print('Done', file=sys.stderr)
 
 
 if __name__ == "__main__":
