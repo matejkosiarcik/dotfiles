@@ -37,13 +37,13 @@ def main(argv: List[str]):
     found_files.sort(key=str.casefold)
     print("Sorted files", file=sys.stderr)
 
-    for file in found_files:
-        with open(file, "rb") as open_file:
+    for file_path in found_files:
+        with open(file_path, "rb") as open_file:
             sha = hashlib.sha1()
             while buffer := open_file.read(1024 * 1024):
                 sha.update(buffer)
             output_hash = sha.hexdigest()
-            output_file = re.sub(fr"^{root_dir}/?", "", file)
+            output_file = re.sub(fr"^{root_dir}/?", "", file_path)
             print(f"{output_hash} {output_file}")
 
 
