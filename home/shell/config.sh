@@ -7,12 +7,6 @@ export PATH="$HOME/.bin:$PATH"
 GPG_TTY="$(tty)"
 export GPG_TTY
 
-# Include other config files
-# shellcheck source=/dev/null
-[ -f "$HOME/.config-secret.sh" ] && . "$HOME/.config-secret.sh"
-# shellcheck source=/dev/null
-[ -f "$HOME/.profile" ] && . "$HOME/.profile"
-
 # Aliases
 alias logtree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv"'
 alias m='make'
