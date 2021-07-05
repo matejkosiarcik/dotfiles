@@ -16,7 +16,7 @@ fi
 
 if command -v apt >/dev/null 2>&1 && command -v apt-get >/dev/null 2>&1; then
     printf '# Apt #\n'
-    apt list --installed >apt.txt
+    apt list --installed | grep '\[installed\]' | sed -E 's~/.*$~~' >apt.txt
 fi
 if command -v dnf >/dev/null 2>&1; then
     printf '# Dnf #\n'
