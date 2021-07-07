@@ -38,8 +38,10 @@
     # custom scripts
     ~/.bin/backup-packages: scripts/backup-packages.sh
     ~/.bin/check-video: scripts/check-video.sh
+    ~/.bin/dir-clean: scripts/dir-clean.sh
     ~/.bin/dir2sha: scripts/dir2sha.py
     ~/.bin/dirs2sha: scripts/dirs2sha.sh
+    ~/.bin/lsdir: scripts/lsdir.py
     ~/.bin/project-update: scripts/project-update.sh
     ~/.bin/relock: scripts/relock.sh
     ~/.bin/report-tabs: scripts/report-tabs.sh
