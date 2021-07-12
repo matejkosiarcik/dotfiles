@@ -70,7 +70,8 @@ handle_file() {
         ;;
     esac
 }
-export -f handle_file
+# export -f handle_file
+declare -x -f handle_file
 
 printf '### Remove dev folders ###\n'
 find "$dir" -type d \( \
