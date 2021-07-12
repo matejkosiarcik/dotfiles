@@ -17,6 +17,7 @@ if [ "$#" -lt 1 ]; then
 fi
 dir="$1"
 shift
+workdir="$(mktemp -d)"
 
 mode=''
 while getopts "h?n?i?f?" opt; do
@@ -45,32 +46,35 @@ if [ "$mode" = '' ]; then
     exit 1
 fi
 
-function handle_file {
-    mode="$1"
-    file="$2"
+cat >"$workdir/handle_file" <<EOF
+#!/usr/bin/env bash
+set -eufo pipefail
+mode="\$1"
+file="\$2"
 
-    case "$mode" in
-    n)
-        printf 'Would remove %s\n' "$file"
-        ;;
-    i)
-        read -r -p "Remove $file? [y/N] " response
-        if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
-            printf 'Removing %s\n' "$file"
-            rm -rf "$file"
-        fi
-        ;;
-    f)
-        printf 'Removing %s\n' "$file"
-        rm -rf "$file"
-        ;;
-    *)
-        printf 'Unrecognized mode: %s\n' "$mode"
-        exit 1
-        ;;
-    esac
-}
-export -f handle_file
+case "\$mode" in
+n)
+    printf 'Would remove %s\n' "\$file"
+    ;;
+i)
+    read -r -p "Remove \$file? [y/N] " response
+    if [ "\$response" = "y" ] || [ "\$response" = "Y" ]; then
+        printf 'Removing %s\n' "\$file"
+        rm -rf "\$file"
+    fi
+    ;;
+f)
+    printf 'Removing %s\n' "\$file"
+    rm -rf "\$file"
+    ;;
+*)
+    printf 'Unrecognized mode: %s\n' "\$mode"
+    exit 1
+    ;;
+esac
+EOF
+chmod a+x "$workdir/handle_file"
+PATH="$PATH:$workdir/"
 
 printf '### Remove dev folders ###\n'
 find "$dir" -type d \( \
@@ -157,3 +161,5 @@ find "$dir" \( -iname 'CON' \
 #     exit 1
 #     ;;
 # esac
+
+rm -rf "$workdir"
