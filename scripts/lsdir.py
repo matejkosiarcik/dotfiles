@@ -14,8 +14,6 @@ from typing import List
 # Normalizes unicode encoding for all files (important when running this on multiple systems to get the same output)
 # Sorts files alphabetically (case insensitive)
 def get_files(dir_path: str) -> List[str]:
-    assert path.exists(dir_path), "Root directory should exist"
-
     found_files = []
     for root, _, files in os.walk(dir_path, topdown=False):
         for file in files:
@@ -35,8 +33,9 @@ def main(argv: List[str]):
     args = parser.parse_args(argv)
 
     root_dir = args.directory
-    assert path.exists(root_dir), "Root directory should exist"
     root_dir = path.abspath(path.realpath(root_dir))
+    if not path.exists(root_dir):
+        raise FileNotFoundError(f"Directory {root_dir} does not exist")
     print(f"Searching {root_dir}", file=sys.stderr)
 
     found_files = get_files(args.directory)
