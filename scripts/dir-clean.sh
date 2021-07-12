@@ -44,7 +44,6 @@ if [ "$mode" = '' ]; then
     usage >&2
     exit 1
 fi
-printf '%s\n' "$mode"
 
 handle_file() {
     mode="$1"
@@ -74,7 +73,7 @@ handle_file() {
 export -f handle_file
 
 printf '### Remove dev folders ###\n'
-find . -type d \( \
+find "$dir" -type d \( \
     -name '.bundle' -or \
     -name '.gradle' -or \
     -name '.idea' -or \
@@ -94,7 +93,7 @@ find . -type d \( \
     \) -prune -exec sh -c 'handle_file "$0" "$1"' "$mode" '{}' \;
 
 printf '### Remove OS junk files and dev cache files ###\n'
-find . -type f \( \
+find "$dir" -type f \( \
     -name '._*' -or \
     -iname '.DS_Store' -or \
     -iname '.AppleDouble' -or \
@@ -108,7 +107,7 @@ find . -type f \( \
     \) -exec sh -c 'handle_file "$0" "$1"' "$mode" '{}' \;
 
 printf '### Remove Windows reserved files ###\n'
-find . \( -iname 'CON' \
+find "$dir" \( -iname 'CON' \
     -or -iname 'PRN' \
     -or -iname 'AUX' \
     -or -iname 'NUL' \
@@ -136,24 +135,25 @@ find . \( -iname 'CON' \
 # printf '### Remove symlinks ###\n'
 # find . -type l -exec sh -c 'printf "%s\n" "{}"' \;
 
-printf '### Remove extended attributes ###\n'
-case "$mode" in
-n)
-    printf 'Would remove attributes from %s\n' "$dir"
-    ;;
-i)
-    read -r -p "Remove attributes from $dir? [y/N] " response
-    if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
-        printf 'Removing attributes from %s\n' "$dir"
-        xattr -rc "$dir"
-    fi
-    ;;
-f)
-    printf 'Removing attributes from %s\n' "$dir"
-    xattr -rc "$dir"
-    ;;
-*)
-    printf 'Unrecognized mode: %s\n' "$mode"
-    exit 1
-    ;;
-esac
+# TODO: enable xattr without -c flag (unavailable on Ubuntu)
+# printf '### Remove extended attributes ###\n'
+# case "$mode" in
+# n)
+#     printf 'Would remove attributes from %s\n' "$dir"
+#     ;;
+# i)
+#     read -r -p "Remove attributes from $dir? [y/N] " response
+#     if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
+#         printf 'Removing attributes from %s\n' "$dir"
+#         xattr -rc "$dir"
+#     fi
+#     ;;
+# f)
+#     printf 'Removing attributes from %s\n' "$dir"
+#     xattr -rc "$dir"
+#     ;;
+# *)
+#     printf 'Unrecognized mode: %s\n' "$mode"
+#     exit 1
+#     ;;
+# esac
