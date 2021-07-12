@@ -15,6 +15,7 @@ alias dr='docker run --interactive --tty --rm'
 alias db='docker build . --rm  --tag'
 alias pbfix='pbpaste | pbcopy'
 alias exa='exa --long --tree --git-ignore --time modified --time-style long-iso --extended  --all --ignore-glob ".git"'
+alias _diff='git diff --no-index'
 
 # Git aliases
 alias df='git df | h'
