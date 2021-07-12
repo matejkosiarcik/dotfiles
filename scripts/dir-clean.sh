@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eufao pipefail
+set -eufo pipefail
 
 function usage {
     printf 'Usage: dir-clean dir [-h] [-n] [-i] [-f]\n'
@@ -70,6 +70,7 @@ function handle_file {
         ;;
     esac
 }
+export -f handle_file
 
 printf '### Remove dev folders ###\n'
 find "$dir" -type d \( \
