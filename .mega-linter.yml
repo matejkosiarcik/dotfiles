@@ -16,3 +16,6 @@ PYTHON_ISORT_CONFIG_FILE: pyproject.toml
 PYTHON_PYLINT_CONFIG_FILE: pyproject.toml
 RUBY_RUBOCOP_CONFIG_FILE: .rubocop.yml
 YAML_YAMLLINT_CONFIG_FILE: .yamllint.yml
+
+# Light mode
+PYTHON_BANDIT_DISABLE_ERRORS: true

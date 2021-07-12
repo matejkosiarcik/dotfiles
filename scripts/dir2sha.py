@@ -14,8 +14,8 @@ from typing import List
 # - Normalizes unicode encoding for all files (important when running this on multiple systems to get the same output)
 # - Sorts files alphabetically (case insensitive)
 def get_files(dir_path: str) -> List[str]:
-    assert path.exists(dir_path), f"Root {dir_path} does not exist"
-    dir_path = path.abspath(path.realpath(dir_path))
+    if not path.exists(dir_path):
+        raise FileNotFoundError(f"Directory {dir_path} does not exist")
 
     found_files = []
     for root, _, files in os.walk(dir_path, topdown=False):
@@ -30,7 +30,9 @@ def get_files(dir_path: str) -> List[str]:
 
 
 def get_file_hash(filepath: str) -> str:
-    assert path.exists(filepath), f"File {filepath} does not exist"
+    if not path.exists(filepath):
+        raise FileNotFoundError(f"File {filepath} does not exist")
+
     with open(filepath, "rb") as open_file:
         sha = hashlib.sha1()
         while buffer := open_file.read(1024 * 1024):
@@ -47,7 +49,8 @@ def main(argv: List[str]):
     args = parser.parse_args(argv)
 
     root_dir = args.directory
-    assert path.exists(root_dir), "Root directory should exist"
+    if not path.exists(root_dir):
+        raise FileNotFoundError(f"Directory {root_dir} does not exist")
     root_dir = path.abspath(path.realpath(root_dir))
     print(f"Searching {root_dir}", file=sys.stderr)
 
