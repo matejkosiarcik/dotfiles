@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eufao pipefail
 
-usage() {
+function usage {
     printf 'Usage: dir-clean dir [-h] [-n] [-i] [-f]\n'
     printf ' dir    directory to clean (recursively)\n'
     printf ' -h     show help message\n'
@@ -45,7 +45,7 @@ if [ "$mode" = '' ]; then
     exit 1
 fi
 
-handle_file() {
+function handle_file {
     mode="$1"
     file="$2"
 
