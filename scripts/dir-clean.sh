@@ -81,6 +81,8 @@ find "$dir" -type d \( \
     -name '.bundle' -or \
     -name '.gradle' -or \
     -name '.idea' -or \
+    -name '.Trash' -or \
+    -name '.Trashes' -or \
     -name '.venv' -or \
     -name '*.framework' -or \
     -name 'bower_components' -or \
@@ -98,41 +100,41 @@ find "$dir" -type d \( \
 
 printf '### Remove OS junk files and dev cache files ###\n'
 find "$dir" -type f \( \
-    -name '._*' -or \
-    -iname '.DS_Store' -or \
     -iname '.AppleDouble' -or \
-    -iname '.LSOverride' -or \
+    -iname '.DS_Store' -or \
     -iname '.localized' -or \
+    -iname '.LSOverride' -or \
     -iname 'CMakeCache.txt' -or \
-    -iname 'Thumbs.db' -or \
-    -iname 'ehthumbs.db' -or \
+    -iname 'desktop.ini' -or \
     -iname 'ehthumbs_vista.db' -or \
-    -iname 'desktop.ini' \
+    -iname 'ehthumbs.db' -or \
+    -iname 'Thumbs.db' -or \
+    -name '._*' \
     \) -exec sh -c 'handle_file "$0" "$1"' "$mode" '{}' \;
 
 printf '### Remove Windows reserved files ###\n'
-find "$dir" \( -iname 'CON' \
-    -or -iname 'PRN' \
-    -or -iname 'AUX' \
-    -or -iname 'NUL' \
-    -or -iname 'COM1' \
-    -or -iname 'COM2' \
-    -or -iname 'COM3' \
-    -or -iname 'COM4' \
-    -or -iname 'COM5' \
-    -or -iname 'COM6' \
-    -or -iname 'COM7' \
-    -or -iname 'COM8' \
-    -or -iname 'COM9' \
-    -or -iname 'LPT1' \
-    -or -iname 'LPT2' \
-    -or -iname 'LPT3' \
-    -or -iname 'LPT4' \
-    -or -iname 'LPT5' \
-    -or -iname 'LPT6' \
-    -or -iname 'LPT7' \
-    -or -iname 'LPT8' \
-    -or -iname 'LPT9' \
+find "$dir" \( -iname 'CON' -or \
+    -iname 'PRN' -or \
+    -iname 'AUX' -or \
+    -iname 'NUL' -or \
+    -iname 'COM1' -or \
+    -iname 'COM2' -or \
+    -iname 'COM3' -or \
+    -iname 'COM4' -or \
+    -iname 'COM5' -or \
+    -iname 'COM6' -or \
+    -iname 'COM7' -or \
+    -iname 'COM8' -or \
+    -iname 'COM9' -or \
+    -iname 'LPT1' -or \
+    -iname 'LPT2' -or \
+    -iname 'LPT3' -or \
+    -iname 'LPT4' -or \
+    -iname 'LPT5' -or \
+    -iname 'LPT6' -or \
+    -iname 'LPT7' -or \
+    -iname 'LPT8' -or \
+    -iname 'LPT9' \
     \) -exec sh -c 'handle_file "$0" "$1"' "$mode" '{}' \;
 
 # remove symlinks
