@@ -30,7 +30,7 @@ fi
 dir="$2"
 cd "$dir"
 
-find . \( -iname '*.jpg' -or -iname '*.jpeg' \) -maxdepth 1 -type f | sort --version-sort | while read -r file; do
+find . \( -iname '*.jpg' -or -iname '*.jpeg' \) -type f | sort --version-sort | while read -r file; do
     filedir="$dir/$(dirname "$file")"
     filename="$(basename "$file")"
 
@@ -43,21 +43,30 @@ find . \( -iname '*.jpg' -or -iname '*.jpeg' \) -maxdepth 1 -type f | sort --ver
     fi
 
     if [ "$date" != '' ]; then
-        newfilename="$date.jpg"
-        i=0
-        while [ -e "$filedir/$newfilename" ]; do
-            i="$((i + 1))"
-            newfilename="$date $i.jpg"
-        done
-        if [ ! -e "$filedir/$newfilename" ]; then
-            printf '%s <- %s\n' "$newfilename" "$filename"
-            if [ "$mode" = 'f' ]; then
-                mv "$filedir/$filename" "$filedir/$newfilename"
-            fi
-        else
-            printf 'ERROR: Can not move %s to %s (file already exists)\n' "$filename" "$newfilename"
+        printf '%s: %s\n' "$date" "$filename"
+        if [ "$mode" = 'f' ]; then
+            newfilename="$date.jpg"
+            i=0
+            while [ -e "$filedir/$newfilename" ]; do
+                i="$((i + 1))"
+                newfilename="$date $i.jpg"
+            done
+            mv "$filedir/$filename" "$filedir/$newfilename"
         fi
     else
         printf 'ERROR: No date for %s\n' "$filename" >&2
     fi
 done
+
+if [ "$mode" = 'f' ]; then
+    find . -name '*-*-* *-*-* 1.jpg' -type f | sort --version-sort | while read -r file; do
+        filedate="$(basename "$file" ' 1.jpg')"
+        oldfile="$(dirname "$file")/$filedate.jpg"
+        newfile="$(dirname "$file")/$filedate 0.jpg"
+        if [ ! -e "$newfile" ]; then
+            mv "$oldfile" "$newfile"
+        else
+            printf '%s already exist!\n' "$newfile"
+        fi
+    done
+fi
