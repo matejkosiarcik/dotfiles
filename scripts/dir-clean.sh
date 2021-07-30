@@ -17,7 +17,6 @@ if [ "$#" -lt 1 ]; then
 fi
 dir="$1"
 shift
-workdir="$(mktemp -d)"
 
 mode=''
 while getopts "h?n?i?f?" opt; do
@@ -46,35 +45,32 @@ if [ "$mode" = '' ]; then
     exit 1
 fi
 
-cat >"$workdir/handle_file" <<EOF
-#!/usr/bin/env bash
-set -eufo pipefail
-mode="\$1"
-file="\$2"
+function remove_file {
+    mode="$1"
+    file="$2"
 
-case "\$mode" in
-n)
-    printf 'Would remove %s\n' "\$file"
-    ;;
-i)
-    read -r -p "Remove \$file? [y/N] " response
-    if [ "\$response" = "y" ] || [ "\$response" = "Y" ]; then
-        printf 'Removing %s\n' "\$file"
-        rm -rf "\$file"
-    fi
-    ;;
-f)
-    printf 'Removing %s\n' "\$file"
-    rm -rf "\$file"
-    ;;
-*)
-    printf 'Unrecognized mode: %s\n' "\$mode"
-    exit 1
-    ;;
-esac
-EOF
-chmod a+x "$workdir/handle_file"
-PATH="$PATH:$workdir/"
+    case "$mode" in
+    n)
+        printf 'Would remove %s\n' "$file"
+        ;;
+    i)
+        read -r -p "Remove $file? [y/N] " response
+        if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
+            printf 'Removing %s\n' "$file"
+            rm -rf "$file"
+        fi
+        ;;
+    f)
+        printf 'Removing %s\n' "$file"
+        rm -rf "$file"
+        ;;
+    *)
+        printf 'Unrecognized mode: %s\n' "$mode"
+        exit 1
+        ;;
+    esac
+}
+export -f remove_file
 
 printf '### Remove dev folders ###\n'
 find "$dir" -type d \( \
@@ -96,7 +92,7 @@ find "$dir" -type d \( \
     -name 'target' -or \
     -name 'vendor' -or \
     -name 'venv' \
-    \) -prune -exec sh -c 'handle_file "$0" "$1"' "$mode" '{}' \;
+    \) -prune -exec bash -c 'remove_file "$0" "$1"' "$mode" '{}' \;
 
 printf '### Remove OS junk files and dev cache files ###\n'
 find "$dir" -type f \( \
@@ -110,10 +106,11 @@ find "$dir" -type f \( \
     -iname 'ehthumbs.db' -or \
     -iname 'Thumbs.db' -or \
     -name '._*' \
-    \) -exec sh -c 'handle_file "$0" "$1"' "$mode" '{}' \;
+    \) -exec bash -c 'remove_file "$0" "$1"' "$mode" '{}' \;
 
 printf '### Remove Windows reserved files ###\n'
-find "$dir" \( -iname 'CON' -or \
+find "$dir" \( \
+    -iname 'CON' -or \
     -iname 'PRN' -or \
     -iname 'AUX' -or \
     -iname 'NUL' -or \
@@ -135,33 +132,36 @@ find "$dir" \( -iname 'CON' -or \
     -iname 'LPT7' -or \
     -iname 'LPT8' -or \
     -iname 'LPT9' \
-    \) -exec sh -c 'handle_file "$0" "$1"' "$mode" '{}' \;
+    \) -exec bash -c 'remove_file "$0" "$1"' "$mode" '{}' \;
 
-# remove symlinks
-# printf '### Remove symlinks ###\n'
-# find . -type l -exec sh -c 'printf "%s\n" "{}"' \;
+printf '### Remove extended attributes ###\n'
+function remove_xattributes {
+    mode="$1"
+    file="$2"
 
-# TODO: enable xattr without -c flag (unavailable on Ubuntu)
-# printf '### Remove extended attributes ###\n'
-# case "$mode" in
-# n)
-#     printf 'Would remove attributes from %s\n' "$dir"
-#     ;;
-# i)
-#     read -r -p "Remove attributes from $dir? [y/N] " response
-#     if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
-#         printf 'Removing attributes from %s\n' "$dir"
-#         xattr -rc "$dir"
-#     fi
-#     ;;
-# f)
-#     printf 'Removing attributes from %s\n' "$dir"
-#     xattr -rc "$dir"
-#     ;;
-# *)
-#     printf 'Unrecognized mode: %s\n' "$mode"
-#     exit 1
-#     ;;
-# esac
-
-rm -rf "$workdir"
+    xattr "$file" | while read -r attribute; do
+        printf '# %s %s %s\n' "$attribute" "$file" "$mode"
+        case "$mode" in
+        n)
+            printf 'Would remove attribute %s from %s\n' "$attribute" "$file"
+            ;;
+        i)
+            read -u 2 -r -p "Remove attribute $attribute from $file? [y/N] " response
+            if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
+                printf 'Removing attribute %s from %s\n' "$attribute" "$file"
+                xattr -d "$attribute" "$file"
+            fi
+            ;;
+        f)
+            printf 'Removing attribute %s from %s\n' "$attribute" "$file"
+            xattr -d "$attribute" "$file"
+            ;;
+        *)
+            printf 'Unrecognized mode: %s\n' "$mode"
+            exit 1
+            ;;
+        esac
+    done
+}
+export -f remove_xattributes
+find "$dir" -exec bash -c 'remove_xattributes "$0" "$1"' "$mode" '{}' \;
