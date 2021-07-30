@@ -8,14 +8,14 @@ GPG_TTY="$(tty)"
 export GPG_TTY
 
 # Aliases
-alias logtree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv"'
-alias m='make'
-alias d='docker'
-alias dr='docker run --interactive --tty --rm'
-alias db='docker build . --rm  --tag'
+alias tree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv"'
 alias pbfix='pbpaste | pbcopy'
 alias exa='exa --long --tree --git-ignore --time modified --time-style long-iso --extended  --all --ignore-glob ".git"'
-alias _diff='git diff --no-index'
+alias rawdiff='git diff --no-index'
+
+# Docker aliases
+alias dr='docker run --interactive --tty --rm'
+alias db='docker build . --rm  --tag'
 
 # Git aliases
 alias df='git df | h'
@@ -34,8 +34,8 @@ alias ghpr='gh pr create --assignee matejkosiarcik --title "Automated PR" --body
 # New Gitlab MR to myself and automatically merge it
 alias glmr='glab mr create --assignee matej.kosiarcik --title "Automated MR" --description "" --remove-source-branch && sleep 2 && glab mr merge "$(git branch --show-current)" --when-pipeline-succeeds --remove-source-branch'
 
-# download video/audio from youtube with best quality
-# -f best is not enough, because it is limited to 1080p (IIRC)
+# Download video/audio from youtube with best quality
+# `-f best` is not enough, because it is limited to 1080p (IIRC)
 alias ytdv='youtube-dl --ignore-error --format "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4" --'
 alias ytda='youtube-dl --ignore-error --format "bestaudio[ext=m4a]" --'
 
@@ -47,6 +47,8 @@ alias azlint='docker run --volume "$PWD:/project:ro" matejkosiarcik/azlint:dev l
 alias azfmt='docker run --volume "$PWD:/project" matejkosiarcik/azlint:dev fmt'
 alias azc='azfmt --only-changed && azlint --only-changed'
 alias az='azfmt && azlint'
+
+# Other
 alias whatsmyip='curl ipinfo.io'
 
 # Update local repository
