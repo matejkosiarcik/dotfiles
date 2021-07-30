@@ -15,4 +15,4 @@ function fun {
 }
 export -f fun
 
-find . -exec sh -c 'fun "$0"' '{}' \;
+find . -exec bash -c 'fun "$0"' '{}' \;
