@@ -43,6 +43,10 @@ find . \( -iname '*.jpg' -or -iname '*.jpeg' \) -type f | sort --version-sort | 
         # "-FileModifyDate" is often not reliable, but better than nothing if the previous methods yield nada
         date="$(exiftool -short -short -short -FileModifyDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g' | sed -E 's~\+.+$~~')"
     fi
+    if [ "$date" = '0000-00-00_00-00-00' ]; then
+        # unset date when it is bogus
+        date=''
+    fi
 
     if [ "$date" != '' ]; then
         printf '%s: %s\n' "$date" "$filename" >&2
