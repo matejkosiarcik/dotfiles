@@ -51,4 +51,7 @@
     ~/.bin/ulozto-autodownload: scripts/ulozto-autodownload.sh
 
 - shell:
-    - printf 'Manually run `sh setup/setup.sh`\n'
+    - description: Setup
+      command: sh 'setup/setup.sh'
+      stdin: true
+      stdout: true
