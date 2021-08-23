@@ -40,7 +40,7 @@ find . \( \
     -iname '*.mov' -or \
     -iname '*.mp4' -or \
     -iname '*.wav' \
-\) -type f | sort --version-sort | while read -r file; do
+    \) -type f | sort --version-sort | while read -r file; do
     filedir="$dir/$(dirname "$file")"
     filename="$(basename "$file")"
     fileext="$(printf '%s' "$filename" | sed -E 's~^.*\.~~')"
@@ -84,16 +84,16 @@ done
 # So add 0 suffix to it
 if [ "$mode" = 'f' ]; then
     find . \( \
-    -iname '*.3gp' -or \
-    -iname '*.avi' -or \
-    -iname '*.jpeg' -or \
-    -iname '*.jpg' -or \
-    -iname '*.m4a' -or \
-    -iname '*.m4v' -or \
-    -iname '*.mov' -or \
-    -iname '*.mp4' -or \
-    -iname '*.wav' \
-    \) -and -name "* 1.*" -type f | sort --version-sort | while read -r file; do
+        -iname '*.3gp' -or \
+        -iname '*.avi' -or \
+        -iname '*.jpeg' -or \
+        -iname '*.jpg' -or \
+        -iname '*.m4a' -or \
+        -iname '*.m4v' -or \
+        -iname '*.mov' -or \
+        -iname '*.mp4' -or \
+        -iname '*.wav' \
+        \) -and -name "* 1.*" -type f | sort --version-sort | while read -r file; do
         filename="$(basename "$file")"
         fileext="$(printf '%s' "$filename" | sed -E 's~^.*\.~~')"
         filedate="$(basename "$file" " 1.$fileext")"
