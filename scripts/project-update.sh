@@ -8,7 +8,7 @@ print_help() {
     printf 'Usage: project-update [-h] [-t <target>]\n'
     printf '\n'
     printf '  -h                       print help message\n'
-    printf '  -t {major, minor patch}  semver upgrade target\n'
+    printf '  -t {major, minor, patch}  semver upgrade target\n'
 }
 
 target='major'
@@ -58,15 +58,14 @@ done
 
 # Python
 printf '## Pip ##\n'
-pur_target="--$target"
 glob '*requirements*.txt' | while read -r file; do
     if [ ! -e "$file" ]; then
         continue
     fi
-    if [ "$pur_target" = '--major' ]; then
+    if [ "$target" = 'major' ]; then
         pur --force --requirement "$file"
     else
-        pur --force "$pur_target" --requirement "$file"
+        pur --force "--$target" --requirement "$file"
     fi
 done
 
