@@ -62,10 +62,11 @@ glob '*requirements*.txt' | while read -r file; do
     if [ ! -e "$file" ]; then
         continue
     fi
+    echo "File: $file"
     if [ "$target" = 'major' ]; then
         pur --force --requirement "$file"
     else
-        pur --force "--$target" --requirement "$file"
+        pur --force "--$target" '*' --requirement "$file"
     fi
 done
 
