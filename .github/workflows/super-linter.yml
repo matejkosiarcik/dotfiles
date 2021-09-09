@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  github-super-linter:
+  super-linter:
     name: GitHub Super Linter
     runs-on: ubuntu-latest
     steps:
@@ -34,6 +34,7 @@ jobs:
           VALIDATE_RUST_CLIPPY: false # somehow fails the compilation
 
           # config files
+          DOCKERFILE_HADOLINT_FILE_NAME: .hadolint.yaml
           MARKDOWN_CONFIG_FILE: .markdownlint.json
           PYTHON_BLACK_CONFIG_FILE: pyproject.toml
           PYTHON_FLAKE8_CONFIG_FILE: setup.cfg
