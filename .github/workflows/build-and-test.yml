@@ -1,7 +1,9 @@
-name: Build and Test 🔧
+name: Build and Test
 
 on:
   push:
+    branches:
+      - master
   pull_request:
 
 jobs:
