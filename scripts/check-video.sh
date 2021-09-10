@@ -5,7 +5,7 @@ set -euf
 # and checks them for errors - useful for example after downloading
 
 root="."
-if [ "${#}" -ge 1 ]; then
+if [ "$#" -ge 1 ]; then
     root="${1}"
 fi
 logfile='errors.txt'
