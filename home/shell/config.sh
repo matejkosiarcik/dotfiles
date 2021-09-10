@@ -126,6 +126,18 @@ c() {
     fi
 }
 
+if [ "$(uname)" != 'Darwin' ]; then
+    if command -v xclip >/dev/null 2>&1; then
+        alias pbcopy='xclip -selection clipboard'
+        alias pbpaste='xclip -selection clipboard -o'
+    fi
+
+    if command -v xsel >/dev/null 2>&1; then
+        alias pbcopy='xsel --clipboard --input'
+        alias pbpaste='xsel --clipboard --output'
+    fi
+fi
+
 # runs specified commnand N times
 runN() {
     if [ "$#" -lt 2 ]; then
