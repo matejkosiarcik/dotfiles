@@ -50,19 +50,26 @@ alias whatsmyip='curl ipinfo.io'
 
 # Update local repository
 gitup() {
+    if [ "$(git status --short)" != '' ]; then
+        printf 'You have uncommitted changes!\n'
+        return 1
+    fi
+
     git fetch --all --tags --prune --prune-tags
+    current_branch="$(git rev-parse --abbrev-ref HEAD)"
+    default_branch="$(git remote show origin | grep 'HEAD branch:' | sed -E 's~.+:[ \t]*~~')"
 
-    if (git branch --list | grep -q master); then # check if master exists
-        if [ "$(git rev-parse --abbrev-ref HEAD)" = master ]; then
-            git pull --ff-only || return 1 # update master when it's checked
-        else
-            git fetch origin master:master || return 1 # update master when we are on different branch
-        fi
+    if [ "$current_branch" = "$default_branch" ]; then
+        # update master/main when it's checked
+        git pull --ff-only || return 1
+    else
+        # update master/main when we are on different branch
+        git fetch origin "$default_branch:$default_branch" || return 1
+    fi
 
-        git branch --merged master | grep -ve '\*' -e 'master' | xargs -n1 git branch -d || return 1
-        if [ "$(git rev-parse --abbrev-ref HEAD)" != master ]; then
-            git rebase master || return 1
-        fi
+    git branch --merged "$default_branch" | grep -ve '\*' -e "$default_branch" | xargs -n1 git branch -d || return 1
+    if [ "$current_branch" != "$default_branch" ]; then
+        git rebase "$default_branch" || return 1
     fi
 }
 

@@ -22,8 +22,7 @@
 
 [alias]
     # shortcuts
-    # amend = commit --amend --no-edit
-    c = commit # -m
+    c = commit
     ch = checkout
     d = diff
     ds = diff --staged
@@ -32,7 +31,7 @@
     plr = pull --rebase
     ps = push origin
     psf = push --force-with-lease
-    psu = "!command() { git push origin "$(git branch | grep \\* | cut -d\\  -f2)" --set-upstream; }; command"
+    psu = "!command() { git push origin "$(git branch | grep \\* | cut -d\\  -f2)" --set-upstream; }; command" # push current branch to remote and setup tracking based on branch name
     psuf = psu --force-with-lease
     r = reset
     s = status
