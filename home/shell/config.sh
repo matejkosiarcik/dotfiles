@@ -25,11 +25,8 @@ alias s='tig status'
 alias t='tig'
 
 # Create GitHub PR
-# alias ghpr='hub pull-request -a matejkosiarcik -l automerge,autoupdate -m "Automated PR"'
-alias ghpr='gh pr create --assignee matejkosiarcik --title "Automated PR" --body ""'
-
-# New GitLab MR to somebody else
-# alias glmr='gh mr create --description ""'
+# alias ghpr='hub pull-request -a matejkosiarcik -m "Automated PR"'
+alias ghpr='gh pr create --assignee matejkosiarcik --title "Automated PR" --body "" && sleep 2 && gh pr merge --auto --merge'
 
 # New Gitlab MR to myself and automatically merge it
 alias glmr='glab mr create --assignee matej.kosiarcik --title "Automated MR" --description "" --remove-source-branch && sleep 2 && glab mr merge "$(git branch --show-current)" --when-pipeline-succeeds --remove-source-branch'
