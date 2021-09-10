@@ -76,7 +76,7 @@ tdup() {
 # Create directory (if not exists) and navigate to it
 mcd() {
     # Validate argument count
-    case "${#}" in
+    case "$#" in
     0)
         printf 'No arguments provided\n' >&2
         return 1
@@ -110,25 +110,37 @@ fi
 
 # Smart alias for 'open'
 o() {
-    if [ "${#}" -eq 0 ]; then
+    if [ "$#" -eq 0 ]; then
         open .
     else
-        open "${@}"
+        open "$@"
     fi
 }
 
 # Smart alias for `code`
 c() {
-    if [ "${#}" -eq 0 ]; then
+    if [ "$#" -eq 0 ]; then
         code .
     else
-        code "${@}"
+        code "$@"
     fi
 }
 
+if [ "$(uname)" != 'Darwin' ]; then
+    if command -v xclip >/dev/null 2>&1; then
+        alias pbcopy='xclip -selection clipboard'
+        alias pbpaste='xclip -selection clipboard -o'
+    fi
+
+    if command -v xsel >/dev/null 2>&1; then
+        alias pbcopy='xsel --clipboard --input'
+        alias pbpaste='xsel --clipboard --output'
+    fi
+fi
+
 # runs specified commnand N times
 runN() {
-    if [ "${#}" -lt 2 ]; then
+    if [ "$#" -lt 2 ]; then
         printf 'Not enough arguments. Run like "runN 2 echo foo".\n' >&2
         return 1
     fi
@@ -148,7 +160,7 @@ runN() {
         printf '%s\n' "Start at: $(date +'%Y-%m-%d %H:%M:%S')"
         printf '\n'
 
-        (set -euf && time "${@}")
+        (set -euf && time "$@")
         statuscode="${?}"
         if [ "$statuscode" != 0 ]; then
             printf 'Command "%s" returned %s. Stopping.\n' "${*}" "$statuscode"
@@ -166,7 +178,7 @@ runN() {
 # print n-th line of file
 # usage: `line 3 example.txt` or `line 3 <example.txt`
 line() {
-    (if [ "${#}" -lt 2 ]; then cat; else cat "${2}"; fi) |
+    (if [ "$#" -lt 2 ]; then cat; else cat "${2}"; fi) |
         head -n "${1}" |
         tail -n 1
 }

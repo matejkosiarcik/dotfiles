@@ -3,7 +3,7 @@ set -euf
 
 # Wrapper around dir2sha for multiple root directories
 
-if [ "${#}" -lt 1 ]; then
+if [ "$#" -lt 1 ]; then
     printf 'Not enough arguments. Expected dirpath.\n' >&2
 fi
 root="${1}"
