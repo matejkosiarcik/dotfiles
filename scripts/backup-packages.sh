@@ -67,6 +67,7 @@ case "$(uname -s)" in
 Darwin) cp "$HOME/Library/Application Support/Code/User/settings.json" 'vscode-settings.json' ;;
 Windows) cp %APPDATA%\\Code\\User\\settings.json vscode-settings.json ;;
 Linux) cp "$HOME/.config/Code/User/settings.json" 'vscode-settings.json' ;;
+*) printf 'Could not copy VSCode settings, unsupported system %s\n' "$(uname -a)" ;;
 esac
 
 touch ".$(date '+%Y-%m-%dT%H-%M-%S%z')" # mark datetime of current export

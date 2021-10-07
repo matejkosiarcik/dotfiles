@@ -3,7 +3,8 @@ set -euf
 cd "$(dirname "${0}")"
 
 case "$(uname -s)" in
-'Darwin') sh 'macOS.sh' ;;
+'Darwin') sh 'setup-mac.sh' ;;
+*) true ;;
 esac
 
 # TODO: make it compatible with linux/windows
