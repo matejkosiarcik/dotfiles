@@ -30,6 +30,18 @@ fi
 dir="$2"
 cd "$dir"
 
+dircountfile="$(mktemp)"
+find . -mindepth 1 -type d >"$dircountfile"
+if [ "$(wc -l <"$dircountfile")" -gt 0 ]; then
+    printf "ERROR: Cannot process nested directories, found:\n"
+    cat "$dircountfile"
+    rm -rf "$dircountfile"
+    exit 1
+fi
+rm -rf "$dircountfile"
+
+tmpfile="$(mktemp)"
+
 find . \( \
     -iname '*.3gp' -or \
     -iname '*.avi' -or \
@@ -60,19 +72,23 @@ find . \( \
     fi
 
     if [ "$date" != '' ]; then
+        printf "%s\n" "$date" | sed -E 's~_.*~~' >>"$tmpfile"
+
         printf '%s: %s\n' "$date" "$filename" >&2
         if [ "$mode" = 'f' ]; then
             newfilename="$date.$fileext"
 
-            # Check if the new file already exists (2 photos with the exact date taken)
-            # In such case name the second photo with an iterator suffix
-            i=0
-            while [ -e "$filedir/$newfilename" ]; do
-                i="$((i + 1))"
-                newfilename="$date $i.$fileext"
-            done
+            if [ "$newfilename" != "$filename" ]; then
+                # Check if the new file already exists (2 photos with the exact date taken)
+                # In such case name the second photo with an iterator suffix
+                i=0
+                while [ -e "$filedir/$newfilename" ]; do
+                    i="$((i + 1))"
+                    newfilename="$date $i.$fileext"
+                done
 
-            mv "$filedir/$filename" "$filedir/$newfilename"
+                mv "$filedir/$filename" "$filedir/$newfilename"
+            fi
         fi
     else
         printf 'ERROR: No date for %s\n' "$filename" >&2
@@ -97,12 +113,17 @@ if [ "$mode" = 'f' ]; then
         filename="$(basename "$file")"
         fileext="$(printf '%s' "$filename" | sed -E 's~^.*\.~~')"
         filedate="$(basename "$file" " 1.$fileext")"
-        oldfile="$(dirname "$file")/$filename"
+        oldfile="$(dirname "$file")/$filedate.$fileext"
         newfile="$(dirname "$file")/$filedate 0.$fileext"
         if [ ! -e "$newfile" ]; then
             mv "$oldfile" "$newfile"
         else
-            printf '%s already exist!\n' "$newfile" >&2
+            printf 'ERROR: %s already exist!\n' "$newfile" >&2
         fi
     done
 fi
+
+printf "Summary:\n"
+cat "$tmpfile" | sort --version-sort | uniq -c
+
+rm -rf "$tmpfile"
