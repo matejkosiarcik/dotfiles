@@ -2,11 +2,12 @@
 set -euf
 
 usage() {
-    printf 'Usage: exifdir [-h] [-n] [-i] [-f] <dir>\n'
+    printf 'Usage: exifdir [-h] [-n] [-i] [-f] [-r] <dir>\n'
     printf ' dir    directory to analyze\n'
     printf ' -h     show help message\n'
-    printf ' -n     dry run\n'
-    printf ' -f     force\n'
+    printf ' -n     dry run (do not rename anything)\n'
+    printf ' -f     force (auto confirm renaming files)\n'
+    printf ' -r     recurse into subdirectories\n'
 }
 
 if [ "$#" -lt 2 ]; then
@@ -16,90 +17,46 @@ if [ "$#" -lt 2 ]; then
 fi
 
 mode=''
-if [ "$1" = '-n' ]; then
-    mode='n'
-elif [ "$1" = '-f' ]; then
-    mode='f'
-fi
+recursive='0'
+while getopts "h?n?f?r?" opt; do
+    case "$opt" in
+    h)
+        usage
+        ;;
+    n)
+        mode='n'
+        ;;
+    f)
+        mode='f'
+        ;;
+    r)
+        recursive='1'
+        ;;
+    *)
+        usage >&2
+        exit 1
+        ;;
+    esac
+done
+shift "$((OPTIND - 1))"
 if [ "$mode" = '' ]; then
-    printf 'No mode specified (specify either -n|-i|-f)\n\n' >&2
+    printf 'No mode specified (specify either -n|-f)\n\n' >&2
     usage >&2
     exit 1
 fi
 
-dir="$2"
-cd "$dir"
+root_dir="$1"
+# echo "mode: $mode"
+# echo "recursive: $recursive"
+# echo "dir: $dir"
+cd "$root_dir"
 
-dircountfile="$(mktemp)"
-find . -mindepth 1 -type d >"$dircountfile"
-if [ "$(wc -l <"$dircountfile")" -gt 0 ]; then
-    printf "ERROR: Cannot process nested directories, found:\n"
-    cat "$dircountfile"
-    rm -rf "$dircountfile"
-    exit 1
-fi
-rm -rf "$dircountfile"
+check_dir() {
+    current_dir="$1"
+    printf '\nAnalyzing %s\n' "$current_dir"
+    summaryfile="$(mktemp)"
 
-tmpfile="$(mktemp)"
-
-find . \( \
-    -iname '*.3gp' -or \
-    -iname '*.avi' -or \
-    -iname '*.jpeg' -or \
-    -iname '*.jpg' -or \
-    -iname '*.m4a' -or \
-    -iname '*.m4v' -or \
-    -iname '*.mov' -or \
-    -iname '*.mp4' -or \
-    -iname '*.wav' \
-    \) -type f | sort --version-sort | while read -r file; do
-    filedir="$dir/$(dirname "$file")"
-    filename="$(basename "$file")"
-    fileext="$(printf '%s' "$filename" | sed -E 's~^.*\.~~')"
-
-    # Get photo creation date
-    date="$(exiftool -short -short -short -CreateDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g')"
-    if [ "$date" = '' ] || [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
-        date="$(exiftool -short -short -short -DateTimeOriginal "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g')"
-    fi
-    if [ "$date" = '' ] || [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
-        # "-FileModifyDate" is often not reliable, but better than nothing if the previous methods yield nothing
-        date="$(exiftool -short -short -short -FileModifyDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g' | sed -E 's~\+.+$~~')"
-    fi
-    if [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
-        # unset date when it is bogus
-        date=''
-    fi
-
-    if [ "$date" != '' ]; then
-        printf "%s\n" "$date" | sed -E 's~_.*~~' >>"$tmpfile"
-
-        printf '%s: %s\n' "$date" "$filename" >&2
-        if [ "$mode" = 'f' ]; then
-            newfilename="$date.$fileext"
-
-            if [ "$newfilename" != "$filename" ]; then
-                # Check if the new file already exists (2 photos with the exact date taken)
-                # In such case name the second photo with an iterator suffix
-                i=0
-                while [ -e "$filedir/$newfilename" ]; do
-                    i="$((i + 1))"
-                    newfilename="$date $i.$fileext"
-                done
-
-                mv "$filedir/$filename" "$filedir/$newfilename"
-            fi
-        fi
-    else
-        printf 'ERROR: No date for %s\n' "$filename" >&2
-    fi
-done
-
-# If there were some collisions (multiple photos with the same exact date)
-# The first photo will lack suffix (as a consequence, it will be sorted last in programs such as file explorer)
-# So add 0 suffix to it
-if [ "$mode" = 'f' ]; then
-    find . \( \
+    find "$current_dir" \( \
         -iname '*.3gp' -or \
         -iname '*.avi' -or \
         -iname '*.jpeg' -or \
@@ -109,21 +66,96 @@ if [ "$mode" = 'f' ]; then
         -iname '*.mov' -or \
         -iname '*.mp4' -or \
         -iname '*.wav' \
-        \) -and -name "* 1.*" -type f | sort --version-sort | while read -r file; do
+        \) -maxdepth 1 -type f | sort --version-sort | while read -r file; do
+        filedir="$root_dir/$(dirname "$file")"
         filename="$(basename "$file")"
         fileext="$(printf '%s' "$filename" | sed -E 's~^.*\.~~')"
-        filedate="$(basename "$file" " 1.$fileext")"
-        oldfile="$(dirname "$file")/$filedate.$fileext"
-        newfile="$(dirname "$file")/$filedate 0.$fileext"
-        if [ ! -e "$newfile" ]; then
-            mv "$oldfile" "$newfile"
+
+        # Get photo creation date
+        date="$(exiftool -short -short -short -CreateDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g')"
+        if [ "$date" = '' ] || [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
+            date="$(exiftool -short -short -short -DateTimeOriginal "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g')"
+        fi
+        if [ "$date" = '' ] || [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
+            # "-FileModifyDate" is often not reliable, but better than nothing if the previous methods yield nothing
+            date="$(exiftool -short -short -short -FileModifyDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g' | sed -E 's~\+.+$~~')"
+        fi
+        if [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
+            # unset date when it is bogus
+            date=''
+        fi
+
+        if [ "$date" != '' ]; then
+            printf "%s\n" "$date" | sed -E 's~_.*~~' >>"$summaryfile"
+            printf '%s: %s\n' "$date" "$filename" >&2
+
+            if [ "$mode" = 'f' ]; then
+                newfilename="$date.$fileext"
+
+                if [ "$newfilename" != "$filename" ]; then
+                    # Check if the new file already exists (2 photos with the exact date taken)
+                    # In such case name the second photo with an iterator suffix
+                    i=0
+                    while [ -e "$filedir/$newfilename" ]; do
+                        i="$((i + 1))"
+                        newfilename="$date $i.$fileext"
+                    done
+
+                    mv "$filedir/$filename" "$filedir/$newfilename"
+                fi
+            fi
         else
-            printf 'ERROR: %s already exist!\n' "$newfile" >&2
+            printf 'ERROR: No date for %s\n' "$filename" >&2
         fi
     done
+
+    # If there were some collisions (multiple photos with the same exact date)
+    # The first photo will lack suffix (as a consequence, it will be sorted last in programs such as file explorer)
+    # So add 0 suffix to it
+    if [ "$mode" = 'f' ]; then
+        find "$current_dir" \( \
+            -iname '*.3gp' -or \
+            -iname '*.avi' -or \
+            -iname '*.jpeg' -or \
+            -iname '*.jpg' -or \
+            -iname '*.m4a' -or \
+            -iname '*.m4v' -or \
+            -iname '*.mov' -or \
+            -iname '*.mp4' -or \
+            -iname '*.wav' \
+            \) -maxdepth 1 -and -name "* 1.*" -type f | sort --version-sort | while read -r file; do
+            filename="$(basename "$file")"
+            fileext="$(printf '%s' "$filename" | sed -E 's~^.*\.~~')"
+            filedate="$(basename "$file" " 1.$fileext")"
+            oldfile="$(dirname "$file")/$filedate.$fileext"
+            newfile="$(dirname "$file")/$filedate 0.$fileext"
+            if [ -e "$oldfile" ]; then
+                if [ ! -e "$newfile" ]; then
+                    mv "$oldfile" "$newfile"
+                else
+                    printf 'ERROR: %s already exist!\n' "$newfile" >&2
+                fi
+            fi
+        done
+    fi
+
+    printf 'Summary %s:\n' "$current_dir"
+    cat "$summaryfile" | sort --version-sort | uniq -c
+    rm -rf "$summaryfile"
+}
+
+dirfile="$(mktemp)"
+if [ "$recursive" -eq 1 ]; then
+    find . -type d >"$dirfile"
+else
+    if [ "$(find . -type d | wc -l)" -gt 0 ]; then
+        printf 'WARNING: Found nested directories. Ignoring them and proceeding.\n'
+    fi
+    printf '.\n' >"$dirfile"
 fi
 
-printf "Summary:\n"
-cat "$tmpfile" | sort --version-sort | uniq -c
+cat "$dirfile" | while read -r dir; do
+    check_dir "$dir"
+done
 
-rm -rf "$tmpfile"
+rm -rf "$dirfile"
