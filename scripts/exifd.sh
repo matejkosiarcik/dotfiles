@@ -1,24 +1,26 @@
 #!/bin/sh
+# A script to get or rename files based on exif data creation date
 set -euf
 
 usage() {
-    printf 'Usage: exif-sort [-h] [-n] [-i] [-f] [-r] <dir>\n'
+    printf 'Usage: exifd [-h] [-f] [-r] [-v] <dir>\n'
     printf ' dir    directory to analyze\n'
     printf ' -h     show help message\n'
-    printf ' -n     dry run (do not rename anything)\n'
     printf ' -f     force (auto confirm renaming files)\n'
     printf ' -r     recurse into subdirectories\n'
+    printf ' -v     verbose logging\n'
 }
 
-if [ "$#" -lt 2 ]; then
+if [ "$#" -lt 1 ]; then
     printf 'Not enough arguments\n\n' >&2
     usage >&2
     exit 1
 fi
 
-mode=''
+mode='n'
 recursive='0'
-while getopts "h?n?f?r?" opt; do
+verbose='0'
+while getopts "h?f?n?r?v?" opt; do
     case "$opt" in
     h)
         usage
@@ -32,6 +34,9 @@ while getopts "h?n?f?r?" opt; do
     r)
         recursive='1'
         ;;
+    v)
+        verbose='1'
+        ;;
     *)
         usage >&2
         exit 1
@@ -39,17 +44,14 @@ while getopts "h?n?f?r?" opt; do
     esac
 done
 shift "$((OPTIND - 1))"
-if [ "$mode" = '' ]; then
-    printf 'No mode specified (specify either -n|-f)\n\n' >&2
-    usage >&2
-    exit 1
-fi
 
 root_dir="$1"
-# echo "mode: $mode"
-# echo "recursive: $recursive"
-# echo "dir: $dir"
 cd "$root_dir"
+if [ "$verbose" = '1' ]; then
+    printf 'dir: %s\n' "$root_dir"
+    printf 'mode: %s' "$mode"
+    printf 'recursive: %s' "$recursive"
+fi
 
 check_dir() {
     current_dir="$1"
@@ -69,35 +71,10 @@ check_dir() {
         -iname '*.mpg' -or \
         -iname '*.wav' \
         \) -maxdepth 1 -type f | sort --version-sort | while read -r file; do
-        filedir="$root_dir/$(dirname "$file")"
-        filename="$(basename "$file")"
-        fileext="$(printf '%s' "$filename" | sed -E 's~^.*\.~~')"
 
-        # Get photo creation date
-        date="$(exif-file "$file")"
-
-        if [ "$date" != '' ]; then
-            printf "%s\n" "$date" | sed -E 's~_.*~~' >>"$summaryfile"
-            printf '%s: %s\n' "$date" "$filename" >&2
-
-            if [ "$mode" = 'f' ]; then
-                newfilename="$date.$fileext"
-
-                if [ "$newfilename" != "$filename" ]; then
-                    # Check if the new file already exists (2 photos with the exact date taken)
-                    # In such case name the second photo with an iterator suffix
-                    i=0
-                    while [ -e "$filedir/$newfilename" ]; do
-                        i="$((i + 1))"
-                        newfilename="$date $i.$fileext"
-                    done
-
-                    mv "$filedir/$filename" "$filedir/$newfilename"
-                fi
-            fi
-        else
-            printf 'ERROR: No date for %s\n' "$filename" >&2
-        fi
+        # Get photo creation date (and optionally rename the file if desired)
+        date="$(exiff "-$mode" "$file")"
+        printf "%s\n" "$date" | sed -E 's~_.*~~' >>"$summaryfile"
     done
 
     # If there were some collisions (multiple photos with the same exact date)
@@ -133,7 +110,7 @@ check_dir() {
     fi
 
     printf 'Summary %s:\n' "$current_dir"
-    cat "$summaryfile" | sort --version-sort | uniq -c
+    sort --version-sort <"$summaryfile" | uniq -c
     rm -rf "$summaryfile"
 }
 
@@ -147,8 +124,8 @@ else
     printf '.\n' >"$dirfile"
 fi
 
-cat "$dirfile" | while read -r dir; do
+while read -r dir; do
     check_dir "$dir"
-done
+done <"$dirfile"
 
 rm -rf "$dirfile"
