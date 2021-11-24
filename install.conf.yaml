@@ -41,7 +41,8 @@
     ~/.bin/dir-clean: scripts/dir-clean.sh
     ~/.bin/dir2sha: scripts/dir2sha.py
     ~/.bin/dirs2sha: scripts/dirs2sha.sh
-    ~/.bin/exifdir: scripts/exifdir.sh
+    ~/.bin/exif-file: scripts/exif-file.sh
+    ~/.bin/exif-sort: scripts/exif-sort.sh
     ~/.bin/lsdir: scripts/lsdir.py
     ~/.bin/newterm: scripts/newterm.sh
     ~/.bin/project-update: scripts/project-update.sh
