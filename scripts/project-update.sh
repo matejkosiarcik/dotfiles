@@ -52,8 +52,8 @@ glob 'package.json' | while read -r file; do
     if [ ! -e "$file" ]; then
         continue
     fi
-    ncu --cwd "$(dirname "$file")" --target "$ncu_target" --upgrade # main
-    (cd "$(dirname "$file")" && relock)                             # lock
+    ncu --cwd "$(dirname "$file")" --target "$ncu_target" --upgrade # package.json
+    (cd "$(dirname "$file")" && relock)                             # package-lock.json
 done
 
 # Python
