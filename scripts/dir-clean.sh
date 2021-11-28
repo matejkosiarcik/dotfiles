@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # must use bash instead of plain sh
-# becuase we need to export functions into subshells
+# because we need to export functions into subshells
 set -eufo pipefail
 
 function usage {
