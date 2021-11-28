@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# must use bash instead of plain sh
+# becuase we need to export functions into subshells
 set -eufo pipefail
 
 function usage {
@@ -80,7 +82,6 @@ find "$dir" -type d \( \
     -name '.Trash' -or \
     -name '.Trashes' -or \
     -name '.venv' -or \
-    -name '*.framework' -or \
     -name 'bower_components' -or \
     -name 'build' -or \
     -name 'Carthage' -or \
@@ -93,6 +94,8 @@ find "$dir" -type d \( \
     -name 'vendor' -or \
     -name 'venv' \
     \) -prune -exec bash -c 'remove_file "$0" "$1"' "$mode" '{}' \;
+
+# TODO: check manually: *.framework
 
 printf '### Remove OS junk files and dev cache files ###\n'
 find "$dir" -type f \( \
@@ -134,34 +137,4 @@ find "$dir" \( \
     -iname 'LPT9' \
     \) -exec bash -c 'remove_file "$0" "$1"' "$mode" '{}' \;
 
-printf '### Remove extended attributes ###\n'
-function remove_xattributes {
-    mode="$1"
-    file="$2"
-
-    xattr "$file" | while read -r attribute; do
-        printf '# %s %s %s\n' "$attribute" "$file" "$mode"
-        case "$mode" in
-        n)
-            printf 'Would remove attribute %s from %s\n' "$attribute" "$file"
-            ;;
-        i)
-            read -u 2 -r -p "Remove attribute $attribute from $file? [y/N] " response
-            if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
-                printf 'Removing attribute %s from %s\n' "$attribute" "$file"
-                xattr -d "$attribute" "$file"
-            fi
-            ;;
-        f)
-            printf 'Removing attribute %s from %s\n' "$attribute" "$file"
-            xattr -d "$attribute" "$file"
-            ;;
-        *)
-            printf 'Unrecognized mode: %s\n' "$mode"
-            exit 1
-            ;;
-        esac
-    done
-}
-export -f remove_xattributes
-find "$dir" -exec bash -c 'remove_xattributes "$0" "$1"' "$mode" '{}' \;
+# TODO: remove extended attributes with pyxattr
