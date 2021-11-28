@@ -70,7 +70,7 @@ check_dir() {
         -iname '*.mp4' -or \
         -iname '*.mpg' -or \
         -iname '*.wav' \
-        \) -maxdepth 1 -type f | sort --version-sort | while read -r file; do
+        \) -not -iname '._*' -maxdepth 1 -type f | sort --version-sort | while read -r file; do
 
         # Get photo creation date (and optionally rename the file if desired)
         date="$(exiff "-$mode" "$file")"
@@ -93,7 +93,7 @@ check_dir() {
             -iname '*.mp4' -or \
             -iname '*.mpg' -or \
             -iname '*.wav' \
-            \) -maxdepth 1 -and -name "* 1.*" -type f | sort --version-sort | while read -r file; do
+            \) -not -iname '._*' -maxdepth 1 -and -name "* 1.*" -type f | sort --version-sort | while read -r file; do
             filename="$(basename "$file")"
             fileext="$(printf '%s' "$filename" | sed -E 's~^.*\.~~')"
             filedate="$(basename "$file" " 1.$fileext")"
