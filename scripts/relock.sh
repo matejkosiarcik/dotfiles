@@ -38,7 +38,7 @@ update_directory() {
 
     tmpdir="$(mktemp -d)"
     cp "$directory/package.json" "$tmpdir/"
-    docker run --rm --volume "$tmpdir:/src" -e CYPRESS_INSTALL_BINARY=0 -e PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true node:14 sh -c 'cd /src && npm install --ignore-scripts && npm dedupe'
+    docker run --rm --volume "$tmpdir:/src" --volume "$HOME/.npmrc:/src/.npmrc:ro" -e CYPRESS_INSTALL_BINARY=0 -e PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true node:14 sh -c 'cd /src && npm install --ignore-scripts && npm dedupe'
     cp "$tmpdir/package-lock.json" "$directory/"
     rm -rf "$tmpdir"
 
