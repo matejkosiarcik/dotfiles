@@ -63,7 +63,7 @@ npm update -g
 # Python
 printf '%s\n' '--- Python ---'
 python3 -m pip install --upgrade pip setuptools wheel
-python3 -m pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 python3 -m pip install --upgrade
+# python3 -m pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 python3 -m pip install --upgrade
 
 # Ruby
 printf '%s\n' '--- Ruby ---'
