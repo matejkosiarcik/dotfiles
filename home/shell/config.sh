@@ -11,7 +11,7 @@ export GPG_TTY
 alias tree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcworkspace|bower_components|build|external|Carthage|CMakeFiles|CMakeScripts|node_modules|Pods|target|vendor|venv"'
 alias pbfix='pbpaste | pbcopy'
 alias exa='exa --long --tree --git-ignore --time modified --time-style long-iso --extended  --all --ignore-glob ".git"'
-alias rawdiff='git diff --no-index'
+alias diff='git diff --no-index'
 
 # Docker aliases
 alias dr='docker run --interactive --tty --rm'
@@ -23,6 +23,7 @@ alias ds='git ds | h'
 alias h='diff2html -s side -i stdin'
 alias s='tig status'
 alias t='tig'
+alias g='git'
 
 # Create GitHub PR
 # alias ghpr='hub pull-request -a matejkosiarcik -m "Automated PR"'
