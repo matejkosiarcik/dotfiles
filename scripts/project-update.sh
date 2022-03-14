@@ -71,18 +71,15 @@ glob '*requirements*.txt' | while read -r file; do
 done
 
 # Rust
-if [ "$target" = major ]; then
-    printf '## Cargo ##\n'
-    glob 'Cargo.toml' | while read -r file; do
-        if [ ! -e "$file" ]; then
-            continue
-        fi
+glob 'Cargo.toml' | while read -r file; do
+    if [ ! -e "$file" ]; then
+        continue
+    fi
+    if [ "$target" = major ]; then
         (cd "$(dirname "$file")" && cargo upgrade) # main
-        (cd "$(dirname "$file")" && cargo update)  # lock
-    done
-else
-    printf '## Skipping cargo ##\n'
-fi
+    fi
+    (cd "$(dirname "$file")" && cargo update) # lock
+done
 
 # Gitman
 printf '## Gitman ##\n'
