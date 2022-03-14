@@ -78,11 +78,11 @@ if [ "$target" = major ]; then
             continue
         fi
         (cd "$(dirname "$file")" && cargo upgrade) # main
-        (cd "$(dirname "$file")" && cargo update)  # lock
     done
 else
     printf '## Skipping cargo ##\n'
 fi
+(cd "$(dirname "$file")" && cargo update) # lock
 
 # Gitman
 printf '## Gitman ##\n'
