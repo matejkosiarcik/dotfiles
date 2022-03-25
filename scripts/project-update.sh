@@ -2,7 +2,6 @@
 set -euf
 
 # TODO: dry-run
-# TODO: target version (major, minor, patch)
 
 print_help() {
     printf 'Usage: project-update [-h] [-t <target>]\n'
