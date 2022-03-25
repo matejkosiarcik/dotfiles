@@ -1,8 +1,6 @@
 #!/bin/sh
 set -euf
 
-# TODO: dry-run
-
 print_help() {
     printf 'Usage: project-update [-h] [-t <target>]\n'
     printf '\n'
