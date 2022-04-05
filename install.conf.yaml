@@ -44,7 +44,7 @@
     ~/.bin/exiff: scripts/exiff.sh
     ~/.bin/exifd: scripts/exifd.sh
     ~/.bin/lsdir: scripts/lsdir.py
-    ~/.bin/newterm: scripts/newterm.sh
+    ~/.bin/newterm: scripts/newterm.scpt
     ~/.bin/project-update: scripts/project-update.sh
     ~/.bin/relock: scripts/relock.sh
     ~/.bin/report-tabs: scripts/report-tabs.sh
