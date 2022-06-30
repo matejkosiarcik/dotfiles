@@ -12,3 +12,5 @@ cd() {
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias history='history 0'
