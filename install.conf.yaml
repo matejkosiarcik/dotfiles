@@ -33,7 +33,7 @@
     # git config
     ~/.config-main.gitconfig: home/git/config-main.gitconfig
     ~/.config-personal.gitconfig: home/git/config-personal.gitconfig
-    ~/.config-touch4it.gitconfig: home/git/config-touch4it.gitconfig
+    ~/.config-foxit.gitconfig: home/git/config-foxit.gitconfig
 
     # custom scripts
     ~/.bin/backup-packages: scripts/backup-packages.sh
