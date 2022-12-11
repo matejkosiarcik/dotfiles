@@ -51,6 +51,9 @@
     ~/.bin/system-update: scripts/system-update.sh
     ~/.bin/ulozto-autodownload: scripts/ulozto-autodownload.sh
 
+    ~/.bin/gitup: scripts/git/gitup.sh
+    ~/.bin/gitmon: scripts/gitmon.sh
+
     # custom deamons
     ~/.bin/watch-screenshots: deamons/watch-screenshots.sh
     ~/.bin/watch-screenshots.scpt: deamons/watch-screenshots.scpt

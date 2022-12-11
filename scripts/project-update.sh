@@ -4,8 +4,8 @@ set -euf
 print_help() {
     printf 'Usage: project-update [-h] [-t <target>]\n'
     printf '\n'
-    printf '  -h                       print help message\n'
-    printf '  -t {major, minor, patch}  semver upgrade target\n'
+    printf '  -h                              print help message\n'
+    printf '  -t {major, minor, patch, lock}  semver upgrade target\n'
 }
 
 target='major'
@@ -25,7 +25,7 @@ while getopts "h?t:" o; do
     esac
 done
 
-if [ "$target" != 'major' ] && [ "$target" != 'minor' ] && [ "$target" != 'patch' ]; then
+if printf '%s' "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
     printf 'Unsupported target %s\n' "$target"
     print_help
     exit 1
@@ -49,20 +49,24 @@ glob 'package.json' | while read -r file; do
     if [ ! -e "$file" ]; then
         continue
     fi
-    ncu --cwd "$(dirname "$file")" --target "$ncu_target" --upgrade # package.json
-    (cd "$(dirname "$file")" && relock)                             # package-lock.json
+
+    if [ "$target" != 'lock' ]; then
+        ncu --cwd "$(dirname "$file")" --target "$ncu_target" --upgrade # package.json
+    fi
+    (cd "$(dirname "$file")" && relock) # package-lock.json
 done
 
 # Python
+# TODO: Pipfile
 printf '## Pip ##\n'
 glob '*requirements*.txt' | while read -r file; do
     if [ ! -e "$file" ]; then
         continue
     fi
-    echo "File: $file"
+
     if [ "$target" = 'major' ]; then
         pur --force --requirement "$file"
-    else
+    elif [ "$target" != 'lock' ]; then
         pur --force "--$target" '*' --requirement "$file"
     fi
 done
@@ -72,7 +76,10 @@ glob 'Cargo.toml' | while read -r file; do
     if [ ! -e "$file" ]; then
         continue
     fi
-    if [ "$target" = major ]; then
+
+    if [ "$target" = 'major' ]; then
+        (cd "$(dirname "$file")" && cargo upgrade --incompatible) # main
+    elif [ "$target" = 'minor' ]; then
         (cd "$(dirname "$file")" && cargo upgrade) # main
     fi
     (cd "$(dirname "$file")" && cargo update) # lock
@@ -84,6 +91,9 @@ glob 'gitman.yml' '.gitman.yml' | while read -r file; do
     if [ ! -e "$file" ]; then
         continue
     fi
-    (cd "$(dirname "$file")" && gitman update) # main
-    (cd "$(dirname "$file")" && gitman lock)   # lock
+
+    if [ "$target" != 'lock' ]; then
+        (cd "$(dirname "$file")" && gitman update) # main
+    fi
+    (cd "$(dirname "$file")" && gitman lock) # lock
 done

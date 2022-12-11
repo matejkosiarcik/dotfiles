@@ -15,7 +15,7 @@ if [ "$(uname -s)" = 'Darwin' ]; then
     printf '%s\n' '--- Brew ---'
     update_brew
     printf '%s\n' '--- macOS ---'
-    softwareupdate --install --all
+    softwareupdate --install --all --agree-to-license --force
 elif [ "$(uname -s)" = 'Linux' ]; then
     if command -v yum >/dev/null 2>&1 && ! command -v dnf >/dev/null 2>&1; then
         printf '%s\n' '--- Yum ---'
