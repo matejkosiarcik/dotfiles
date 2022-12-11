@@ -25,7 +25,7 @@ while getopts "h?t:" o; do
     esac
 done
 
-if printf "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
+if printf '%s' "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
     printf 'Unsupported target %s\n' "$target"
     print_help
     exit 1
