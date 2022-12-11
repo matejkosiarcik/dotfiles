@@ -22,7 +22,7 @@ def get_files(dir_path: str) -> List[str]:
         for file in files:
             filepath = unicodedata.normalize("NFC", path.join(root, file))
             if path.exists(filepath) and path.isfile(filepath):
-                filepath = re.sub(fr"^{dir_path}/?", "", filepath)
+                filepath = re.sub(rf"^{dir_path}/?", "", filepath)
                 found_files.append(filepath)
 
     found_files.sort(key=str.casefold)

@@ -18,7 +18,7 @@ def get_files(dir_path: str) -> List[str]:
     for root, _, files in os.walk(dir_path, topdown=False):
         for file in files:
             filepath = unicodedata.normalize("NFC", path.join(root, file))
-            filepath = re.sub(fr"^{dir_path}/?", "", filepath)
+            filepath = re.sub(rf"^{dir_path}/?", "", filepath)
             if path.exists(filepath) and path.isfile(filepath):
                 found_files.append(filepath)
 
