@@ -53,7 +53,7 @@ glob 'package.json' | while read -r file; do
     if [ "$target" != 'lock' ]; then
         ncu --cwd "$(dirname "$file")" --target "$ncu_target" --upgrade # package.json
     fi
-    (cd "$(dirname "$file")" && relock)                             # package-lock.json
+    (cd "$(dirname "$file")" && relock) # package-lock.json
 done
 
 # Python
@@ -95,5 +95,5 @@ glob 'gitman.yml' '.gitman.yml' | while read -r file; do
     if [ "$target" != 'lock' ]; then
         (cd "$(dirname "$file")" && gitman update) # main
     fi
-    (cd "$(dirname "$file")" && gitman lock)   # lock
+    (cd "$(dirname "$file")" && gitman lock) # lock
 done
