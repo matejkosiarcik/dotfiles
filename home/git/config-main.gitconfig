@@ -1,5 +1,5 @@
 [user]
-    name = 'Matej Košiarčik'
+    name = "Matej Košiarčik"
 
 [includeIf "gitdir/i:~/Dev/Personal/"]
     path = ~/.config-personal.gitconfig
