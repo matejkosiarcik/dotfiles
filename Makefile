@@ -12,7 +12,7 @@ export PATH := $(PROJECT_DIR)/venv/bin:$(PATH)
 
 .DEFAULT: all
 .PHONY: all
-all: bootstrap
+all: bootstrap install
 
 .PHONY: bootstrap
 bootstrap:
