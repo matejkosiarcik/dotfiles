@@ -9,6 +9,8 @@ if [ "$#" -lt 1 ]; then
 fi
 command="$1"
 
+# Monitor everything (except certain ignored paths)
+# For each change verify that file belongs in git (ignore change if not)
 chokidar '**/*' --initial --silent \
     --command "if ! git check-ignore '{path}' >/dev/null 2>&1; then clear; $command; fi" \
     --ignore "**/.DS_Store" \
@@ -25,4 +27,5 @@ chokidar '**/*' --initial --silent \
     --ignore "**/node_modules" \
     --ignore "**/public" \
     --ignore "**/target" \
-    --ignore "**/venv"
+    --ignore "**/venv" \
+    --ignore "**/tmp"
