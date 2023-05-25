@@ -1,44 +1,16 @@
 version: 2.1
 
-commands:
-  install-system-dependencies:
-    steps:
-      - run:
-          name: Install system packages
-          command: |
-            if command -v yum >/dev/null 2>&1 && ! command -v dnf >/dev/null 2>&1; then
-              yum install -y dnf;
-            fi
-
-            if command -v apt-get >/dev/null 2>&1; then
-              apt-get update;
-              apt-get install --yes make python3 python3-pip python3-venv python3-setuptools;
-            elif command -v apk >/dev/null 2>&1; then
-              apk update --no-cache;
-              apk add --no-cache make python3 python3-dev py3-virtualenv;
-            elif command -v dnf >/dev/null 2>&1; then
-              dnf upgrade -y;
-              dnf install -y make python3 python3-pip python3-setuptools;
-            elif command -v pacman >/dev/null 2>&1; then
-              pacman --noconfirm -Suy python python-pip make;
-            elif command -v swupd >/dev/null 2>&1; then
-              swupd update;
-              swupd bundle-add python-basic make;
-            elif command -v zypper >/dev/null 2>&1; then
-              zypper --non-interactive update;
-              zypper --non-interactive install python3 make
-            fi
-
 workflows:
   version: 2
-  circleci-build:
+  circleci:
     jobs:
       - azlint
-      - test:
+      - install:
           matrix:
             parameters:
               image:
-                - debian:stable
+                - debian:11.7
+                - ubuntu:22.04
 
 jobs:
   azlint:
@@ -53,7 +25,7 @@ jobs:
             azlint --only-changed
           fi
 
-  test:
+  install:
     parameters:
       image:
         type: string
@@ -61,5 +33,6 @@ jobs:
       - image: "<< parameters.image >>"
     steps:
       - checkout
-      - install-system-dependencies
-      - run: make
+      - run: apt-get update && apt-get install --yes python3 python3-pip python3-venv
+      - run: make bootstrap
+      - run: make install
