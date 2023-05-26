@@ -45,7 +45,8 @@ def get_file_hash(filepath: str) -> str:
 def main(argv: List[str]):
     # parse arguments
     parser = argparse.ArgumentParser(prog="dir2sha")
-    parser.add_argument("directory", type=str, help="Root directory to search and analyze")
+    parser.add_argument("directory", type=str,
+                        help="Root directory to search and analyze")
     args = parser.parse_args(argv)
 
     root_dir = args.directory

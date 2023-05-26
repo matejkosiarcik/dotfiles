@@ -29,7 +29,8 @@ def get_files(dir_path: str) -> List[str]:
 def main(argv: List[str]):
     # parse arguments
     parser = argparse.ArgumentParser(prog="lsdir")
-    parser.add_argument("directory", type=str, help="Root directory to search and analyze")
+    parser.add_argument("directory", type=str,
+                        help="Root directory to search and analyze")
     args = parser.parse_args(argv)
 
     root_dir = args.directory
