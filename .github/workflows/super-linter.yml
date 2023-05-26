@@ -1,26 +1,28 @@
 name: Lint
 
+permissions: read-all
+
 on:
   pull_request:
 
 jobs:
   super-linter:
-    name: GitHub Super Linter
+    name: SuperLinter
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
         with:
           fetch-depth: 0 # Full git history is needed to get a proper list of changed files
 
-      - name: GitHub Super Linter
+      - name: Run SuperLinter
         uses: github/super-linter@v5.0.0
         env:
           # global settings
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           DEFAULT_BRANCH: main
-          LINTER_RULES_PATH: /
+          LINTER_RULES_PATH: .config/
 
           # disable
           VALIDATE_CSS: false

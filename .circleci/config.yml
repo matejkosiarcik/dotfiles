@@ -18,6 +18,7 @@ jobs:
       - image: matejkosiarcik/azlint
     steps:
       - checkout
+      - run: find .config -type f -exec sh -c 'ln -s "$0" "$(basename "$0")"' {} \; # TODO: Remove
       - run: |
           if [ "$CIRCLE_BRANCH" = main ]; then
             azlint
