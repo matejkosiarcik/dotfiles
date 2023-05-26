@@ -38,9 +38,9 @@ jobs:
           # config files
           DOCKERFILE_HADOLINT_FILE_NAME: .hadolint.yaml
           MARKDOWN_CONFIG_FILE: .markdownlint.json
-          PYTHON_BLACK_CONFIG_FILE: pyproject.toml
-          PYTHON_FLAKE8_CONFIG_FILE: setup.cfg
-          PYTHON_ISORT_CONFIG_FILE: pyproject.toml
-          PYTHON_PYLINT_CONFIG_FILE: pyproject.toml
+          # PYTHON_BLACK_CONFIG_FILE: pyproject.toml
+          # PYTHON_FLAKE8_CONFIG_FILE: setup.cfg
+          # PYTHON_ISORT_CONFIG_FILE: pyproject.toml
+          # PYTHON_PYLINT_CONFIG_FILE: pyproject.toml
           RUBY_CONFIG_FILE: .rubocop.yml
           YAML_CONFIG_FILE: .yamllint.yml
