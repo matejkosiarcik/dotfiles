@@ -19,5 +19,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           DEFAULT_BRANCH: main
-          LINTER_RULES_PATH: /
-          # Rest of the config is in /.mega-linter.yml
+          MEGALINTER_CONFIG: .config/.mega-linter.yml
