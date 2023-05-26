@@ -1,0 +1,28 @@
+name: Test
+
+permissions: read-all
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    name: Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
+
+      - name: Setup Python
+        uses: actions/setup-python@v4.6.1
+        with:
+          python-version: 3.x
+
+      - run: make bootstrap
+      - run: make install
