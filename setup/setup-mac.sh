@@ -121,15 +121,16 @@ defaults write 'NSGlobalDomain' NSToolbarTitleViewRolloverDelay -float 0
 #
 ## Screenshots ##
 #
-mkdir -p "$HOME/Screenshots"
+screenshots_dir="$HOME/Pictures/Screenshots"
+mkdir -p "$screenshots_dir"
 
-# No shadow for screenshots
+# No shadows
 defaults write 'com.apple.screencapture' disable-shadow -bool false
 
-# Change default ~/Desktop
-defaults write 'com.apple.screencapture' location -string "$HOME/Screenshots"
+# Change location
+defaults write 'com.apple.screencapture' location -string "$screenshots_dir"
 
-# Do not display thumbnail - mainly with multiple monitors
+# Save screenshot immediately
 defaults write 'com.apple.screencapture' show-thumbnail -bool false
 
 # Default name
