@@ -6,9 +6,16 @@
     clean:
       force: true
 
+- shell:
+    - description: PreSetup
+      command: sh 'setup/pre-setup.sh'
+      stdin: true
+      stdout: true
+
 - clean:
     - "~"
     - "~/.bin"
+    - "~/.bin/old"
 
 - link:
     # general config
@@ -17,7 +24,7 @@
     ~/.emacs: home/.emacs
     ~/.lftp/rc: home/.lftp/rc
 
-    # only link gnupg when it already exists
+    # gpg config
     ~/.gnupg/gpg.conf:
       path: home/.gnupg/gpg.conf
       if: "test -d ~/.gnupg"
@@ -36,23 +43,22 @@
     ~/.config-foxit.gitconfig: home/git/config-foxit.gitconfig
 
     # custom scripts
-    ~/.bin/backup-packages: scripts/backup-packages.sh
-    ~/.bin/check-video: scripts/check-video.sh
-    ~/.bin/dir-clean: scripts/dir-clean.sh
-    ~/.bin/dir2sha: scripts/dir2sha.py
-    ~/.bin/dirs2sha: scripts/dirs2sha.sh
-    ~/.bin/exiff: scripts/exiff.sh
-    ~/.bin/exifd: scripts/exifd.sh
-    ~/.bin/lsdir: scripts/lsdir.py
-    ~/.bin/newterm: scripts/newterm.scpt
-    ~/.bin/project-update: scripts/project-update.sh
-    ~/.bin/relock: scripts/relock.sh
-    ~/.bin/report-tabs: scripts/report-tabs.sh
-    ~/.bin/system-update: scripts/system-update.sh
-    ~/.bin/ulozto-autodownload: scripts/ulozto-autodownload.sh
-
-    ~/.bin/gitup: scripts/git/gitup.sh
-    ~/.bin/gitmon: scripts/gitmon.sh
+    ~/.bin/old/backup-packages: scripts/backup-packages.sh
+    ~/.bin/old/check-video: scripts/check-video.sh
+    ~/.bin/old/dir-clean: scripts/dir-clean.sh
+    ~/.bin/old/dir2sha: scripts/dir2sha.py
+    ~/.bin/old/dirs2sha: scripts/dirs2sha.sh
+    ~/.bin/old/exiff: scripts/exiff.sh
+    ~/.bin/old/exifd: scripts/exifd.sh
+    ~/.bin/old/lsdir: scripts/lsdir.py
+    ~/.bin/old/newterm: scripts/newterm.scpt
+    ~/.bin/old/project-update: scripts/project-update.sh
+    ~/.bin/old/relock: scripts/relock.sh
+    ~/.bin/old/report-tabs: scripts/report-tabs.sh
+    ~/.bin/old/system-update: scripts/system-update.sh
+    ~/.bin/old/ulozto-autodownload: scripts/ulozto-autodownload.sh
+    ~/.bin/old/gitup: scripts/git/gitup.sh
+    ~/.bin/old/gitmon: scripts/gitmon.sh
 
 - shell:
     - description: Setup
