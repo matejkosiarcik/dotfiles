@@ -1,4 +1,4 @@
-# Scripts
+# Personal dotfiles
 
 > Collection of my personal system config files
 
@@ -21,4 +21,5 @@ Repository is split into these important parts:
 
 ## License
 
-This project is licensed under the MIT License, see [LICENSE.txt](LICENSE.txt) for full license details.
+This project is licensed under the MIT License, see
+[LICENSE.txt](LICENSE.txt) for full license details.
