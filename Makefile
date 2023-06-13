@@ -32,4 +32,4 @@ clean:
 
 .PHONY: install
 install:
-	dotbot -c install.conf.yaml
+	dotbot -c install.conf.yml
