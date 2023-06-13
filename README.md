@@ -5,6 +5,7 @@
 <!-- toc -->
 
 - [About](#about)
+- [Installation](#installation)
 - [License](#license)
 
 <!-- tocstop -->
@@ -18,6 +19,29 @@ Repository is split into these important parts:
 | home      | Config files from $HOME              |
 | setup     | Scripts to run during computer setup |
 | scripts   | Runtime scripts under $PATH          |
+
+## Installation
+
+You probably don't want to actually install all my dotfiles...
+So this section is mostly for my future self :\) .
+
+Install project dependencies:
+
+```bash
+make bootstrap
+```
+
+Install project system-wide:
+
+```bash
+make install
+```
+
+Or just run everything mentioned (and more):
+
+```bash
+make
+```
 
 ## License
 
