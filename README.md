@@ -5,6 +5,7 @@
 <!-- toc -->
 
 - [About](#about)
+- [Installation](#installation)
 - [License](#license)
 
 <!-- tocstop -->
