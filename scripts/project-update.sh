@@ -93,7 +93,7 @@ glob 'gitman.yml' '.gitman.yml' | while read -r file; do
     fi
 
     if [ "$target" != 'lock' ]; then
-        (cd "$(dirname "$file")" && gitman update) # main
+        (cd "$(dirname "$file")" && gitman update --force) # main
     fi
     (cd "$(dirname "$file")" && gitman lock) # lock
 done
