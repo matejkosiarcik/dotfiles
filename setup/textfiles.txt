@@ -1,3 +1,15 @@
+# Text
+.text
+.txt
+
+# Documentation
+.bib
+.markdown
+.md
+.mdown
+.rst
+.tex
+
 # Shell
 .bash
 .bash_history
@@ -25,23 +37,30 @@
 .tigrc
 
 # Generic Configuration
+.cfg
 .conf
+.ini
 .lock
 .log
 .pub
 .resolved
-.text
 .tmp
 .toml
-.txt
 .workflow
 .yaml
 .yml
 Brewfile
-id_rsa
-known_hosts
 Procfile
 rc # config for lftp
+
+# Tool-specific configuration
+.ecrc
+.mdlrc
+.proselintrc
+.pub # Public ssh key
+.remarkrc
+id_rsa # Private ssh key
+known_hosts
 
 # Containers/Virtual-machines
 .dockerignore
@@ -59,14 +78,6 @@ Vagrantfile
 .hgkeep
 .keep
 .tig_history
-
-# Documentation
-.bib
-.markdown
-.md
-.mdown
-.rst
-.tex
 
 # Diagrams
 .iuml
@@ -149,10 +160,15 @@ Jakefile
 .in
 .m
 .M
-.make
 .mm
 .oclint
+
+# Make
+.make
+.Makefile
+BMakefile
 BSDMakefile
+GMakefile
 GNUMakefile
 Makefile
 
@@ -162,6 +178,23 @@ Cartfile
 Fastfile
 Podfile
 
+# Python
+.py
+.py2
+.py3
+.python_history
+.python-version
+Pipfile
+
+# Ruby
+.rb
+.ruby
+.ruby-gemset
+.ruby-version
+.rvmrc
+Gemfile
+Rakefile
+
 # Other languages
 .lisp
 .lsp
@@ -169,20 +202,7 @@ Podfile
 .netrc
 .nim
 .perl
-.py
-.py2
-.py3
-.python_history
-.python-version
-.rb
-.ruby
-.ruby-gemset
-.ruby-version
-.rvmrc
 .sqlite_history
-Gemfile
-Pipfile
-Rakefile
 
 # These file types don't behave
 # .plist # stays associated with Xcode
