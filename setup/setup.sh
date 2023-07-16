@@ -7,12 +7,11 @@ case "$(uname -s)" in
 *) true ;;
 esac
 
-# TODO: make it compatible with linux/windows
 # uses `duti` on macOS
 # makes all extensions associated with given program
 make_default_program() {
-    program="${1}"
-    file_list="${2}"
+    program="$1"
+    file_list="$2"
 
     while IFS="" read -r line; do
         filetype="$(printf '%s' "$line" | sed -E 's~#.+~~;s~ ~~g')"
