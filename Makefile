@@ -5,6 +5,9 @@ SHELL := /bin/sh  # for compatibility (mainly with redhat distros)
 .SHELLFLAGS := -ec
 PROJECT_DIR := $(abspath $(dir $(MAKEFILE_LIST)))
 
+# Modify PATH to access dependency binaries
+PATH := $(PROJECT_DIR)/venv/bin:$(PATH)
+
 .POSIX:
 
 .DEFAULT: all
@@ -21,13 +24,11 @@ bootstrap:
 		|| mkvirtualenv venv
 
 	# install dependencies
-	PATH="$(PROJECT_DIR)/venv/bin:$(PATH)" \
-		pip install --requirement requirements.txt
+	pip install --requirement requirements.txt
 
 .PHONY: install
 install:
-	PATH="$(PROJECT_DIR)/venv/bin:$(PATH)" \
-		dotbot -c install.conf.yml
+	dotbot -c install.conf.yml
 
 .PHONY: clean
 clean:
