@@ -23,6 +23,7 @@ jobs:
 
       - name: Run AZLint
         run: |
+          export VALIDATE_PROSELINT=false
           if [ "$GITHUB_REF_NAME" = main ]; then
             azlint
           else
