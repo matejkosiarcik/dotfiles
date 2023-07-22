@@ -6,7 +6,7 @@ SHELL := /bin/sh  # for compatibility (mainly with redhat distros)
 PROJECT_DIR := $(abspath $(dir $(MAKEFILE_LIST)))
 
 # Modify PATH to access dependency binaries
-export PATH := $(PROJECT_DIR)/venv/bin:$(PATH)
+PATH := $(PROJECT_DIR)/venv/bin:$(PATH)
 
 .POSIX:
 
@@ -17,7 +17,7 @@ all: clean bootstrap install
 .PHONY: bootstrap
 bootstrap:
 	# check if virtual environment exists or create it
-	[ -n "$${VIRTUAL_ENV+x}" ] || [ -d venv ] \
+	[ -d venv ] \
 		|| python3 -m venv venv \
 		|| python -m venv venv \
 		|| virtualenv venv \
@@ -26,10 +26,10 @@ bootstrap:
 	# install dependencies
 	pip install --requirement requirements.txt
 
-.PHONY: clean
-clean:
-	rm -rf venv
-
 .PHONY: install
 install:
 	dotbot -c install.conf.yml
+
+.PHONY: clean
+clean:
+	rm -rf venv
