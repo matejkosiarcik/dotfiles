@@ -17,7 +17,8 @@ all: clean bootstrap install
 .PHONY: bootstrap
 bootstrap:
 	# check if virtual environment exists or create it
-	[ -d venv ] \
+	[ -n "$${VIRTUAL_ENV+x}" ] || \
+		[ -d venv ] \
 		|| python3 -m venv venv \
 		|| python -m venv venv \
 		|| virtualenv venv \
