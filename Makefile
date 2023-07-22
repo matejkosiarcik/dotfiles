@@ -4,8 +4,6 @@ MAKEFLAGS += --warn-undefined-variables
 SHELL := /bin/sh  # for compatibility (mainly with redhat distros)
 .SHELLFLAGS := -ec
 PROJECT_DIR := $(abspath $(dir $(MAKEFILE_LIST)))
-
-# Modify PATH to access dependency binaries
 PATH := $(PROJECT_DIR)/venv/bin:$(PATH)
 
 .POSIX:
