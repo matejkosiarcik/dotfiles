@@ -2,4 +2,4 @@ dotbot==1.19.2
 
 # TODO: Remove direct PyYAML dependency
 # NOTE: Workaround for https://github.com/yaml/pyyaml/issues/724
-PyYAML==5.3.1
+PyYAML==6.0.1
