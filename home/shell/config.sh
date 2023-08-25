@@ -47,7 +47,7 @@ alias whatsmyip='curl --silent ipinfo.io | jq -r .ip'
 alias csv2json='mlr --icsv --ojson --jlistwrap cat'
 
 # Open new terminal at current directory
-duplicate-terminal() {
+tdup() {
     # TODO: make iterm2, hyper.js compatible
     # TODO: make ubuntu compatible
     open -a 'Terminal' "$PWD"
