@@ -5,7 +5,7 @@ set -euf
 browser='Safari'
 current_date="$(date -u +'%Y-%m-%dT%H:%M:%S')"
 
-is_running="$(osascript -e 'tell application "System Events" to (name of processes) contains "Safari"')"
+is_running="$(osascript -e "tell application \"System Events\" to (name of processes) contains \"$browser\"")"
 if [ "$is_running" != 'true' ]; then
     printf '%s,0\n' "$current_date"
     exit 0

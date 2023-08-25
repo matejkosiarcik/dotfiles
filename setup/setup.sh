@@ -14,7 +14,7 @@ make_default_program() {
     file_list="$2"
 
     while IFS="" read -r line; do
-        filetype="$(printf '%s' "$line" | sed -E 's~#.+~~;s~ ~~g')"
+        filetype="$(printf '%s' "$line" | sed -E 's~ ?#.+$~~;s~ ~~g')"
         if [ "$filetype" = '' ]; then
             continue
         fi
