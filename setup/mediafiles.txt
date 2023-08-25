@@ -47,7 +47,8 @@
 .spx
 .wm
 
-# consider either having this as separate entry, or add this automatically to every extension, such as .mp4.part
+# This would be better on all files, but it seems impossible with duti
+# eg. .mp4.part
 .part
 
 # ---
