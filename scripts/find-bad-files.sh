@@ -1,5 +1,5 @@
 #!/bin/sh
 set -euf
 
-#TODO: search for these chars
+# TODO: Search for these characters in filenames
 # * . " / \ [ ] : ; | , < > { } '
