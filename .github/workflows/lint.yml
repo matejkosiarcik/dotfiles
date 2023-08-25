@@ -79,11 +79,6 @@ jobs:
 
       - name: Run AZLint
         run: |
-          # TODO: Remove overrides
-          export VALIDATE_SHELLHARDEN=false
-          export VALIDATE_SHELLCHECK=false
-          export VALIDATE_SHELL_DRY_RUN=false
-          export VALIDATE_PROSELINT=false
           if [ "$GITHUB_REF_NAME" = main ]; then
             azlint
           else

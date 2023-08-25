@@ -21,7 +21,6 @@ jobs:
     steps:
       - checkout
       - run: |
-          export VALIDATE_PROSELINT=false
           if [ "$CIRCLE_BRANCH" = main ]; then
             azlint
           else
