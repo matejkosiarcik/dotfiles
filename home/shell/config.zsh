@@ -9,8 +9,9 @@ cd() {
     builtin cd "$@" && ls -A >&2
 }
 
+alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
-alias history='history 0'
+alias ........='cd ../../../../../..'
