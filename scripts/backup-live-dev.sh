@@ -1,7 +1,7 @@
 #!/bin/sh
 set -euf
 
-if [ -z ${DEVDIR+x} ]; then
+if [ "${DEVDIR+x}" = "" ]; then
     DEVDIR="$HOME/Dev"
 fi
 
