@@ -20,27 +20,21 @@ alias dr='docker run --interactive --tty --rm'
 alias dbentry='docker run --interactive --tty --rm --entrypoint=bash'
 
 # Git aliases
-alias df='git df | h'
-alias ds='git ds | h'
-alias h='diff2html -s side -i stdin'
+alias gdf='git df | dh'
+alias gds='git ds | dh'
+alias dh='diff2html -s side -i stdin'
 alias s='tig status'
 alias t='tig'
 alias g='git'
 
-# Create GitHub PR
-# alias ghpr='hub pull-request -a matejkosiarcik -m "Automated PR"'
+# Automatic PR creation
 alias ghpr='gh pr create --assignee matejkosiarcik --title "Automated PR" --body "" && sleep 2 && gh pr merge --auto --merge'
-
-# New Gitlab MR to myself and automatically merge it
 # alias glmr='glab mr create --assignee matej.kosiarcik --title "Automated MR" --description "" --remove-source-branch && sleep 2 && glab mr merge "$(git branch --show-current)" --when-pipeline-succeeds --remove-source-branch'
 
 # Download video/audio from youtube with best quality
 # `-f best` is not enough, because it is limited to 1080p (IIRC)
 alias ytdv='youtube-dl --ignore-error --format "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4" --'
 alias ytda='youtube-dl --ignore-error --format "bestaudio[ext=m4a]" --'
-
-# download from uloz.to using ulozto-downloader wrapped in docker
-# alias uloztod='docker run --interactive --tty --rm --volume "${PWD}:/downloads" matejkosiarcik/ulozto-downloader:dev --output /downloads --auto-captcha --parts 10'
 
 # azlint
 alias azlint='docker run --volume "$PWD:/project:ro" matejkosiarcik/azlint:dev lint'
@@ -53,7 +47,7 @@ alias whatsmyip='curl --silent ipinfo.io | jq -r .ip'
 alias csv2json='mlr --icsv --ojson --jlistwrap cat'
 
 # Open new terminal at current directory
-tdup() {
+duplicate-terminal() {
     # TODO: make iterm2, hyper.js compatible
     # TODO: make ubuntu compatible
     open -a 'Terminal' "$PWD"
@@ -75,16 +69,11 @@ mcd() {
     esac
 
     # Run function
-    mkdir -p "${1}" || return 1
-    cd "${1}" || return 1
+    mkdir -p "$1" || return 1
+    cd "$1" || return 1
 }
 
-# mchanges() {
-#     find . -mindepth 1 -maxdepth 1 -type d -print0 |
-#         xargs -0 -n1 sh -c 'cd "$0" && printf "%s\n" "$(basename $0)" && git status --short'
-# }
-
-# Normalize 'open' on all systems
+# Normalize 'open' on non-Macs
 if [ "$(uname)" != 'Darwin' ]; then
     if grep -q Microsoft /proc/version; then # Ubuntu on Windows using the Linux subsystem
         alias open='explorer.exe'
@@ -93,6 +82,7 @@ if [ "$(uname)" != 'Darwin' ]; then
     fi
 fi
 
+# Normalize PasteBoard commands on non-Macs
 if [ "$(uname)" != 'Darwin' ]; then
     if command -v xclip >/dev/null 2>&1; then
         alias pbcopy='xclip -selection clipboard'
@@ -112,14 +102,14 @@ runN() {
         return 1
     fi
 
-    count="${1}"
+    count="$1"
     if [ "$count" -lt 0 ]; then
         printf "Can't repeat command negative amount of times." >&2
         return 1
     fi
     shift
 
-    printf 'Executing "%s" for %s times.\n' "${*}" "$count" >&2
+    printf 'Executing "%s" for %s times.\n' "$*" "$count" >&2
     i='1'
     while [ "$i" -le "$count" ]; do
         printf '\n'
@@ -128,9 +118,9 @@ runN() {
         printf '\n'
 
         (set -euf && time "$@")
-        statuscode="${?}"
+        statuscode="$?"
         if [ "$statuscode" != 0 ]; then
-            printf 'Command "%s" returned %s. Stopping.\n' "${*}" "$statuscode"
+            printf 'Command "%s" returned %s. Stopping.\n' "$*" "$statuscode"
             return 1
         fi
 
@@ -145,7 +135,7 @@ runN() {
 # print n-th line of file
 # usage: `line 3 example.txt` or `line 3 <example.txt`
 line() {
-    (if [ "$#" -lt 2 ]; then cat; else cat "${2}"; fi) |
-        head -n "${1}" |
+    (if [ "$#" -lt 2 ]; then cat; else cat "$2"; fi) |
+        head -n "$1" |
         tail -n 1
 }
