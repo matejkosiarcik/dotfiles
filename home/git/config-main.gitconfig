@@ -4,12 +4,6 @@
 [includeIf "gitdir/i:~/Dev/Personal/"]
     path = ~/.config-personal.gitconfig
 
-[includeIf "gitdir/i:~/Dev/FEI/"]
-    path = ~/.config-personal.gitconfig
-
-[includeIf "gitdir/i:~/Dev/FIIT/"]
-    path = ~/.config-personal.gitconfig
-
 [includeIf "gitdir/i:~/Dev/Foxit/"]
     path = ~/.config-foxit.gitconfig
 
@@ -25,17 +19,21 @@
     ch = checkout
     d = diff
     ds = diff --staged
+    r = reset
+    s = status
+
+    # Update script
+    up = "!command() { sh $HOME/.bin/dotfiles/hidden-scripts/git-update; }; command"
+
+    # Pull
     plf = pull --ff-only
     plm = pull --merge
     plr = pull --rebase
+
+    # Push
     ps = push origin
     psf = push --force-with-lease
-    r = reset
-    s = status
-    up = "!command() { gitup; }; command"
-
     # push current branch to remote and setup tracking based on branch name
-    psu = "!command() { git push origin "$(git branch | grep "\\* " | cut -d* -f2)" --set-upstream; }; command"
-
+    psu = "!command() { git push origin $(git branch | grep '\\* ' | cut -d* -f2) --set-upstream; }; command"
     # force push current branch to remote and setup tracking based on branch name
-    psuf = "!command() { git push origin "$(git branch | grep "\\* " | cut -d* -f2)" --set-upstream  --force-with-lease; }; command"
+    psuf = "!command() { git push origin $(git branch | grep '\\* ' | cut -d* -f2) --set-upstream  --force-with-lease; }; command"
