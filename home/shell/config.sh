@@ -12,7 +12,7 @@ alias tree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcw
 alias pbfix='pbpaste | pbcopy'
 alias o='open'
 alias exa='exa --long --tree --git-ignore --time modified --time-style long-iso --extended  --all --ignore-glob ".git"'
- # TODO: install exa as project dependency
+# TODO: install exa as project dependency
 alias diff='git diff --no-index'
 
 # Git aliases
