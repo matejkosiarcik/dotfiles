@@ -5,18 +5,20 @@ set -euf
 
 cd "$HOME" # to be sure we don't update project instead of system
 
+# TODO: Add chronic from moreutils
+
 update_brew() {
-    brew update
-    brew upgrade
-    brew cleanup
+    brew update --quiet
+    brew upgrade --quiet
+    brew cleanup --quiet
 }
 
-if [ "$(uname -s)" = 'Darwin' ]; then
+if command -v brew >/dev/null 2>&1; then
     printf '%s\n' '--- Brew ---'
     update_brew
-    printf '%s\n' '--- macOS ---'
-    softwareupdate --install --all --agree-to-license --force
-elif [ "$(uname -s)" = 'Linux' ]; then
+fi
+
+if [ "$(uname -s)" = 'Linux' ]; then
     if command -v yum >/dev/null 2>&1 && ! command -v dnf >/dev/null 2>&1; then
         printf '%s\n' '--- Yum ---'
         yum update
@@ -25,9 +27,9 @@ elif [ "$(uname -s)" = 'Linux' ]; then
 
     if command -v apt-get >/dev/null 2>&1; then
         printf '%s\n' '--- Apt ---'
-        apt-get update
-        apt-get upgrade --yes
-        apt-get clean
+        apt-get update -qq
+        DEBIAN_FRONTEND=noninteractive DEBCONF_TERSE=yes DEBCONF_NOWARNINGS=yes apt-get upgrade -qq --yes
+        apt-get clean -qq
     elif command -v apk >/dev/null 2>&1; then
         printf '%s\n' '--- Apk ---'
         apk update --no-cache
@@ -44,12 +46,6 @@ elif [ "$(uname -s)" = 'Linux' ]; then
         printf '%s\n' '--- Zypper ---'
         zypper update
     fi
-
-    # brew can also be installed on linux
-    if command -v brew >/dev/null 2>&1; then
-        printf '%s\n' '--- Brew ---'
-        update_brew
-    fi
 elif [ "$(uname -s)" = 'Windows' ]; then
     printf '%s\n' '--- Chocolatey ---'
     choco upgrade chocolatey
@@ -58,12 +54,12 @@ fi
 
 # JavaScript
 printf '%s\n' '--- NodeJS ---'
-npm update -g
+NODE_OPTIONS=--dns-result-order=ipv4first npm update -g
 
 # Python
 printf '%s\n' '--- Python ---'
 python3 -m pip install --upgrade pip setuptools wheel
-# python3 -m pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 python3 -m pip install --upgrade
+python3 -m pip list --outdated | tail -n +3 | cut -d ' ' -f 1 | xargs -n1 python3 -m pip install --upgrade
 
 # Ruby
 printf '%s\n' '--- Ruby ---'
@@ -73,10 +69,15 @@ gem update --quiet
 # Rust
 printf '%s\n' '--- Rust ---'
 rustup update
-rustup self update || true # when installed with package manager fails to self-update
+rustup self update || true # when installed with package manager rustup fails to self-update
 cargo install-update -a
 
 # Haskell
 # printf '%s\n' '--- Haskell ---'
 # cabal update
 # stack update
+
+# if [ "$(uname -s)" = 'Darwin' ]; then
+#     printf '%s\n' '--- macOS ---'
+#     softwareupdate --install --all --agree-to-license --force
+# fi

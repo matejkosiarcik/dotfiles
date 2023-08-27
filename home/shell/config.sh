@@ -12,19 +12,15 @@ alias tree='tree --ignore-case -CI ".build|.git|.hg|.svn|.venv|*.xcodeproj|*.xcw
 alias pbfix='pbpaste | pbcopy'
 alias o='open'
 alias exa='exa --long --tree --git-ignore --time modified --time-style long-iso --extended  --all --ignore-glob ".git"'
+# TODO: install exa as project dependency
 alias diff='git diff --no-index'
 
-# Docker aliases
-alias db='docker build . --rm  --tag'
-alias dr='docker run --interactive --tty --rm'
-alias dbentry='docker run --interactive --tty --rm --entrypoint=bash'
-
 # Git aliases
-alias gdf='git df | dh'
-alias gds='git ds | dh'
-alias dh='diff2html -s side -i stdin'
-alias s='tig status'
+alias ds='git diff --staged | diff2html'
+alias diff2html='diff2html -s side -i stdin'
+# TODO: install diff2html as project dependency
 alias t='tig'
+alias s='tig status'
 alias g='git'
 
 # Automatic PR creation
@@ -37,10 +33,10 @@ alias ytdv='youtube-dl --ignore-error --format "bestvideo[ext=mp4]+bestaudio[ext
 alias ytda='youtube-dl --ignore-error --format "bestaudio[ext=m4a]" --'
 
 # azlint
-alias azlint='docker run --volume "$PWD:/project:ro" matejkosiarcik/azlint:dev lint'
-alias azfmt='docker run --volume "$PWD:/project" matejkosiarcik/azlint:dev fmt'
-alias azc='azfmt --only-changed && azlint --only-changed'
-alias az='azfmt && azlint'
+alias azlint_lint='docker run --volume "$PWD:/project:ro" matejkosiarcik/azlint:dev lint'
+alias azlint_fmt='docker run --volume "$PWD:/project" matejkosiarcik/azlint:dev fmt'
+alias azc='azlint_fmt --only-changed && azlint_lint --only-changed'
+alias az='azlint_fmt && azlint_lint'
 
 # Other
 alias whatsmyip='curl --silent ipinfo.io | jq -r .ip'
