@@ -29,9 +29,7 @@
     ~/.config.zsh: home/shell/config.zsh
 
     # git config
-    ~/.config-main.gitconfig: home/git/config-main.gitconfig
-    ~/.config-personal.gitconfig: home/git/config-personal.gitconfig
-    ~/.config-foxit.gitconfig: home/git/config-foxit.gitconfig
+    ~/.gitconfig.general: home/git/.gitconfig.general
     ~/.bin/dotfiles/hidden-scripts/git-update: scripts/hidden/git-update.sh
 
     # custom scripts
