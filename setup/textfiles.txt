@@ -46,7 +46,6 @@
 .resolved
 .tmp
 .toml
-.workflow
 .yaml
 .yml
 Brewfile
