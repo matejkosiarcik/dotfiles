@@ -1,12 +1,6 @@
 [user]
     name = "Matej Košiarčik"
 
-[includeIf "gitdir/i:~/Dev/Personal/"]
-    path = ~/.config-personal.gitconfig
-
-[includeIf "gitdir/i:~/Dev/Foxit/"]
-    path = ~/.config-foxit.gitconfig
-
 [core]
     excludesfile = ~/.gitignore
     attributesfile = ~/.gitattributes
