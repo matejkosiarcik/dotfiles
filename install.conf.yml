@@ -33,22 +33,22 @@
     ~/.bin/dotfiles/hidden-scripts/git-update: scripts/hidden/git-update.sh
 
     # custom scripts
-    # ~/.bin/old/backup-packages: scripts/backup-packages.sh
-    # ~/.bin/old/check-video: scripts/check-video.sh
-    # ~/.bin/old/dir-clean: scripts/dir-clean.sh
-    # ~/.bin/old/dir2sha: scripts/dir2sha.py
-    # ~/.bin/old/dirs2sha: scripts/dirs2sha.sh
-    # ~/.bin/old/exiff: scripts/exiff.sh
-    # ~/.bin/old/exifd: scripts/exifd.sh
-    # ~/.bin/old/lsdir: scripts/lsdir.py
-    # ~/.bin/old/newterm: scripts/newterm.scpt
-    # ~/.bin/old/project-update: scripts/project-update.sh
-    # ~/.bin/old/relock: scripts/relock.sh
-    # ~/.bin/old/report-tabs: scripts/report-tabs.sh
-    # ~/.bin/old/system-update: scripts/system-update.sh
-    # ~/.bin/old/ulozto-autodownload: scripts/ulozto-autodownload.sh
-    # ~/.bin/old/gitup: scripts/git/gitup.sh
-    # ~/.bin/old/gitmon: scripts/gitmon.sh
+    # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
+    # ~/.bin/old/check-video: scripts/backup/check-video.sh
+    # ~/.bin/old/dir-clean: scripts/backup/dir-clean.sh
+    # ~/.bin/old/dir2sha: scripts/backup/dir2sha.py
+    # ~/.bin/old/dirs2sha: scripts/backup/dirs2sha.sh
+    # ~/.bin/old/exiff: scripts/backup/exiff.sh
+    # ~/.bin/old/exifd: scripts/backup/exifd.sh
+    # ~/.bin/old/lsdir: scripts/backup/lsdir.py
+    # ~/.bin/old/newterm: scripts/backup/newterm.scpt
+    # ~/.bin/old/project-update: scripts/backup/project-update.sh
+    # ~/.bin/old/relock: scripts/backup/relock.sh
+    # ~/.bin/old/report-tabs: scripts/backup/report-tabs.sh
+    # ~/.bin/old/system-update: scripts/backup/system-update.sh
+    # ~/.bin/old/ulozto-autodownload: scripts/backup/ulozto-autodownload.sh
+    # ~/.bin/old/gitup: scripts/git/backup/gitup.sh
+    # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
 
 - shell:
     - description: Setup
