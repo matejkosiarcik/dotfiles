@@ -17,7 +17,7 @@
     s = status
 
     # Update script
-    up = "!command() { sh $HOME/.bin/dotfiles/hidden-scripts/git-update; }; command"
+    up = "!command() { sh $HOME/.bin/scripts-nopath/git-update; }; command"
 
     # Pull
     plf = pull --ff-only

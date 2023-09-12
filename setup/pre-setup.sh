@@ -1,4 +1,5 @@
 #!/bin/sh
 set -euf
 
-mkdir -p "$HOME/.lftp" "$HOME/.bin" "$HOME/.bin/dotfiles/hidden-scripts"
+rm -rf "$HOME/.bin"
+mkdir -p "$HOME/.lftp" "$HOME/.bin"

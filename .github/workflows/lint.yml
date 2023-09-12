@@ -9,6 +9,26 @@ on:
   pull_request:
 
 jobs:
+  azlint:
+    name: AZLint
+    runs-on: ubuntu-latest
+    container:
+      image: matejkosiarcik/azlint:0.6.10
+      options: --user root
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.0.0
+        with:
+          fetch-depth: 0 # Full git history is needed to get a proper list of changed files
+
+      - name: Run AZLint
+        run: |
+          if [ "$GITHUB_REF_NAME" = main ]; then
+            azlint
+          else
+            azlint # --only-changed # TODO: Fix
+          fi
+
   mega-linter:
     name: MegaLinter
     runs-on: ubuntu-latest
@@ -64,23 +84,3 @@ jobs:
           PYTHON_PYLINT_CONFIG_FILE: pyproject.toml
           RUBY_CONFIG_FILE: .rubocop.yml
           YAML_CONFIG_FILE: .yamllint.yml
-
-  azlint:
-    name: AZLint
-    runs-on: ubuntu-latest
-    container:
-      image: matejkosiarcik/azlint:0.6.10
-      options: --user root
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.0.0
-        with:
-          fetch-depth: 0 # Full git history is needed to get a proper list of changed files
-
-      - name: Run AZLint
-        run: |
-          if [ "$GITHUB_REF_NAME" = main ]; then
-            azlint
-          else
-            azlint # --only-changed # TODO: Fix
-          fi

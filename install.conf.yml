@@ -14,7 +14,6 @@
 
 - clean:
     - "~"
-    - "~/.bin/dotfiles/hidden-scripts"
 
 - link:
     # general config
@@ -30,7 +29,13 @@
 
     # git config
     ~/.gitconfig.general: home/git/.gitconfig.general
-    ~/.bin/dotfiles/hidden-scripts/git-update: scripts/hidden/git-update.sh
+    ~/.bin/scripts-nopath/git-update: scripts/hidden/git-update.sh
+
+    # scripts
+    ~/.bin/scripts/photo-exif-rename: scripts/photo-exif-rename.sh
+    ~/.bin/scripts/photos-to-pdf: scripts/photos-to-pdf/dist/convert.js
+    ~/.bin/scripts/photos-to-pdf-analyze: scripts/photos-to-pdf/dist/analyze.js
+    ~/.bin/scripts/project-update: scripts/project-update/main.sh
 
     # custom scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
@@ -49,6 +54,14 @@
     # ~/.bin/old/ulozto-autodownload: scripts/backup/ulozto-autodownload.sh
     # ~/.bin/old/gitup: scripts/git/backup/gitup.sh
     # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
+
+    # deamons
+    ~/.bin/deamons/main.sh: deamons/main.sh
+    ~/.bin/deamons/photo-import/main.sh: deamons/photo-import/main.sh
+    ~/.bin/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
+    ~/.bin/deamons/screenshots-rename/rename.sh: deamons/screenshots-rename/rename.sh
+    ~/.bin/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
+    ~/.bin/deamons/screenrecording-rename/rename.sh: deamons/screenrecording-rename/rename.sh
 
 - shell:
     - description: Setup
