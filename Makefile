@@ -15,15 +15,18 @@ all: clean bootstrap build # `install` intentionally left out
 
 .PHONY: bootstrap
 bootstrap:
-	# Install project dependencies
-	python3 -m pip install --requirement requirements.txt --target python --upgrade
-
 	# Python dependencies
-	printf '%s\n%s\n%s\n%s\n' deamons/photo-import deamons/screenrecording-rename deamons/screenshots-rename scripts/project-update | \
+	printf '%s\n%s\n%s\n%s\n%s\n' . deamons/photo-import deamons/screenrecording-rename deamons/screenshots-rename scripts/project-update | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$$dir" && \
 		PIP_DISABLE_PIP_VERSION_CHECK=1 \
 			python3 -m pip install --requirement requirements.txt --target python --quiet --upgrade && \
+		find python/bin -type f | while read -r file; do \
+			if cat "$$file" | grep -E '^\#\!' >/dev/null 2>&1; then \
+				content="$$(tail -n +2 "$$file")" && \
+				printf '#%s/usr/bin/env python3\n%s\n' '!' "$$content" >"$$file" && \
+			true; fi && \
+		true; done && \
 	true; done
 
 	# NodeJS dependencies
