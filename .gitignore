@@ -15,3 +15,6 @@ Package Control.*
 # dependencies
 *Brewfile.lock.json
 venv/
+node_modules/
+build/
+dist/
