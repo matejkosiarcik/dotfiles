@@ -2,9 +2,9 @@
 set -euf
 
 cd "$(dirname "$0")"
-venvpath="$(dirname "$(readlink 'main.sh')")/venv/bin"
-scriptspath="$(dirname "$(dirname "$PWD")")/scripts"
-PATH="$PATH:/opt/homebrew/bin:$venvpath:$scriptspath"
+dependency_path="$(dirname "$(readlink 'main.sh')")/python/bin"
+scripts_path="$(dirname "$(dirname "$PWD")")/scripts"
+PATH="$PATH:/opt/homebrew/bin:$dependency_path:$scripts_path"
 
 # Set [and create] target directory
 watchdir="$HOME/Pictures/Import"

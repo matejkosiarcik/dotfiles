@@ -2,8 +2,8 @@
 set -euf
 
 cd "$(dirname "$0")"
-venvpath="$(dirname "$(readlink 'main.sh')")/venv/bin"
-PATH="$PATH:/opt/homebrew/bin:$venvpath"
+dependency_path="$(dirname "$(readlink 'main.sh')")/python/bin"
+PATH="$PATH:/opt/homebrew/bin:$dependency_path"
 
 # Set [and create] target directory
 watchdir="$HOME/Movies/Screenrecording"

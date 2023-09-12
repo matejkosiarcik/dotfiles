@@ -9,7 +9,7 @@ print_help() {
 }
 
 subprojectpath="$(dirname "$(readlink "$0")")"
-PATH="$subprojectpath/venv/bin:$subprojectpath/node_modules/.bin:/opt/homebrew/bin:$PATH"
+PATH="$subprojectpath/python/bin:$subprojectpath/node_modules/.bin:/opt/homebrew/bin:$PATH"
 export PATH
 
 target='major'
