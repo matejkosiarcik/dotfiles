@@ -21,13 +21,13 @@ bootstrap:
 		cd "$(PROJECT_DIR)/$$dir" && \
 		PIP_DISABLE_PIP_VERSION_CHECK=1 \
 			python3 -m pip install --requirement requirements.txt --target python --quiet --upgrade && \
-		find python/bin -type f | while read -r file; do \
-			if cat "$$file" | grep -E '^\#\!' >/dev/null 2>&1; then \
-				content="$$(tail -n +2 "$$file")" && \
-				printf '#%s/usr/bin/env python3\n%s\n' '!' "$$content" >"$$file" && \
-			true; fi && \
-		true; done && \
 	true; done
+	# find python/bin -type f | while read -r file; do \
+	# 	if cat "$$file" | grep -E '^\#\!' >/dev/null 2>&1; then \
+	# 		content="$$(tail -n +2 "$$file")" && \
+	# 		printf '#%s/usr/bin/env python3\n%s\n' '!' "$$content" >"$$file" && \
+	# 	true; fi && \
+	# true; done && \
 
 	# NodeJS dependencies
 	printf '%s\n%s\n' scripts/photos-to-pdf scripts/project-update | \
