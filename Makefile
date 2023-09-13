@@ -43,6 +43,7 @@ build:
 .PHONY: install
 install:
 	PATH="$(PROJECT_DIR)/python/bin:$$PATH" \
+	PYTHONPATH="$(PROJECT_DIR)/python" \
 		dotbot -c install.conf.yml
 
 .PHONY: clean
