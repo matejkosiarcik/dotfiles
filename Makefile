@@ -15,26 +15,23 @@ all: clean bootstrap build # `install` intentionally left out
 
 .PHONY: bootstrap
 bootstrap:
-	# Check if virtual environment exists or create it
-	[ -n "$${VIRTUAL_ENV+x}" ] || \
-		[ -d venv ] \
-		|| python3 -m venv venv \
-		|| python -m venv venv \
-		|| virtualenv venv \
-		|| mkvirtualenv venv
-
-	# Install project dependencies
+	python3 -m venv venv && \
 	PATH="$$PWD/venv/bin:$$PATH" \
-		python3 -m pip install --requirement requirements.txt
+	PIP_DISABLE_PIP_VERSION_CHECK=1 \
+		python3 -m pip install --requirement requirements.txt --quiet --upgrade
 
 	# Python dependencies
 	printf '%s\n%s\n%s\n%s\n' deamons/photo-import deamons/screenrecording-rename deamons/screenshots-rename scripts/project-update | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$$dir" && \
-		python3 -m venv venv && \
-		PATH="$$PWD/venv/bin:$$PATH" \
 		PIP_DISABLE_PIP_VERSION_CHECK=1 \
-			python3 -m pip install --requirement requirements.txt --quiet --upgrade && \
+			python3 -m pip install --requirement requirements.txt --target python --quiet --upgrade && \
+		find python/bin -type f | while read -r file; do \
+			if cat "$$file" | grep -E '^\#\!' >/dev/null 2>&1; then \
+				content="$$(tail -n +2 "$$file")" && \
+				printf '#%s/usr/bin/env python3\n%s\n' '!' "$$content" >"$$file" && \
+			true; fi && \
+		true; done && \
 	true; done
 
 	# NodeJS dependencies
@@ -50,15 +47,16 @@ build:
 
 .PHONY: install
 install:
-	dotbot -c install.conf.yml
+	PATH="$(PROJECT_DIR)/venv/bin:$$PATH" \
+		dotbot -c install.conf.yml
 
 .PHONY: clean
 clean:
 	rm -rf venv
-	rm -rf deamons/photo-import/venv
-	rm -rf deamons/screenrecording-rename/venv
-	rm -rf deamons/screenshots-rename/venv
+	rm -rf deamons/photo-import/python
+	rm -rf deamons/screenrecording-rename/python
+	rm -rf deamons/screenshots-rename/python
 	rm -rf scripts/photos-to-pdf/node_modules
 	rm -rf scripts/photos-to-pdf/dist
 	rm -rf scripts/project-update/node_modules
-	rm -rf scripts/project-update/venv
+	rm -rf scripts/project-update/python

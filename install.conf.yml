@@ -33,9 +33,10 @@
 
     # scripts
     ~/.bin/scripts/photo-exif-rename: scripts/photo-exif-rename.sh
-    ~/.bin/scripts/photos-to-pdf: scripts/photos-to-pdf/dist/convert.js
     ~/.bin/scripts/photos-to-pdf-analyze: scripts/photos-to-pdf/dist/analyze.js
+    ~/.bin/scripts/photos-to-pdf: scripts/photos-to-pdf/dist/convert.js
     ~/.bin/scripts/project-update: scripts/project-update/main.sh
+    ~/.bin/scripts/system-update: scripts/system-update.sh
 
     # custom scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
@@ -50,7 +51,6 @@
     # ~/.bin/old/project-update: scripts/backup/project-update.sh
     # ~/.bin/old/relock: scripts/backup/relock.sh
     # ~/.bin/old/report-tabs: scripts/backup/report-tabs.sh
-    # ~/.bin/old/system-update: scripts/backup/system-update.sh
     # ~/.bin/old/ulozto-autodownload: scripts/backup/ulozto-autodownload.sh
     # ~/.bin/old/gitup: scripts/git/backup/gitup.sh
     # ~/.bin/old/gitmon: scripts/backup/gitmon.sh

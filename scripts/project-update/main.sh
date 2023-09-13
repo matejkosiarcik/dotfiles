@@ -8,9 +8,11 @@ print_help() {
     printf '  -t {major, minor, patch, lock}  semver upgrade target\n'
 }
 
-subprojectpath="$(dirname "$(readlink "$0")")"
-PATH="$subprojectpath/venv/bin:$subprojectpath/node_modules/.bin:/opt/homebrew/bin:$PATH"
+project_dir="$(dirname "$(readlink "$0")")"
+PATH="$project_dir/python/bin:$project_dir/node_modules/.bin:/opt/homebrew/bin:$PATH"
 export PATH
+PYTHONPATH="$project_dir/python"
+export PYTHONPATH
 
 target='major'
 while getopts "h?t:" o; do

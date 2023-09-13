@@ -29,5 +29,10 @@ jobs:
           node-version: latest
 
       - run: make bootstrap
+        shell: bash
       - run: make build
+        shell: bash
       - run: make install
+        shell: bash
+
+      - run: sh setup/test.sh

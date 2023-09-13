@@ -1,9 +1,11 @@
 #!/bin/sh
 set -euf
 
-cd "$(dirname "$0")"
-venvpath="$(dirname "$(readlink 'main.sh')")/venv/bin"
-PATH="$PATH:/opt/homebrew/bin:$venvpath"
+project_dir="$(dirname "$(readlink "$0")")"
+PATH="$project_dir/python/bin:/opt/homebrew/bin:$PATH"
+export PATH
+PYTHONPATH="$project_dir/python"
+export PYTHONPATH
 
 # Set [and create] target directory
 watchdir="$HOME/Pictures/Screenshots"
