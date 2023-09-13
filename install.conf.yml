@@ -59,9 +59,7 @@
     ~/.bin/deamons/main.sh: deamons/main.sh
     ~/.bin/deamons/photo-import/main.sh: deamons/photo-import/main.sh
     ~/.bin/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
-    ~/.bin/deamons/screenshots-rename/rename.sh: deamons/screenshots-rename/rename.sh
     ~/.bin/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
-    ~/.bin/deamons/screenrecording-rename/rename.sh: deamons/screenrecording-rename/rename.sh
 
 - shell:
     - description: Setup

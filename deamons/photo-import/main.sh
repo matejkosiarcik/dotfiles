@@ -2,6 +2,8 @@
 set -euf
 
 project_dir="$(dirname "$(readlink "$0")")"
+cd "$project_dir"
+
 PATH="$project_dir/python/bin:/opt/homebrew/bin:$PATH"
 export PATH
 PYTHONPATH="$project_dir/python"
