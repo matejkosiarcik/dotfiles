@@ -1,9 +1,11 @@
 #!/bin/sh
 set -euf
 
-cd "$(dirname "$0")"
-dependency_path="$(dirname "$(readlink 'main.sh')")/python/bin"
-PATH="$PATH:/opt/homebrew/bin:$dependency_path"
+project_dir="$(dirname "$(readlink "$0")")"
+PATH="$project_dir/python/bin:/opt/homebrew/bin:$PATH"
+export PATH
+PYTHONPATH="$project_dir/python"
+export PYTHONPATH
 
 # Set [and create] target directory
 watchdir="$HOME/Movies/Screenrecording"

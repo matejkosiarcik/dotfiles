@@ -1,10 +1,11 @@
 #!/bin/sh
 set -euf
 
-cd "$(dirname "$0")"
-dependency_path="$(dirname "$(readlink 'main.sh')")/python/bin"
-scripts_path="$(dirname "$(dirname "$PWD")")/scripts"
-PATH="$PATH:/opt/homebrew/bin:$dependency_path:$scripts_path"
+project_dir="$(dirname "$(readlink "$0")")"
+PATH="$project_dir/python/bin:/opt/homebrew/bin:$PATH"
+export PATH
+PYTHONPATH="$project_dir/python"
+export PYTHONPATH
 
 # Set [and create] target directory
 watchdir="$HOME/Pictures/Import"
