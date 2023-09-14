@@ -96,6 +96,7 @@ Vagrantfile
 # JavaScript
 .coffee
 .emscripten
+.har
 .js
 .json
 .json5
