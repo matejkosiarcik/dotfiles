@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Customize PATH
-export PATH="$HOME/.bin:$PATH"
+export PATH="$HOME/.bin/scripts:$PATH"
 
 # gpg
 GPG_TTY="$(tty)"
