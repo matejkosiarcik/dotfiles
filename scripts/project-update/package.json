@@ -1,6 +1,6 @@
 {
   "private": true,
   "dependencies": {
-    "npm-check-updates": "^16.13.3"
+    "npm-check-updates": "^16.14.4"
   }
 }

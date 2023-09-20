@@ -40,6 +40,7 @@ if printf '%s\n' "$old_filename" | grep -E '^.+ [0-9\-]+ at [0-9\.]+ \([0-9]+\)\
     fi
 fi
 
+sleep 1
 if [ "$new_filename" != "$old_filename" ]; then
     mv "$old_filename" "$new_filename"
 fi
