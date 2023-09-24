@@ -28,7 +28,6 @@ import { compare } from 'alphanumeric-sort';
     input = (await Promise.all(input.map(async (file) => {
         return (await glob(file)).sort(compare);
     }))).flat();
-    console.log(`Input (${input.length}):\n${input.join('\n')}`);
 
     const output = args.output;
     if (path.extname(output).slice(1) !== 'pdf') {
