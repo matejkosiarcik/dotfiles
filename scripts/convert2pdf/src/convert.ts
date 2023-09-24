@@ -4,6 +4,8 @@ import path from 'path';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { execa } from 'execa';
+import { glob } from 'glob';
+import { compare } from 'alphanumeric-sort';
 
 (async () => {
     let argumentParser = yargs(hideBin(process.argv))
@@ -19,10 +21,14 @@ import { execa } from 'execa';
         });
     const args = await argumentParser.parse();
 
-    const input = args.input;
+    let input = args.input;
     if (!Array.isArray(input) || input.length === 0) {
         throw new Error('Empty input');
     }
+    input = (await Promise.all(input.map(async (file) => {
+        return (await glob(file)).sort(compare);
+    }))).flat();
+    console.log(`Input (${input.length}):\n${input.join('\n')}`);
 
     const output = args.output;
     if (path.extname(output).slice(1) !== 'pdf') {
