@@ -38,7 +38,7 @@ updates:
     open-pull-requests-limit: 1
 
   - package-ecosystem: npm
-    directory: /scripts/photos-to-pdf
+    directory: /scripts/convert2pdf
     schedule:
       interval: daily
       time: "02:30"

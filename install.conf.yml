@@ -32,9 +32,8 @@
     ~/.bin/scripts-nopath/git-update: scripts/hidden/git-update.sh
 
     # scripts
+    ~/.bin/scripts/convert2pdf: scripts/convert2pdf/dist/convert.js
     ~/.bin/scripts/photo-exif-rename: scripts/photo-exif-rename.sh
-    ~/.bin/scripts/photos-to-pdf-analyze: scripts/photos-to-pdf/dist/analyze.js
-    ~/.bin/scripts/photos-to-pdf: scripts/photos-to-pdf/dist/convert.js
     ~/.bin/scripts/project-update: scripts/project-update/main.sh
     ~/.bin/scripts/system-update: scripts/system-update.sh
 

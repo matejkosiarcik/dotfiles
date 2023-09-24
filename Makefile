@@ -35,7 +35,7 @@ bootstrap:
 	true; done
 
 	# NodeJS dependencies
-	printf '%s\n%s\n' scripts/photos-to-pdf scripts/project-update | \
+	printf '%s\n%s\n' scripts/convert2pdf scripts/project-update | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$$dir" && \
 		npm install --no-save --no-progress --no-audit --quiet && \
@@ -43,7 +43,7 @@ bootstrap:
 
 .PHONY: build
 build:
-	npm --prefix scripts/photos-to-pdf run build
+	npm --prefix scripts/convert2pdf run build
 
 .PHONY: install
 install:
@@ -56,7 +56,7 @@ clean:
 	rm -rf deamons/photo-import/python
 	rm -rf deamons/screenrecording-rename/python
 	rm -rf deamons/screenshots-rename/python
-	rm -rf scripts/photos-to-pdf/node_modules
-	rm -rf scripts/photos-to-pdf/dist
+	rm -rf scripts/convert2pdf/node_modules
+	rm -rf scripts/convert2pdf/dist
 	rm -rf scripts/project-update/node_modules
 	rm -rf scripts/project-update/python
