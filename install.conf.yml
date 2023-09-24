@@ -32,6 +32,7 @@
     ~/.bin/scripts-nopath/git-update: scripts/hidden/git-update.sh
 
     # scripts
+    ~/.bin/old/dir2sha: scripts/dir2sha.py
     ~/.bin/scripts/convert2pdf: scripts/convert2pdf/dist/convert.js
     ~/.bin/scripts/photo-exif-rename: scripts/photo-exif-rename.sh
     ~/.bin/scripts/project-update: scripts/project-update/main.sh
@@ -41,7 +42,6 @@
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
     # ~/.bin/old/check-video: scripts/backup/check-video.sh
     # ~/.bin/old/dir-clean: scripts/backup/dir-clean.sh
-    # ~/.bin/old/dir2sha: scripts/backup/dir2sha.py
     # ~/.bin/old/dirs2sha: scripts/backup/dirs2sha.sh
     # ~/.bin/old/exiff: scripts/backup/exiff.sh
     # ~/.bin/old/exifd: scripts/backup/exifd.sh
