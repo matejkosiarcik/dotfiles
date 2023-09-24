@@ -32,7 +32,7 @@
     ~/.bin/scripts-nopath/git-update: scripts/hidden/git-update.sh
 
     # scripts
-    ~/.bin/old/dir2sha: scripts/dir2sha.py
+    ~/.bin/scripts/dir2sha: scripts/dir2sha.py
     ~/.bin/scripts/convert2pdf: scripts/convert2pdf/dist/convert.js
     ~/.bin/scripts/photo-exif-rename: scripts/photo-exif-rename.sh
     ~/.bin/scripts/project-update: scripts/project-update/main.sh
