@@ -65,7 +65,7 @@ def main(argv: List[str]):
         files_done_count += 1
         files_done_percent = "%.2f" % (files_done_count / files_all_count * 100)
         print(f"\rIn progress: {str(files_done_count).rjust(len(str(files_all_count)), ' ')} {files_done_percent}%", end="", file=sys.stderr)
-    print(f"\rFinished: {root_dir}", file=sys.stderr)
+    print(f"\nFinished: {root_dir}", file=sys.stderr)
 
 
 if __name__ == "__main__":
