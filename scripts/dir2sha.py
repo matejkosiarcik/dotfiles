@@ -52,19 +52,20 @@ def main(argv: List[str]):
     if not path.exists(root_dir):
         raise FileNotFoundError(f"Directory {root_dir} does not exist")
     root_dir = path.abspath(path.realpath(root_dir))
-    print(f"Searching {root_dir}", file=sys.stderr)
+    print(f"Searching files in: {root_dir}", file=sys.stderr)
 
     found_files = get_files(args.directory)
-    files_count = len(found_files)
-    files_progress = 0
+    files_all_count = len(found_files)
+    files_done_count = 0
 
-    print(f"\r{files_progress}/{files_count}\t\t", end="", file=sys.stderr)
+    print(f"Total files: {files_all_count}", file=sys.stderr)
     for file in found_files:
         file_hash = get_file_hash(path.join(root_dir, file))
         print(f"{file_hash} {file}")
-        files_progress += 1
-        print(f"\r{files_progress}/{files_count}\t\t", end="", file=sys.stderr)
-    print(f"Done {root_dir}", file=sys.stderr)
+        files_done_count += 1
+        files_done_percent = "%.2f" % (files_done_count / files_all_count * 100)
+        print(f"\rIn progress: {str(files_done_count).rjust(len(str(files_all_count)), ' ')} {files_done_percent}%", end="", file=sys.stderr)
+    print(f"\rFinished: {root_dir}", file=sys.stderr)
 
 
 if __name__ == "__main__":
