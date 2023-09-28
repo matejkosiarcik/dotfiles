@@ -63,7 +63,7 @@ def main(argv: List[str]):
         file_hash = get_file_hash(path.join(root_dir, file))
         print(f"{file_hash} {file}")
         files_done_count += 1
-        files_done_percent = "%.2f" % (files_done_count / files_all_count * 100)
+        files_done_percent = f"{(files_done_count / files_all_count * 100):.2f}"
         print(f"\rIn progress: {str(files_done_count).rjust(len(str(files_all_count)), ' ')} {files_done_percent}%", end="", file=sys.stderr)
     print(f"\nFinished: {root_dir}", file=sys.stderr)
 
