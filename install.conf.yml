@@ -56,6 +56,7 @@
 
     # deamons
     ~/.bin/deamons/main.sh: deamons/main.sh
+    ~/.bin/deamons/notes-attachments-import/main.sh: deamons/notes-attachments-import/main.sh
     ~/.bin/deamons/photo-import/main.sh: deamons/photo-import/main.sh
     ~/.bin/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
     ~/.bin/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
