@@ -2,19 +2,24 @@
 set -euf
 
 if [ "$#" -lt 1 ]; then
-    printf 'Not enough arguments\n\n' >&2
+    printf 'Not enough arguments to rename file\n' >&2
     usage >&2
     exit 1
 fi
 
 file="$1"
 if [ ! -e "$file" ]; then
-    printf 'File does not exist: %s\n' "$file" >&2
-    exit 1
+    exit 0
 fi
 
 cd "$(dirname "$file")"
 old_filename="$(basename "$file")"
+
+# Skip hidden files (leading ".")
+if printf '%s' "$old_filename" | grep -E '^\.' >/dev/null; then
+    exit 0
+fi
+
 old_extension="$(printf '%s' "$old_filename" | sed -E 's~^.*\.~~')"
 new_extension="$(printf '%s' "$old_extension" | tr '[:upper:]' '[:lower:]')"
 date="$(date +"%Y-%m-%d_%H-%M-%S")"

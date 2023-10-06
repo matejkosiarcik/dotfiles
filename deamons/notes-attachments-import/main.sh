@@ -18,7 +18,7 @@ watchdir="$(readlink "$HOME/Links/Notes")/.attachments"
 
 # Rename existing files
 tmpfile="$(mktemp)"
-find "$watchdir" -maxdepth 1 -type f -name '*.*' -print0 >"$tmpfile"
+find "$watchdir" -maxdepth 1 -type f -name '*.*' \( -not -name '.*' \) -print0 >"$tmpfile"
 xargs -0 -n1 sh rename.sh <"$tmpfile"
 rm -f "$tmpfile"
 
@@ -28,5 +28,5 @@ watchmedo shell-command "$watchdir" \
     --quiet \
     --ignore-directories \
     --patterns '*.*' \
-    --command 'if [ "$watch_event_type" = created ] && [ "$watch_object" = file ]; then sleep 1; sh rename.sh "$watch_src_path"; fi'
-# NOTE: We could also listen for "move" events, but it would be really easy to fall into infinite loop
+    --command 'if { [ "$watch_event_type" = modified ] || [ "$watch_event_type" = created ]; } && [ "$watch_object" = file ]; then sh rename.sh "$watch_src_path"; fi'
+# NOTE: Because Notes can be inside of Dropbox, the events received aren't "created" as usual, but rather "modified"
