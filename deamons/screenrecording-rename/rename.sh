@@ -2,15 +2,14 @@
 set -euf
 
 if [ "$#" -lt 1 ]; then
-    printf 'Not enough arguments\n\n' >&2
+    printf 'Not enough arguments to rename file\n' >&2
     usage >&2
     exit 1
 fi
 
 file="$1"
 if [ ! -e "$file" ]; then
-    printf 'Input file %s does not exist\n' "$file" >&2
-    exit 1
+    exit 0
 fi
 
 cd "$(dirname "$file")"
