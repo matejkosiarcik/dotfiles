@@ -29,4 +29,5 @@ make_default_program() {
 }
 
 make_default_program 'com.microsoft.VSCode' 'textfiles.txt'
+make_default_program 'com.apple.dt.Xcode' 'xcodefiles.txt'
 make_default_program 'org.videolan.vlc' 'mediafiles.txt'
