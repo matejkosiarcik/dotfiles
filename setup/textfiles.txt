@@ -43,7 +43,7 @@
 .lock
 .log
 .pub
-.resolved
+# .resolved # Skipped for Xcode
 .tmp
 .toml
 .yaml
@@ -173,7 +173,7 @@ GNUMakefile
 Makefile
 
 # Apple/Darwin
-.swift
+# .swift # Skipped for Xcode
 Cartfile
 Fastfile
 Podfile
