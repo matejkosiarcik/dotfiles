@@ -9,15 +9,15 @@ workflows:
           matrix:
             parameters:
               image:
-                - debian:11.7
-                - debian:12.1
-                - ubuntu:20.04
-                - ubuntu:22.04
+                - debian:11.8
+                - debian:12.2
+                - ubuntu:latest
+                - ubuntu:rolling
 
 jobs:
   azlint:
     docker:
-      - image: matejkosiarcik/azlint:0.6.10
+      - image: matejkosiarcik/azlint:0.6.11
     steps:
       - checkout
       - run: |
