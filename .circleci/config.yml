@@ -11,7 +11,7 @@ workflows:
               image:
                 - debian:11.8
                 - debian:12.2
-                - ubuntu:latest
+                - ubuntu:22.04
                 - ubuntu:rolling
 
 jobs:
