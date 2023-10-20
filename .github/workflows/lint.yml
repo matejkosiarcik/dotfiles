@@ -13,7 +13,7 @@ jobs:
     name: AZLint
     runs-on: ubuntu-latest
     container:
-      image: matejkosiarcik/azlint:0.6.10
+      image: matejkosiarcik/azlint:0.6.11
       options: --user root
     steps:
       - name: Checkout
@@ -66,14 +66,15 @@ jobs:
 
           # disable
           VALIDATE_CSS: false
-          VALIDATE_JSON: false # because eslint considers .json as .js (so rules like single-quote don't make sense)
+          VALIDATE_JSON: false # Because eslint considers .json as .js (so rules like single-quote don't make sense)
           VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSCPD: false
           VALIDATE_TYPESCRIPT_ES: false
           VALIDATE_TYPESCRIPT_STANDARD: false
           VALIDATE_RUST_2015: false
-          VALIDATE_RUST_CLIPPY: false # somehow fails the compilation
+          VALIDATE_RUST_CLIPPY: false # Somehow fails the compilation
+          VALIDATE_DOCKERFILE_HADOLINT: false # Incorrectly tries to lint .dockerfilelintrc
 
           # config files
           DOCKERFILE_HADOLINT_FILE_NAME: .hadolint.yaml
