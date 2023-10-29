@@ -10,11 +10,11 @@ PYTHONPATH="$project_dir/python"
 export PYTHONPATH
 
 # Set [and create] target directory
-if [ ! -e "$HOME/Links/Notes" ]; then
+if [ ! -e "$HOME/Notes" ]; then
     printf 'No notes folder found\n' >&2
     exit 0
 fi
-watchdir="$(readlink "$HOME/Links/Notes")/.attachments"
+watchdir="$HOME/Notes/.attachments"
 
 # Rename existing files
 tmpfile="$(mktemp)"
