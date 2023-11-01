@@ -29,8 +29,8 @@ alias ghpr='gh pr create --assignee matejkosiarcik --title "Automated PR" --body
 
 # Download video/audio from youtube with best quality
 # `-f best` is not enough, because it is limited to 1080p (IIRC)
-alias ytdv='youtube-dl --ignore-error --format "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4" --'
-alias ytda='youtube-dl --ignore-error --format "bestaudio[ext=m4a]" --'
+alias ytdv='yt-dlp --ignore-error --format "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4" --'
+alias ytda='yt-dlp --ignore-error --format "bestaudio[ext=m4a]" --'
 
 # azlint
 alias azlint_lint='docker run --interactive --volume "$PWD:/project:ro" matejkosiarcik/azlint:dev lint'
