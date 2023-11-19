@@ -2,7 +2,7 @@
 set -euf
 
 source_dir="$(dirname "$(readlink "$0")")"
-cd "$source_dir"
+export source_dir
 
 PATH="$source_dir/python/bin:/opt/homebrew/bin:$HOME/.bin/scripts:$PATH"
 export PATH

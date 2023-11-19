@@ -73,7 +73,7 @@ glob 'package.json' | while read -r file; do
         --env NODE_OPTIONS='--dns-result-order=ipv4first' \
         --entrypoint /bin/sh \
         node:latest \
-        -c "cd /src/$dirname && npm install --ignore-scripts && npm dedupe"
+        -c "cd \"/src/$dirname\" && npm install --ignore-scripts && npm dedupe"
     mv "$tmpdir/package-lock.json" "$directory/package-lock.json"
     rm -rf "$tmpdir"
 done
