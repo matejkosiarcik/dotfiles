@@ -38,7 +38,7 @@
     ~/.bin/scripts/project-update: scripts/project-update/main.sh
     ~/.bin/scripts/system-update: scripts/system-update.sh
 
-    # custom scripts
+    # old scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
     # ~/.bin/old/check-video: scripts/backup/check-video.sh
     # ~/.bin/old/dir-clean: scripts/backup/dir-clean.sh
