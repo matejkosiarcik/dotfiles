@@ -8,10 +8,10 @@ print_help() {
     printf '  -t {major, minor, patch, lock}  semver upgrade target\n'
 }
 
-project_dir="$(dirname "$(readlink "$0")")"
-PATH="$project_dir/python/bin:$project_dir/node_modules/.bin:/opt/homebrew/bin:$PATH"
+source_dir="$(dirname "$(readlink "$0")")"
+PATH="$source_dir/python/bin:$source_dir/node_modules/.bin:/opt/homebrew/bin:$PATH"
 export PATH
-PYTHONPATH="$project_dir/python"
+PYTHONPATH="$source_dir/python"
 export PYTHONPATH
 
 target='major'

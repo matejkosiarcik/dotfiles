@@ -1,12 +1,12 @@
 #!/bin/sh
 set -euf
 
-project_dir="$(dirname "$(readlink "$0")")"
-cd "$project_dir"
+source_dir="$(dirname "$(readlink "$0")")"
+cd "$source_dir"
 
-PATH="$project_dir/python/bin:/opt/homebrew/bin:$HOME/.bin/scripts:$PATH"
+PATH="$source_dir/python/bin:/opt/homebrew/bin:$HOME/.bin/scripts:$PATH"
 export PATH
-PYTHONPATH="$project_dir/python"
+PYTHONPATH="$source_dir/python"
 export PYTHONPATH
 
 # Set [and create] target directory
