@@ -18,7 +18,7 @@ old_filename="$(basename "$file")"
 
 # Exit on files not in proper format
 if printf '%s\n' "$old_filename" | grep -vE '^.+ [0-9\-]+ at [0-9\.]+( \(?[0-9]+\)?)?\.png$' >/dev/null; then
-    printf 'Invalid file: %s\n' "$old_filename"
+    printf 'Invalid filename (skipping): %s\n' "$old_filename"
     exit 0
 fi
 
