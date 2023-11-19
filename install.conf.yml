@@ -54,7 +54,7 @@
     # ~/.bin/old/gitup: scripts/git/backup/gitup.sh
     # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
 
-    # deamons
+    # background deamons
     ~/.bin/deamons/main.sh: deamons/main.sh
     ~/.bin/deamons/notes-attachments-import/main.sh: deamons/notes-attachments-import/main.sh
     ~/.bin/deamons/photo-import/main.sh: deamons/photo-import/main.sh
