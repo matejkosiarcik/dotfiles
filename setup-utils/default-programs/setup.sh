@@ -2,11 +2,6 @@
 set -euf
 cd "$(dirname "${0}")"
 
-case "$(uname -s)" in
-'Darwin') sh 'setup-mac.sh' ;;
-*) true ;;
-esac
-
 # uses `duti` on macOS
 # makes all extensions associated with given program
 make_default_program() {

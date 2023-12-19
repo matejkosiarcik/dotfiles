@@ -8,7 +8,7 @@
 
 - shell:
     - description: PreSetup
-      command: sh 'setup/pre-setup.sh'
+      command: sh 'setup-utils/pre-setup.sh'
       stdin: true
       stdout: true
 
@@ -63,6 +63,6 @@
 
 - shell:
     - description: Setup
-      command: sh 'setup/setup.sh'
+      command: sh 'setup-utils/setup.sh'
       stdin: true
       stdout: true
