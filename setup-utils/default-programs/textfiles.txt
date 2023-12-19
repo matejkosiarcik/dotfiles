@@ -125,7 +125,7 @@ Jakefile
 .svg
 .xhtml
 .xml
-.sdef # applescript definition
+.sdef # AppleScript definition
 
 # Generic server
 .htaccess
