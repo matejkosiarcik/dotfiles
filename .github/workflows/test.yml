@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: 3.x
 
-      - uses: actions/setup-node@v4.0.0
+      - uses: actions/setup-node@v4.0.1
         with:
           node-version: latest
 
