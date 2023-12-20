@@ -22,7 +22,12 @@ bootstrap:
 		python3 -m pip install --requirement requirements.txt --quiet --upgrade
 
 	# Python dependencies
-	printf '%s\n%s\n%s\n%s\n' deamons/notes-attachments-import deamons/photo-import deamons/screenrecording-rename deamons/screenshots-rename scripts/project-update | \
+	printf '%s\n%s\n%s\n%s\n%s\n' \
+		deamons/notes-attachments-import \
+		deamons/photo-import \
+		deamons/screenrecording-rename \
+		deamons/screenshots-rename \
+		scripts/project-update | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$$dir" && \
 		PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -36,7 +41,9 @@ bootstrap:
 	true; done
 
 	# NodeJS dependencies
-	printf '%s\n%s\n' scripts/convert2pdf scripts/project-update | \
+	printf '%s\n%s\n' \
+		scripts/convert2pdf \
+		scripts/project-update | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$$dir" && \
 		npm install --no-save --no-progress --no-audit --quiet && \
