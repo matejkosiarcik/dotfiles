@@ -5,13 +5,29 @@ workflows:
   circleci:
     jobs:
       - azlint
-      - install:
+      - install-1:
           matrix:
             parameters:
               image:
-                - debian:11.8
-                - debian:12.2
-                - ubuntu:22.04
+                - debian:latest
+                - debian:testing
+      - install-2:
+          matrix:
+            parameters:
+              image:
+                - ubuntu:latest
+      - install-3:
+          matrix:
+            parameters:
+              image:
+                - alpine:latest
+                - alpine:edge
+      - install-4:
+          matrix:
+            parameters:
+              image:
+                - fedora:latest
+                - fedora:rawhide
 
 jobs:
   azlint:
@@ -26,7 +42,21 @@ jobs:
             azlint --only-changed
           fi
 
-  install:
+  install-1: # debian
+    parameters:
+      image:
+        type: string
+    docker:
+      - image: "<< parameters.image >>"
+    steps:
+      - checkout
+      - run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes nodejs npm python3 python3-pip python3-venv
+      - run: make bootstrap
+      - run: make build
+      - run: make install
+      - run: sh utils/postinstall-test.sh
+
+  install-2: # ubuntu
     parameters:
       image:
         type: string
@@ -36,6 +66,34 @@ jobs:
       - checkout
       - run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes curl python3 python3-pip python3-venv
       - run: curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && apt-get install -y nodejs
+      - run: make bootstrap
+      - run: make build
+      - run: make install
+      - run: sh utils/postinstall-test.sh
+
+  install-3: # alpine
+    parameters:
+      image:
+        type: string
+    docker:
+      - image: "<< parameters.image >>"
+    steps:
+      - checkout
+      - run: apk add --no-cache make nodejs npm py3-pip python3
+      - run: make bootstrap
+      - run: make build
+      - run: make install
+      - run: sh utils/postinstall-test.sh
+
+  install-4: # fedora
+    parameters:
+      image:
+        type: string
+    docker:
+      - image: "<< parameters.image >>"
+    steps:
+      - checkout
+      - run: dnf install --assumeyes make nodejs python
       - run: make bootstrap
       - run: make build
       - run: make install
