@@ -97,4 +97,4 @@ jobs:
       - run: make bootstrap
       - run: make build
       - run: make install
-      - run: sh uti.repo-utilsls/postinstall-test.sh
+      - run: sh .repo-utils/postinstall-test.sh
