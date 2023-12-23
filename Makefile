@@ -52,6 +52,7 @@ bootstrap:
 .PHONY: build
 build:
 	npm --prefix scripts/convert2pdf run build
+	cd 'apps/My Notes' && sh build.sh
 
 .PHONY: install
 install:
