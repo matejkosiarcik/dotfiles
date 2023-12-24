@@ -29,12 +29,11 @@ jobs:
         with:
           node-version: latest
 
-      - name: Install HomeBrew dependencies
-        if: ${{ matrix.os == 'macos-latest' }}
-        shell: bash
-        run: |
-          brew install platypus --force
-          brew link platypus
+      # - name: Install HomeBrew dependencies
+      #   if: ${{ matrix.os == 'macos-latest' }}
+      #   shell: bash
+      #   run: |
+      #     brew install platypus # TODO: Reenable platypus after https://github.com/sveinbjornt/Platypus/issues/262
 
       - name: Install project dependencies
         shell: bash

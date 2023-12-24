@@ -62,9 +62,10 @@
     ~/.matejkosiarcik-setup/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
 
     # Apps
+    # TODO: Reenable platypus after https://github.com/sveinbjornt/Platypus/issues/262
     ~/Applications/My Notes.app:
       path: apps/My Notes/My Notes.app
-      if: '[ "$(uname -s)" = Darwin ]'
+      if: '[ "$(uname -s)" = Darwin ] && [ "$CI" != 1 ]'
 
 - shell:
     - description: Setup
