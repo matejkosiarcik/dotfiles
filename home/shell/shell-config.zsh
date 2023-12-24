@@ -1,7 +1,8 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+# shellcheck shell=bash
 
 # shellcheck source=/dev/null
-source "$HOME/.config.sh"
+source "$(dirname "$0")/shell-config.sh"
 
 # can not be in ".sh", because builtin is not available in classic sh
 cd() {

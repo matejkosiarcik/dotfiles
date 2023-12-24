@@ -8,7 +8,7 @@
 
 - shell:
     - description: PreSetup
-      command: sh 'setup-utils/pre-setup.sh'
+      command: sh 'setup/pre-setup.sh'
       stdin: true
       stdout: true
 
@@ -23,20 +23,20 @@
     ~/.lftp/rc: home/.lftp/rc
 
     # shell config
-    ~/.config.sh: home/shell/config.sh
-    ~/.config.bash: home/shell/config.bash
-    ~/.config.zsh: home/shell/config.zsh
+    ~/.matejkosiarcik-setup/home/shell-config.sh: home/shell/shell-config.sh
+    ~/.matejkosiarcik-setup/home/shell-config.bash: home/shell/shell-config.bash
+    ~/.matejkosiarcik-setup/home/shell-config.zsh: home/shell/shell-config.zsh
 
     # git config
-    ~/.gitconfig.general: home/git/.gitconfig.general
-    ~/.bin/scripts-nopath/git-update: scripts/hidden/git-update.sh
+    ~/.matejkosiarcik-setup/home/general.gitconfig: home/git/general.gitconfig
 
     # scripts
-    ~/.bin/scripts/dir2sha: scripts/dir2sha.py
-    ~/.bin/scripts/convert2pdf: scripts/convert2pdf/dist/convert.js
-    ~/.bin/scripts/photo-exif-rename: scripts/photo-exif-rename.sh
-    ~/.bin/scripts/project-update: scripts/project-update/main.sh
-    ~/.bin/scripts/system-update: scripts/system-update.sh
+    ~/.matejkosiarcik-setup/bin/dir2sha: scripts/dir2sha.py
+    ~/.matejkosiarcik-setup/bin/convert2pdf: scripts/convert2pdf/dist/convert.js
+    ~/.matejkosiarcik-setup/bin/git-update: scripts/git-update.sh
+    ~/.matejkosiarcik-setup/bin/photo-exif-rename: scripts/photo-exif-rename.sh
+    ~/.matejkosiarcik-setup/bin/project-update: scripts/project-update/main.sh
+    ~/.matejkosiarcik-setup/bin/system-update: scripts/system-update.sh
 
     # old scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
@@ -55,14 +55,20 @@
     # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
 
     # background deamons
-    ~/.bin/deamons/main.sh: deamons/main.sh
-    ~/.bin/deamons/notes-attachments-import/main.sh: deamons/notes-attachments-import/main.sh
-    ~/.bin/deamons/photo-import/main.sh: deamons/photo-import/main.sh
-    ~/.bin/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
-    ~/.bin/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
+    ~/.matejkosiarcik-setup/deamons/main.sh: deamons/main.sh
+    ~/.matejkosiarcik-setup/deamons/notes-attachments-import/main.sh: deamons/notes-attachments-import/main.sh
+    ~/.matejkosiarcik-setup/deamons/photo-import/main.sh: deamons/photo-import/main.sh
+    ~/.matejkosiarcik-setup/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
+    ~/.matejkosiarcik-setup/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
+
+    # Apps
+    # TODO: Reenable platypus after https://github.com/sveinbjornt/Platypus/issues/262
+    ~/Applications/My Notes.app:
+      path: apps/My Notes/My Notes.app
+      if: '[ "$(uname -s)" = Darwin ] && [ "$CI" != 1 ]'
 
 - shell:
     - description: Setup
-      command: sh 'setup-utils/setup.sh'
+      command: sh 'setup/setup.sh'
       stdin: true
       stdout: true

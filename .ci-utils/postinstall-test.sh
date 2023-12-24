@@ -1,7 +1,7 @@
 #!/bin/sh
 set -euf
 
-PATH="$PATH:$HOME/.bin/scripts"
+PATH="$HOME/.matejkosiarcik-setup/bin:$PATH"
 
 command -v convert2pdf
 command -v dir2sha
