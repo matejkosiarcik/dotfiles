@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Customize PATH
-export PATH="$HOME/.bin/scripts:$PATH"
+export PATH="$HOME/.matejkosiarcik-setup/bin:$PATH"
 
 # gpg
 GPG_TTY="$(tty)"
