@@ -33,7 +33,7 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' }}
         shell: bash
         run: |
-          brew install platypus
+          brew install platypus --force
           brew link platypus
 
       - name: Install project dependencies
