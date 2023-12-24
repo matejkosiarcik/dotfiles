@@ -29,19 +29,25 @@ jobs:
         with:
           node-version: latest
 
-      - name: Setup HomeBrew dependencies
+      - name: Install HomeBrew dependencies
         if: ${{ matrix.os == 'macos-latest' }}
         shell: bash
-        run: brew install platypus
+        run: |
+          brew install platypus
+          brew link platypus
 
-      - shell: bash
+      - name: Install project dependencies
+        shell: bash
         run: make bootstrap
 
-      - shell: bash
+      - name: Build
+        shell: bash
         run: make build
 
-      - shell: bash
+      - name: Instal project to current system
+        shell: bash
         run: make install
 
-      - shell: bash
+      - name: Test project installation
+        shell: bash
         run: sh .ci-utils/postinstall-test.sh
