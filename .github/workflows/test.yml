@@ -45,6 +45,8 @@ jobs:
 
       - name: Instal project to current system
         shell: bash
+        env:
+          CI: 1
         run: make install
 
       - name: Test project installation
