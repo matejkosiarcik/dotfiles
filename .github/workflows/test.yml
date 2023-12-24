@@ -41,6 +41,8 @@ jobs:
 
       - name: Build
         shell: bash
+        env:
+          CI: 1
         run: make build
 
       - name: Instal project to current system
