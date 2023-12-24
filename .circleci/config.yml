@@ -54,7 +54,7 @@ jobs:
       - run: make bootstrap
       - run: make build
       - run: make install
-      - run: sh .repo-utils/postinstall-test.sh
+      - run: sh .ci-utils/postinstall-test.sh
 
   install-2: # ubuntu
     parameters:
@@ -69,7 +69,7 @@ jobs:
       - run: make bootstrap
       - run: make build
       - run: make install
-      - run: sh .repo-utils/postinstall-test.sh
+      - run: sh .ci-utils/postinstall-test.sh
 
   install-3: # alpine
     parameters:
@@ -83,7 +83,7 @@ jobs:
       - run: make bootstrap
       - run: make build
       - run: make install
-      - run: sh .repo-utils/postinstall-test.sh
+      - run: sh .ci-utils/postinstall-test.sh
 
   install-4: # fedora
     parameters:
@@ -97,4 +97,4 @@ jobs:
       - run: make bootstrap
       - run: make build
       - run: make install
-      - run: sh .repo-utils/postinstall-test.sh
+      - run: sh .ci-utils/postinstall-test.sh

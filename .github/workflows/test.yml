@@ -35,4 +35,4 @@ jobs:
       - run: make install
         shell: bash
 
-      - run: sh .repo-utils/postinstall-test.sh
+      - run: sh .ci-utils/postinstall-test.sh
