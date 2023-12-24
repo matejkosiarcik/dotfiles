@@ -17,7 +17,7 @@ platypus \
     --interface-type None \
     --interpreter '/bin/sh' \
     --app-version '0.1' \
-    --author 'Matej Košiarčik' \
+    --author 'Matej Kosiarcik' \
     --bundle-identifier 'com.matejkosiarcik.my-notes' \
     --app-icon "$PWD/appicon.icns" \
     "$PWD/main.sh" \
