@@ -4,7 +4,7 @@ set -euf
 cd "$(dirname "$0")"
 
 # TODO: Reenable platypus after https://github.com/sveinbjornt/Platypus/issues/262
-if [ "$(uname -s)" != 'Darwin' ] || [ "$CI" == 1 ]; then
+if [ "$(uname -s)" != 'Darwin' ] || [ "$CI" = 1 ]; then
     printf 'App build skipped on non-macOS systems' >&2
     exit 0
 fi
