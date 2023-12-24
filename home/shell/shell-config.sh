@@ -16,8 +16,9 @@ alias exa='exa --long --tree --git-ignore --time modified --time-style long-iso 
 alias diff='git diff --no-index'
 
 # Git aliases
-alias ds='git diff --staged | diff2html -s side -i stdin'
 # TODO: install diff2html as project dependency
+alias ds='git diff --staged | diff2html -s side -i stdin'
+alias d2h='diff2html -s side -i stdin'
 alias t='tig'
 alias s='tig status'
 alias g='git'
