@@ -24,15 +24,24 @@ jobs:
         with:
           python-version: 3.x
 
-      - uses: actions/setup-node@v4.0.1
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4.0.1
         with:
           node-version: latest
 
-      - run: make bootstrap
+      - name: Setup HomeBrew dependencies
+        if: ${{ matrix.os == 'macos-latest' }}
         shell: bash
-      - run: make build
-        shell: bash
-      - run: make install
-        shell: bash
+        run: brew install platypus
 
-      - run: sh .ci-utils/postinstall-test.sh
+      - shell: bash
+        run: make bootstrap
+
+      - shell: bash
+        run: make build
+
+      - shell: bash
+        run: make install
+
+      - shell: bash
+        run: sh .ci-utils/postinstall-test.sh
