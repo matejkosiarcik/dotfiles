@@ -12,6 +12,10 @@ updates:
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
+    groups:
+      github-actions:
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /
@@ -24,6 +28,10 @@ updates:
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
+    groups:
+      pip[main]:
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /deamons/notes-attachments-import
@@ -36,6 +44,10 @@ updates:
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
+    groups:
+      pip[notes-attachments-import]:
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /deamons/photo-import
@@ -48,6 +60,10 @@ updates:
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
+    groups:
+      pip[photo-import]:
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /deamons/screenrecording-rename
@@ -60,6 +76,10 @@ updates:
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
+    groups:
+      pip[screenrecording-rename]:
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /deamons/screenshots-rename
@@ -72,6 +92,10 @@ updates:
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
+    groups:
+      pip[screenshots-rename]:
+        patterns:
+          - "*"
 
   - package-ecosystem: npm
     directory: /scripts/project-update
@@ -84,6 +108,10 @@ updates:
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
+    groups:
+      npm[project-update]:
+        patterns:
+          - "*"
 
   - package-ecosystem: npm
     directory: /scripts/convert2pdf
@@ -96,3 +124,7 @@ updates:
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
+    groups:
+      npm[convert2pdf]:
+        patterns:
+          - "*"
