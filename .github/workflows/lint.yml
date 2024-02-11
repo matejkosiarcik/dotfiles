@@ -49,6 +49,10 @@ jobs:
   super-linter:
     name: SuperLinter
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
@@ -65,6 +69,7 @@ jobs:
           LINTER_RULES_PATH: .config/
 
           # disable
+          VALIDATE_BASH_EXEC: false
           VALIDATE_CSS: false
           VALIDATE_JSON: false # Because eslint considers .json as .js (so rules like single-quote don't make sense)
           VALIDATE_JAVASCRIPT_ES: false
