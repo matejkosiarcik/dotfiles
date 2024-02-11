@@ -23,12 +23,12 @@
     ~/.lftp/rc: config/.lftp/rc
 
     # shell config
-    ~/.matejkosiarcik-setup/config/shell-config.sh: config/shell/shell-config.sh
-    ~/.matejkosiarcik-setup/config/shell-config.bash: config/shell/shell-config.bash
-    ~/.matejkosiarcik-setup/config/shell-config.zsh: config/shell/shell-config.zsh
+    ~/.matejkosiarcik-setup/config/shell/config.sh: config/shell/config.sh
+    ~/.matejkosiarcik-setup/config/shell/config.bash: config/shell/config.bash
+    ~/.matejkosiarcik-setup/config/shell/config.zsh: config/shell/config.zsh
 
     # git config
-    ~/.matejkosiarcik-setup/config/general.gitconfig: config/git/general.gitconfig
+    ~/.matejkosiarcik-setup/config/git/general.gitconfig: config/git/general.gitconfig
 
     # scripts
     ~/.matejkosiarcik-setup/bin/dir2sha: scripts/dir2sha.py
