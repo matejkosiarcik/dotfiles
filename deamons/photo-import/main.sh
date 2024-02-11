@@ -4,7 +4,7 @@ set -euf
 source_dir="$(dirname "$(readlink "$0")")"
 export source_dir
 
-PATH="$source_dir/python/bin:/opt/homebrew/bin:$HOME/.bin/scripts:$PATH"
+PATH="$source_dir/python/bin:/opt/homebrew/bin:$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
 export PATH
 PYTHONPATH="$source_dir/python"
 export PYTHONPATH
