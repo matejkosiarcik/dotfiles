@@ -14,12 +14,12 @@
 
 Repository is split into multiple directories:
 
-| Directory  | Purpose                                                                                            |
-|------------|----------------------------------------------------------------------------------------------------|
-| `apps/`    | Applications - usually wrapping scripts using platypus                                             |
-| `config/`  | Config files - installed into `$HOME`                                                              |
-| `deamons/` | Scripts executed automatically in the background (system startup, directory monitoring, cron, ...) |
-| `scripts/` | Scripts - to be added to `$PATH` and used interactively                                            |
+| Directory  | Purpose                                                                                          |
+|------------|--------------------------------------------------------------------------------------------------|
+| `apps/`    | Applications - usually wrapping scripts using platypus                                           |
+| `config/`  | Config files - installed into `$HOME`                                                            |
+| `deamons/` | Scripts executed automatically in the background (system startup, directory monitoring, cron, …) |
+| `scripts/` | Scripts - to be added to `$PATH` and used interactively                                          |
 
 ## Installation
 
