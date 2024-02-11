@@ -14,16 +14,16 @@
 
 Repository is split into multiple directories:
 
-| Directory  | Purpose                            |
-|------------|------------------------------------|
-| `home/`    | Config files from $HOME            |
-| `setup/`   | Scripts to run during installation |
-| `scripts/` | Main `$PATH` scripts               |
-| `deamons/` | Scripts executed on system startup |
+| Directory  | Purpose                                                                                            |
+|------------|----------------------------------------------------------------------------------------------------|
+| `apps/`    | Applications - usually wrapping scripts using platypus                                             |
+| `config/`  | Config files - installed into `$HOME`                                                              |
+| `deamons/` | Scripts executed automatically in the background (system startup, directory monitoring, cron, ...) |
+| `scripts/` | Scripts - to be added to `$PATH` and used interactively                                            |
 
 ## Installation
 
-You probably don't want to actually install all my dotfiles…
+You probably don't want to actually install my dotfiles…
 So this section is mostly for my future self :\) .
 
 Install project dependencies:
