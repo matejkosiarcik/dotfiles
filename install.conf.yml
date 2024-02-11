@@ -17,18 +17,18 @@
 
 - link:
     # general config
-    ~/.vimrc: home/.vimrc
-    ~/.tigrc: home/.tigrc
-    ~/.emacs: home/.emacs
-    ~/.lftp/rc: home/.lftp/rc
+    ~/.vimrc: config/.vimrc
+    ~/.tigrc: config/.tigrc
+    ~/.emacs: config/.emacs
+    ~/.lftp/rc: config/.lftp/rc
 
     # shell config
-    ~/.matejkosiarcik-setup/home/shell-config.sh: home/shell/shell-config.sh
-    ~/.matejkosiarcik-setup/home/shell-config.bash: home/shell/shell-config.bash
-    ~/.matejkosiarcik-setup/home/shell-config.zsh: home/shell/shell-config.zsh
+    ~/.matejkosiarcik-setup/config/shell/config.sh: config/shell/config.sh
+    ~/.matejkosiarcik-setup/config/shell/config.bash: config/shell/config.bash
+    ~/.matejkosiarcik-setup/config/shell/config.zsh: config/shell/config.zsh
 
     # git config
-    ~/.matejkosiarcik-setup/home/general.gitconfig: home/git/general.gitconfig
+    ~/.matejkosiarcik-setup/config/git/general.gitconfig: config/git/general.gitconfig
 
     # scripts
     ~/.matejkosiarcik-setup/bin/dir2sha: scripts/dir2sha.py
@@ -65,7 +65,7 @@
     # TODO: Reenable platypus after https://github.com/sveinbjornt/Platypus/issues/262
     ~/Applications/My Notes.app:
       path: apps/My Notes/My Notes.app
-      if: '[ "$(uname -s)" = Darwin ] && [ "$CI" != 1 ]'
+      if: '[ "$(uname -s)" = Darwin ] && [ "${CI-x}" != 1 ]'
 
 - shell:
     - description: Setup
