@@ -3,8 +3,8 @@ brew "node"
 brew "python"
 
 # For building /apps
-brew "platypus"
-# cask "platypus"
+# brew "platypus"
+cask "platypus"
 
 # For file associations
 brew "duti"
