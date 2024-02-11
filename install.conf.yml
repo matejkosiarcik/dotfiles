@@ -23,20 +23,20 @@
     ~/.lftp/rc: config/.lftp/rc
 
     # shell config
-    ~/.matejkosiarcik-setup/config/shell/config.sh: config/shell/config.sh
-    ~/.matejkosiarcik-setup/config/shell/config.bash: config/shell/config.bash
-    ~/.matejkosiarcik-setup/config/shell/config.zsh: config/shell/config.zsh
+    ~/.matejkosiarcik-dotfiles/config/shell/config.sh: config/shell/config.sh
+    ~/.matejkosiarcik-dotfiles/config/shell/config.bash: config/shell/config.bash
+    ~/.matejkosiarcik-dotfiles/config/shell/config.zsh: config/shell/config.zsh
 
     # git config
-    ~/.matejkosiarcik-setup/config/git/general.gitconfig: config/git/general.gitconfig
+    ~/.matejkosiarcik-dotfiles/config/git/general.gitconfig: config/git/general.gitconfig
 
     # scripts
-    ~/.matejkosiarcik-setup/bin/dir2sha: scripts/dir2sha.py
-    ~/.matejkosiarcik-setup/bin/convert2pdf: scripts/convert2pdf/dist/convert.js
-    ~/.matejkosiarcik-setup/bin/git-update: scripts/git-update.sh
-    ~/.matejkosiarcik-setup/bin/photo-exif-rename: scripts/photo-exif-rename.sh
-    ~/.matejkosiarcik-setup/bin/project-update: scripts/project-update/main.sh
-    ~/.matejkosiarcik-setup/bin/system-update: scripts/system-update.sh
+    ~/.matejkosiarcik-dotfiles/bin/dir2sha: scripts/dir2sha.py
+    ~/.matejkosiarcik-dotfiles/bin/convert2pdf: scripts/convert2pdf/dist/convert.js
+    ~/.matejkosiarcik-dotfiles/bin/git-update: scripts/git-update.sh
+    ~/.matejkosiarcik-dotfiles/bin/photo-exif-rename: scripts/photo-exif-rename.sh
+    ~/.matejkosiarcik-dotfiles/bin/project-update: scripts/project-update/main.sh
+    ~/.matejkosiarcik-dotfiles/bin/system-update: scripts/system-update.sh
 
     # old scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
@@ -55,11 +55,11 @@
     # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
 
     # background deamons
-    ~/.matejkosiarcik-setup/deamons/main.sh: deamons/main.sh
-    ~/.matejkosiarcik-setup/deamons/notes-attachments-import/main.sh: deamons/notes-attachments-import/main.sh
-    ~/.matejkosiarcik-setup/deamons/photo-import/main.sh: deamons/photo-import/main.sh
-    ~/.matejkosiarcik-setup/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
-    ~/.matejkosiarcik-setup/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
+    ~/.matejkosiarcik-dotfiles/deamons/main.sh: deamons/main.sh
+    ~/.matejkosiarcik-dotfiles/deamons/notes-attachments-import/main.sh: deamons/notes-attachments-import/main.sh
+    ~/.matejkosiarcik-dotfiles/deamons/photo-import/main.sh: deamons/photo-import/main.sh
+    ~/.matejkosiarcik-dotfiles/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
+    ~/.matejkosiarcik-dotfiles/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
 
     # Apps
     # TODO: Reenable platypus after https://github.com/sveinbjornt/Platypus/issues/262
