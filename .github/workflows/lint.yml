@@ -67,6 +67,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           DEFAULT_BRANCH: main
           LINTER_RULES_PATH: .config/
+          MULTI_STATUS: false
 
           # disable
           VALIDATE_BASH_EXEC: false
