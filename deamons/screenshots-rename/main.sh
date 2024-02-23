@@ -27,5 +27,5 @@ watchmedo shell-command "$watchdir" \
     --quiet \
     --ignore-directories \
     --patterns '*.png' \
-    --command 'if [ "$watch_event_type" = created ] && [ "$watch_object" = file ]; then sh "$source_dir/rename.sh" "$watch_src_path"; fi'
+    --command 'if [ "$watch_object" = file ] && { [ "$watch_event_type" = created ] || [ "$watch_event_type" = modified ]; }; then sleep 1; sh "$source_dir/rename.sh" "$watch_src_path"; fi'
 # NOTE: We could also listen for "move" events, but it would be really easy to fall into infinite loop
