@@ -18,7 +18,7 @@ old_filename="$(basename "$file")"
 
 # Exit on files not in proper format
 if printf '%s\n' "$old_filename" | grep -vE '^.+ [0-9\-]+ at [0-9\.]+\.[a-zA-Z0-9]+$' >/dev/null; then
-    printf 'Skip %s\n' "$old_filename"
+    printf 'Skipping (wrong filename format) %s\n' "$old_filename"
     exit 0
 fi
 
