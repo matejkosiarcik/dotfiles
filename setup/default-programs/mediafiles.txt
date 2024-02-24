@@ -34,6 +34,7 @@
 .aifc
 .aiff
 .flac
+.m4a
 .mp1
 .mp2
 .mp3
