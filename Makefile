@@ -22,9 +22,10 @@ bootstrap:
 		python3 -m pip install --requirement requirements.txt --quiet --upgrade
 
 	# Python dependencies
-	printf '%s\n%s\n%s\n%s\n%s\n' \
+	printf '%s\n%s\n%s\n%s\n%s\n%s\n' \
 		deamons/notes-attachments-import \
 		deamons/photo-import \
+		deamons/screenrecording-move \
 		deamons/screenrecording-rename \
 		deamons/screenshots-rename \
 		scripts/project-update | \
