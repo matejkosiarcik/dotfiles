@@ -2,6 +2,7 @@
 
 # Customize PATH
 export PATH="$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
+export PATH="$HOME/.bin/sshpass/usr/local/bin:$PATH"
 
 # gpg
 GPG_TTY="$(tty)"
