@@ -8,30 +8,26 @@ if [ "$#" -lt 1 ]; then
 fi
 
 file="$1"
-if [ ! -e "$file" ]; then
-    exit 0
-fi
 
 cd "$(dirname "$file")"
-
 old_filename="$(basename "$file")"
 
 if [ ! -e "$old_filename" ] || [ ! -f "$old_filename" ]; then
-    printf 'Skipping file (not found) %s\n' "$old_filename"
+    # printf 'Skipping file (not found) %s\n' "$old_filename"
     exit 0
 fi
 
 # Exit on files not in proper format
 if printf '%s\n' "$old_filename" | grep -vE '^.+ [0-9\-]+ at [0-9\.]+( \(?[0-9]+\)?)?\.png$' >/dev/null; then
-    printf 'Skipping file (filename format mismatch) %s\n' "$old_filename"
+    # printf 'Skipping file (filename format mismatch) %s\n' "$old_filename"
     exit 0
 fi
 if printf '%s\n' "$old_filename" | grep -vE '^[A-Za-z]' >/dev/null; then
-    printf 'Skipping file (first char must be a letter) %s\n' "$old_filename"
+    # printf 'Skipping file (first char must be a letter) %s\n' "$old_filename"
     exit 0
 fi
 if printf '%s\n' "$old_filename" | grep -vE '^Screenshot ' >/dev/null; then
-    printf 'Skipping file (filename prefix mismatch) %s\n' "$old_filename"
+    # printf 'Skipping file (filename prefix mismatch) %s\n' "$old_filename"
     exit 0
 fi
 
