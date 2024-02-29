@@ -10,9 +10,6 @@ fi
 
 # Update local repo from remote
 git fetch --all --tags --no-prune
-# NOTE: Test and remove below lines if new version is working reliably
-# git fetch --all --tags --prune --prune-tags
-# git remote prune origin
 
 # Determine current and default branch names
 current_branch="$(git rev-parse --abbrev-ref HEAD)"
@@ -21,6 +18,15 @@ if [ "$current_branch" = 'HEAD' ]; then
     exit 1
 fi
 default_branch="$(git remote show origin | grep 'HEAD branch:' | sed -E 's~.+:[ \t]*~~')"
+if [ "$default_branch" != 'master' ] && [ "$default_branch" != 'main' ]; then
+    printf 'Default branch is %s.\n' "$default_branch" >&2
+    printf 'Proceed anyway? [Y]es | [N]o :' >&2
+    read proceed_1
+    printf '\n' >&2
+    if [ "$proceed_1" != 'y' ] && [ "$proceed_1" != 'Y' ]; then
+        exit 0
+    fi
+fi
 
 # Update current branch
 if [ "$current_branch" = "$default_branch" ]; then
@@ -35,11 +41,19 @@ fi
 if [ "$current_branch" != "$default_branch" ]; then
     git rebase "$default_branch" || {
         git rebase --abort
-        printf 'There was problem during plain rebase. Trying rebase with "--onto".\n' >&2
-        git rebase --onto "$default_branch" "origin/$current_branch" || {
-            printf 'There was problem during `rebase --onto`. You need to resolve conflicts before manually.\n' >&2
-            exit 1
-        }
+
+        printf 'There was problem during plain rebase.\n' >&2
+        printf 'Continue with rebase --onto? [Y]es | [N]o :' >&2
+        read next_step
+        printf '\n' >&2
+
+        if [ "$next_step" = 'y' ] || [ "$next_step" = 'Y' ]; then
+            git rebase --onto "$default_branch" "origin/$current_branch" || {
+                printf 'There was problem during `rebase --onto` as well.\n' >&2
+                printf 'You need to resolve conflicts manually.\n' >&2
+                exit 1
+            }
+        fi
     }
 fi
 
