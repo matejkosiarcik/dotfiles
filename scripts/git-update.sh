@@ -21,7 +21,7 @@ default_branch="$(git remote show origin | grep 'HEAD branch:' | sed -E 's~.+:[ 
 if [ "$default_branch" != 'master' ] && [ "$default_branch" != 'main' ]; then
     printf 'Default branch is %s.\n' "$default_branch" >&2
     printf 'Proceed anyway? [Y]es | [N]o :' >&2
-    read proceed_1
+    read -r proceed_1
     printf '\n' >&2
     if [ "$proceed_1" != 'y' ] && [ "$proceed_1" != 'Y' ]; then
         exit 0
@@ -44,7 +44,7 @@ if [ "$current_branch" != "$default_branch" ]; then
 
         printf 'There was problem during plain rebase.\n' >&2
         printf 'Continue with rebase --onto? [Y]es | [N]o :' >&2
-        read next_step
+        read -r next_step
         printf '\n' >&2
 
         if [ "$next_step" = 'y' ] || [ "$next_step" = 'Y' ]; then
