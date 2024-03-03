@@ -64,7 +64,9 @@ pip_extra_args=''
 if command -v python3 2>/dev/null | grep -i homebrew; then
     pip_extra_args='--break-system-packages'
 fi
+# shellcheck disable=SC2248
 python3 -m pip install --upgrade pip setuptools wheel $pip_extra_args
+# shellcheck disable=SC2248
 python3 -m pip list --outdated | tail -n +3 | cut -d ' ' -f 1 | xargs -n1 python3 -m pip install --upgrade $pip_extra_args
 
 # Ruby
