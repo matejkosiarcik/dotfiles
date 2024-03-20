@@ -17,7 +17,12 @@ fi
 
 # Rename existing files
 tmpfile="$(mktemp)"
-find "$watchdir" -maxdepth 1 -type f \( -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.mov' -or -iname '*.mp4' \) -print0 >"$tmpfile"
+find "$watchdir" \
+    -maxdepth 1 \
+    -type f \
+    \( -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.mov' -or -iname '*.mp4' -or -name '*.heic' -or -name '*.heif' \) \
+    -print0 \
+    >"$tmpfile"
 xargs -0 -n1 photo-exif-rename <"$tmpfile"
 rm -f "$tmpfile"
 
@@ -26,6 +31,6 @@ watchmedo shell-command "$watchdir" \
     --wait \
     --quiet \
     --ignore-directories \
-    --patterns '*.jpg;*.jpeg;*.png;*.mov;*.mp4' \
+    --patterns '*.jpg;*.jpeg;*.png;*.mov;*.mp4;*.heic;*.heif' \
     --command 'if [ "$watch_event_type" = created ] && [ "$watch_object" = file ]; then photo-exif-rename "$watch_src_path"; fi'
 # NOTE: We could also listen for "move" events, but it would be really easy to fall into infinite loop
