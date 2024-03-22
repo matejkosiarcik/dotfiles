@@ -15,15 +15,20 @@ if [ ! -e "$file" ]; then
 fi
 
 # Get photo creation date
-date="$(exiftool -short -short -short -CreateDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g')"
-if [ "$date" = '' ] || [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
-    date="$(exiftool -short -short -short -DateTimeOriginal "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g')"
+# -CreationDate is found when exporting videos from Apple Photos (.mov)
+date="$(exiftool -short -short -short -CreationDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g' | sed -E 's~\+.+$~~')"
+if [ "$date" = '' ] || printf '%s' "$date" | grep '^0000-00-00' >/dev/null 2>&1; then
+    # -CreateDate is found when exporting pictures from Apple Photos (.jpg, .jpeg)
+    date="$(exiftool -short -short -short -CreateDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g' | sed -E 's~\+.+$~~')"
 fi
-if [ "$date" = '' ] || [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
+if [ "$date" = '' ] || printf '%s' "$date" | grep '^0000-00-00' >/dev/null 2>&1; then
+    date="$(exiftool -short -short -short -DateTimeOriginal "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g' | sed -E 's~\+.+$~~')"
+fi
+if [ "$date" = '' ] || printf '%s' "$date" | grep '^0000-00-00' >/dev/null 2>&1; then
     # "-FileModifyDate" is often not reliable, but better than nothing (in case all previous methods yield nothing)
     date="$(exiftool -short -short -short -FileModifyDate "$file" 2>/dev/null | sed 's~:~-~g;s~\.~-~g;s~ ~_~g' | sed -E 's~\+.+$~~')"
 fi
-if [ "$date" = '' ] || [ "$date" = '0000-00-00_00-00-00' ] || [ "$date" = '0000-00-00' ]; then
+if [ "$date" = '' ] || printf '%s' "$date" | grep '^0000-00-00' >/dev/null 2>&1; then
     # unset date when it is nonsense
     date='Unknown'
 fi
@@ -38,6 +43,9 @@ cd "$(dirname "$file")"
 old_filename="$(basename "$file")"
 old_extension="$(printf '%s' "$old_filename" | sed -E 's~^.*\.~~')"
 new_extension="$(printf '%s' "$old_extension" | tr '[:upper:]' '[:lower:]')"
+if [ "$new_extension" = 'jpeg' ]; then
+    new_extension='jpg'
+fi
 new_filename="$date.$new_extension"
 
 # Ignore files with properly formatted name
