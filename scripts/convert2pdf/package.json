@@ -11,11 +11,12 @@
     "execa": "^8.0.1",
     "glob": "^10.3.10",
     "jpeg-js": "^0.4.4",
+    "p-all": "^5.0.0",
     "pngjs": "^7.0.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@tsconfig/strictest": "^2.0.3",
+    "@tsconfig/strictest": "^2.0.4",
     "@types/node": "^20.11.30",
     "@types/pngjs": "^6.0.4",
     "@types/yargs": "^17.0.32",

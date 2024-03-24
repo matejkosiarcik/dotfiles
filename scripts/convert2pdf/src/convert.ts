@@ -6,6 +6,7 @@ import { hideBin } from 'yargs/helpers';
 import { execa } from 'execa';
 import { glob } from 'glob';
 import { compare } from 'alphanumeric-sort';
+import pAll from 'p-all';
 
 (async () => {
     let argumentParser = yargs(hideBin(process.argv))
@@ -34,7 +35,9 @@ import { compare } from 'alphanumeric-sort';
         throw new Error('Output must be PDF');
     }
 
-    const photos: { width: number, height: number, path: string }[] = await Promise.all(input.map(async (file) => {
+    const concurrencyLimit = Math.max(os.cpus.length - 1, 1);
+
+    const photos: { width: number, height: number, path: string }[] = await pAll(input.map((file) => async () => {
         const program = await execa('magick', ['identify', '-format', '%wx%h', file]);
         let resolution = program.stdout.split('x').map((el) => Number.parseInt(el)) as [number, number];
         return {
@@ -42,7 +45,7 @@ import { compare } from 'alphanumeric-sort';
             width: resolution[0],
             height: resolution[1],
         };
-    }));
+    }), { concurrency: concurrencyLimit });
 
     const targetResolution = {
         width: Math.min(...photos.map((el) => el.width)),
@@ -51,11 +54,11 @@ import { compare } from 'alphanumeric-sort';
 
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'tmp'));
 
-    const tmpFiles = await Promise.all(input.map(async (file) => {
+    const tmpFiles = await pAll(input.map((file) => async () => {
         const tmpFile = path.join(tmpDir, path.basename(file, path.extname(file))) + '.jpg';
         await execa('magick', ['convert', file, '-quality', '90', '-resize', `${targetResolution.width}x${targetResolution.height}!`, tmpFile]);
         return tmpFile;
-    }));
+    }), { concurrency: concurrencyLimit });
 
     await execa('magick', ['convert', ...tmpFiles, output]);
     await fs.rm(tmpDir, { force: true, recursive: true });
