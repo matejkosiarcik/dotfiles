@@ -38,11 +38,20 @@ if printf '%s' "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
 fi
 
 glob() {
-    while [ "$#" -ge 1 ]; do
-        git ls-files "$1" "*/$1"
-        git ls-files --others --exclude-standard "$1" "*/$1"
-        shift
-    done
+    if git rev-parse --show-toplevel >/dev/null 2>&1; then
+        # This is a git repo
+        while [ "$#" -ge 1 ]; do
+            git ls-files "$1" "*/$1"
+            git ls-files --others --exclude-standard "$1" "*/$1"
+            shift
+        done
+    else
+        # This is not a git repo
+        while [ "$#" -ge 1 ]; do
+            find . -name "$1" -maxdepth 1 | sed -E 's~^./~~'
+            shift
+        done
+    fi
 }
 
 # NodeJS
