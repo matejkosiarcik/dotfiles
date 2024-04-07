@@ -25,8 +25,8 @@ alias s='tig status'
 alias g='git'
 
 # Automatic PR creation
-alias ghpr='gh pr create --assignee matejkosiarcik --title "Automated PR" --body "" && sleep 2 && gh pr merge --auto --merge'
-# alias glmr='glab mr create --assignee matej.kosiarcik --title "Automated MR" --description "" --remove-source-branch && sleep 2 && glab mr merge "$(git branch --show-current)" --when-pipeline-succeeds --remove-source-branch'
+alias ghpr='gh pr create --assignee matejkosiarcik --title "Just a PR" --body "" && sleep 2 && gh pr merge --auto --merge'
+alias glpr='glab mr create --assignee matejkosiarcik --title "Just a PR" --description "" --remove-source-branch && sleep 3 && glab mr merge "$(git branch --show-current)" --auto-merge --remove-source-branch --yes'
 
 # Download video/audio from youtube with best quality
 # `-f best` is not enough, because it is limited to 1080p (IIRC)
