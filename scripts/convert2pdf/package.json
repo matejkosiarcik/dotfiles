@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "alphanumeric-sort": "^0.0.1",
-    "execa": "^9.1.0",
+    "execa": "^9.2.0",
     "glob": "^10.4.1",
     "jpeg-js": "^0.4.4",
     "p-all": "^5.0.0",
