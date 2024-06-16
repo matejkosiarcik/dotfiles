@@ -56,10 +56,10 @@ import pAll from 'p-all';
 
     const tmpFiles = await pAll(input.map((file) => async () => {
         const tmpFile = path.join(tmpDir, path.basename(file, path.extname(file))) + '.jpg';
-        await execa('magick', ['convert', file, '-quality', '90', '-resize', `${targetResolution.width}x${targetResolution.height}!`, tmpFile]);
+        await execa('magick', [file, '-quality', '90', '-resize', `${targetResolution.width}x${targetResolution.height}!`, tmpFile]);
         return tmpFile;
     }), { concurrency: concurrencyLimit });
 
-    await execa('magick', ['convert', ...tmpFiles, output]);
+    await execa('magick', [...tmpFiles, output]);
     await fs.rm(tmpDir, { force: true, recursive: true });
 })();
