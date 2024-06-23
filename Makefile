@@ -47,7 +47,7 @@ bootstrap:
 		scripts/project-update | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$$dir" && \
-		npm install --no-save --no-progress --no-audit --quiet && \
+		npm ci --no-save --no-progress --no-audit --no-fund --loglevel=error && \
 	true; done
 
 .PHONY: build
