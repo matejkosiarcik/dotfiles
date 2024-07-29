@@ -13,6 +13,10 @@ if [ ! -e "$file" ]; then
     printf 'Input file %s does not exist\n' "$file" >&2
     exit 1
 fi
+if [ ! -f "$file" ]; then
+    printf 'Input file %s is not a file\n' "$file" >&2
+    exit 1
+fi
 
 # Get photo creation date
 # -CreationDate is found when exporting videos from Apple Photos (.mov)
