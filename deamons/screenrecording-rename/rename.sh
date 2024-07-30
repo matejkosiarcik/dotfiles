@@ -9,7 +9,7 @@ fi
 
 old_filepath="$1"
 if [ ! -e "$old_filepath" ]; then
-    # printf 'Skipping file (not found) - %s\n' "$(basename "$file")"
+    # printf 'Skipping file (not found) - %s\n' "$(basename "$old_filepath")"
     exit 0
 fi
 
@@ -26,8 +26,8 @@ if printf '%s\n' "$old_filename" | grep -v -E '/Screenshot [0-9]{4}-[0-9]{2}-[0-
     exit 0
 fi
 
-date="$(printf '%s\n' "$(basename "$file")" | sed -E 's~^.+ ([0-9]{4})-([0-9]{2})-([0-9]{2}) at ([0-9]{2})\.([0-9]{2})\.([0-9]{2})\.[a-zA-Z0-9]+$~\1-\2-\3_\4-\5-\6~')"
-extension="$(printf '%s\n' "$(basename "$file")" | sed -E 's~^.+\.([a-zA-Z0-9]+)$~\1~' | tr '[:upper:]' '[:lower:]')"
+date="$(printf '%s\n' "$(basename "$old_filename")" | sed -E 's~^.+ ([0-9]{4})-([0-9]{2})-([0-9]{2}) at ([0-9]{2})\.([0-9]{2})\.([0-9]{2})\.[a-zA-Z0-9]+$~\1-\2-\3_\4-\5-\6~')"
+extension="$(printf '%s\n' "$(basename "$old_filename")" | sed -E 's~^.+\.([a-zA-Z0-9]+)$~\1~' | tr '[:upper:]' '[:lower:]')"
 new_filename="$date.$extension"
 new_filepath="$targetdir/new_filename"
 
