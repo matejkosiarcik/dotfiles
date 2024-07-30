@@ -15,7 +15,8 @@ all: clean bootstrap build # NOTE: "install" intentionally left out
 
 .PHONY: bootstrap
 bootstrap:
-	python3 -m venv venv
+	rm -rf venv && \
+		python3 -m venv venv
 
 	PATH="$$PWD/venv/bin:$$PATH" \
 	PIP_DISABLE_PIP_VERSION_CHECK=1 \
