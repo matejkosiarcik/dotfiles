@@ -49,7 +49,7 @@ if [ "$current_branch" != "$default_branch" ]; then
 
         if [ "$next_step" = 'y' ] || [ "$next_step" = 'Y' ]; then
             git rebase --onto "$default_branch" "origin/$current_branch" || {
-                printf 'There was problem during `rebase --onto` as well.\n' >&2
+                printf 'There was problem during "git rebase --onto" as well.\n' >&2
                 printf 'You need to resolve conflicts manually.\n' >&2
                 exit 1
             }
