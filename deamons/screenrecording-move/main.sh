@@ -1,6 +1,9 @@
 #!/bin/sh
 set -euf
 
+# Disable for xargs
+# shellcheck disable=SC2016
+
 source_dir="$(dirname "$(readlink "$0")")"
 export source_dir
 

@@ -1,6 +1,9 @@
 #!/bin/sh
 set -euf
 
+# Disable for xargs
+# shellcheck disable=SC2016
+
 PATH="/opt/homebrew/bin:$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
 export PATH
 
