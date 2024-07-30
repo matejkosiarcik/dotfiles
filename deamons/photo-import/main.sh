@@ -1,9 +1,6 @@
 #!/bin/sh
 set -euf
 
-# Disable for xargs
-# shellcheck disable=SC2016
-
 PATH="/opt/homebrew/bin:$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
 export PATH
 
@@ -26,4 +23,4 @@ rm -f "$tmpfile"
 
 # Watch for new files
 fswatch "$watchdir" --event=Created --event=MovedTo --event=Renamed -E --exclude '(^|/)\..+$' --exclude '(^|/)[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}( [0-9]+)?\.[A-Za-z0-9-]+$' --print0 |
-    xargs -0 -n1 sh -c 'if [ -f "$1" ]; then photo-exif-rename "$1" || true; fi' -
+    xargs -0 -n1 sh -c 'if [ -f "$1" ]; then photo-exif-rename "$1" || true; fi' - # shellcheck disable=SC2016
