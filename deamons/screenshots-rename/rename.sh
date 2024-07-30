@@ -19,7 +19,7 @@ fi
 
 # Exit on non-screenshots
 if printf '%s\n' "$old_filename" | grep -vE '^Screenshot [0-9]{4}-[0-9]{2}-[0-9]{2} at [0-9]{2}\.[0-9]{2}\.[0-9]{2}(?: [\(]?[0-9]+[\)]?)*\.png$' >/dev/null; then
-    printf 'Skipping file (bad filename) %s\n' "$old_filename"
+    # printf 'Skipping file (bad filename) %s\n' "$old_filename"
     exit 0
 fi
 
