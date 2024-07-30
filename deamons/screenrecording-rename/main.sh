@@ -21,6 +21,6 @@ xargs -0 -n1 sh -c 'sh "$source_dir/rename.sh" "$1" || true' - <"$tmpfile"
 rm -f "$tmpfile"
 
 # Watch for new files
+# shellcheck disable=SC2016
 fswatch "$watchdir" --event=Created --event=MovedTo --event=Renamed -E --exclude '(^|/)\..+$' --print0 |
-    # shellcheck disable=SC2016
     xargs -0 -n1 sh -c 'if [ -f "$2" ]; then sh "$1/rename.sh" "$2" || true; fi' - "$source_dir"
