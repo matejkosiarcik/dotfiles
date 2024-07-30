@@ -34,22 +34,6 @@ updates:
           - "*"
 
   - package-ecosystem: pip
-    directory: /deamons/notes-attachments-import
-    schedule:
-      interval: daily
-      time: "01:30"
-      timezone: Europe/Bratislava
-    reviewers:
-      - matejkosiarcik
-    assignees:
-      - matejkosiarcik
-    open-pull-requests-limit: 1
-    groups:
-      pip[notes-attachments-import]:
-        patterns:
-          - "*"
-
-  - package-ecosystem: pip
     directory: /deamons/photo-import
     schedule:
       interval: daily

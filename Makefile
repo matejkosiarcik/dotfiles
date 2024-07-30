@@ -22,8 +22,7 @@ bootstrap:
 		python3 -m pip install --requirement requirements.txt --quiet --upgrade
 
 	# Python dependencies
-	printf '%s\n%s\n%s\n%s\n%s\n%s\n' \
-		deamons/notes-attachments-import \
+	printf '%s\n%s\n%s\n%s\n%s\n' \
 		deamons/photo-import \
 		deamons/screenrecording-move \
 		deamons/screenrecording-rename \
@@ -63,7 +62,6 @@ install:
 .PHONY: clean
 clean:
 	rm -rf venv
-	rm -rf deamons/notes-attachments-import/python
 	rm -rf deamons/photo-import/python
 	rm -rf deamons/screenrecording-rename/python
 	rm -rf deamons/screenshots-rename/python
