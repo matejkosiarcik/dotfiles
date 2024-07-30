@@ -62,6 +62,6 @@ git fetch --all --tags --prune --prune-tags
 git remote prune origin
 
 # Remove local leftover branches which no longer exist on remote, eg. dependabot branches
-git branch --merged "$default_branch" | grep -ve '\*' -e "$default_branch" -e "$current_branch" | xargs -n1 git branch -d
+git branch --merged "$default_branch" | grep -v -e '\*' -e "$default_branch" -e "$current_branch" | xargs -n1 git branch -d
 
 printf 'Done\n'
