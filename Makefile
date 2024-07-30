@@ -22,12 +22,7 @@ bootstrap:
 		python3 -m pip install --requirement requirements.txt --quiet --upgrade
 
 	# Python dependencies
-	printf '%s\n%s\n%s\n%s\n%s\n' \
-		deamons/photo-import \
-		deamons/screenrecording-move \
-		deamons/screenrecording-rename \
-		deamons/screenshots-rename \
-		scripts/project-update | \
+	printf '%s\n' scripts/project-update | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$$dir" && \
 		PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -62,9 +57,6 @@ install:
 .PHONY: clean
 clean:
 	rm -rf venv
-	rm -rf deamons/photo-import/python
-	rm -rf deamons/screenrecording-rename/python
-	rm -rf deamons/screenshots-rename/python
 	rm -rf scripts/convert2pdf/node_modules
 	rm -rf scripts/convert2pdf/dist
 	rm -rf scripts/project-update/node_modules
