@@ -49,7 +49,7 @@ if [ "$current_branch" != "$default_branch" ]; then
 
         if [ "$next_step" = 'y' ] || [ "$next_step" = 'Y' ]; then
             git rebase --onto "$default_branch" "origin/$current_branch" || {
-                printf 'There was problem during `rebase --onto` as well.\n' >&2
+                printf 'There was problem during "git rebase --onto" as well.\n' >&2
                 printf 'You need to resolve conflicts manually.\n' >&2
                 exit 1
             }
@@ -62,6 +62,6 @@ git fetch --all --tags --prune --prune-tags
 git remote prune origin
 
 # Remove local leftover branches which no longer exist on remote, eg. dependabot branches
-git branch --merged "$default_branch" | grep -ve '\*' -e "$default_branch" -e "$current_branch" | xargs -n1 git branch -d
+git branch --merged "$default_branch" | grep -v -e '\*' -e "$default_branch" -e "$current_branch" | xargs -n1 git branch -d
 
 printf 'Done\n'

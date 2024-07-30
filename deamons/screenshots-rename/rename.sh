@@ -17,21 +17,13 @@ if [ ! -e "$old_filename" ] || [ ! -f "$old_filename" ]; then
     exit 0
 fi
 
-# Exit on files not in proper format
-if printf '%s\n' "$old_filename" | grep -vE '^.+ [0-9\-]+ at [0-9\.]+( \(?[0-9]+\)?)?\.png$' >/dev/null; then
-    # printf 'Skipping file (filename format mismatch) %s\n' "$old_filename"
-    exit 0
-fi
-if printf '%s\n' "$old_filename" | grep -vE '^[A-Za-z]' >/dev/null; then
-    # printf 'Skipping file (first char must be a letter) %s\n' "$old_filename"
-    exit 0
-fi
-if printf '%s\n' "$old_filename" | grep -vE '^Screenshot ' >/dev/null; then
-    # printf 'Skipping file (filename prefix mismatch) %s\n' "$old_filename"
+# Exit on non-screenshots
+if printf '%s\n' "$old_filename" | grep -v -E '^Screenshot [0-9]{4}-[0-9]{2}-[0-9]{2} at [0-9]{2}\.[0-9]{2}\.[0-9]{2}(?: [\(]?[0-9]+[\)]?)*\.png$' >/dev/null; then
+    # printf 'Skipping file (bad filename) %s\n' "$old_filename"
     exit 0
 fi
 
-date="$(printf '%s\n' "$(basename "$file")" | sed -E 's~^.+ ([0-9]{4})-([0-9]{2})-([0-9]{2}) at ([0-9]{2})\.([0-9]{2})\.([0-9]{2})( \(?[0-9]+\)?)?\.png$~\1-\2-\3_\4-\5-\6~')"
+date="$(printf '%s\n' "$(basename "$file")" | sed -E 's~^.+ ([0-9]{4})-([0-9]{2})-([0-9]{2}) at ([0-9]{2})\.([0-9]{2})\.([0-9]{2})( [\(]?[0-9]+[\)]?)*\.png$~\1-\2-\3_\4-\5-\6~')"
 new_filename="$date.png"
 
 # Check if the new file already exists (2 photos with the exact date taken)

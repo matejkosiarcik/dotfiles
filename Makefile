@@ -15,20 +15,15 @@ all: clean bootstrap build # NOTE: "install" intentionally left out
 
 .PHONY: bootstrap
 bootstrap:
-	python3 -m venv venv
+	rm -rf venv && \
+		python3 -m venv venv
 
 	PATH="$$PWD/venv/bin:$$PATH" \
 	PIP_DISABLE_PIP_VERSION_CHECK=1 \
 		python3 -m pip install --requirement requirements.txt --quiet --upgrade
 
 	# Python dependencies
-	printf '%s\n%s\n%s\n%s\n%s\n%s\n' \
-		deamons/notes-attachments-import \
-		deamons/photo-import \
-		deamons/screenrecording-move \
-		deamons/screenrecording-rename \
-		deamons/screenshots-rename \
-		scripts/project-update | \
+	printf '%s\n' scripts/project-update | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$$dir" && \
 		PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -53,7 +48,6 @@ bootstrap:
 .PHONY: build
 build:
 	npm --prefix scripts/convert2pdf run build
-	cd 'apps/My Notes' && sh build.sh
 
 .PHONY: install
 install:
@@ -63,10 +57,6 @@ install:
 .PHONY: clean
 clean:
 	rm -rf venv
-	rm -rf deamons/notes-attachments-import/python
-	rm -rf deamons/photo-import/python
-	rm -rf deamons/screenrecording-rename/python
-	rm -rf deamons/screenshots-rename/python
 	rm -rf scripts/convert2pdf/node_modules
 	rm -rf scripts/convert2pdf/dist
 	rm -rf scripts/project-update/node_modules

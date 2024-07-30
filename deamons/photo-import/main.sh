@@ -1,15 +1,10 @@
 #!/bin/sh
 set -euf
 
-source_dir="$(dirname "$(readlink "$0")")"
-export source_dir
-
-PATH="$source_dir/python/bin:/opt/homebrew/bin:$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
+PATH="/opt/homebrew/bin:$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
 export PATH
-PYTHONPATH="$source_dir/python"
-export PYTHONPATH
 
-# Set [and create] target directory
+# Prepare target directory
 watchdir="$HOME/Pictures/Import"
 if [ ! -d "$watchdir" ]; then
     mkdir -p "$watchdir"
@@ -20,17 +15,14 @@ tmpfile="$(mktemp)"
 find "$watchdir" \
     -maxdepth 1 \
     -type f \
-    \( -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.mov' -or -iname '*.mp4' -or -name '*.heic' -or -name '*.heif' \) \
-    -print0 \
-    >"$tmpfile"
-xargs -0 -n1 photo-exif-rename <"$tmpfile"
+    \( -iname '*.jpe' -or -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.mov' -or -iname '*.mp4' -or -name '*.heic' -or -name '*.heif' \) |
+    grep -E -i '\.(?:hei[cf]|jpeg|jp[eg]|mov|mp4|png)$' |
+    grep -E -v '/[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}(?: [0-9]+)?\.[A-Za-z0-9-]+$' >"$tmpfile" || true
+# shellcheck disable=SC2016
+xargs -n1 sh -c 'photo-exif-rename "$1" || true' - <"$tmpfile"
 rm -f "$tmpfile"
 
-# Watch for changes and rename newly added files
-watchmedo shell-command "$watchdir" \
-    --wait \
-    --quiet \
-    --ignore-directories \
-    --patterns '*.jpg;*.jpeg;*.png;*.mov;*.mp4;*.heic;*.heif' \
-    --command 'if [ "$watch_event_type" = created ] && [ "$watch_object" = file ]; then photo-exif-rename "$watch_src_path"; fi'
-# NOTE: We could also listen for "move" events, but it would be really easy to fall into infinite loop
+# Watch for new files
+# shellcheck disable=SC2016
+fswatch "$watchdir" --event=Created --event=MovedTo --event=Renamed -E --exclude '(^|/)\..+$' --exclude '(^|/)[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}( [0-9]+)?\.[A-Za-z0-9-]+$' --print0 |
+    xargs -0 -n1 sh -c 'if [ -f "$1" ]; then photo-exif-rename "$1" || true; fi' -
