@@ -57,7 +57,6 @@
     # background deamons
     ~/.matejkosiarcik-dotfiles/deamons/main.sh: deamons/main.sh
     ~/.matejkosiarcik-dotfiles/deamons/photo-import/main.sh: deamons/photo-import/main.sh
-    ~/.matejkosiarcik-dotfiles/deamons/screenrecording-move/main.sh: deamons/screenrecording-move/main.sh
     ~/.matejkosiarcik-dotfiles/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
     ~/.matejkosiarcik-dotfiles/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
 
