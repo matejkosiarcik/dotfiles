@@ -13,7 +13,7 @@ jobs:
     name: AZLint
     runs-on: ubuntu-latest
     container:
-      image: matejkosiarcik/azlint:0.6.11
+      image: matejkosiarcik/azlint:0.6.12
       options: --user root
     steps:
       - name: Checkout
