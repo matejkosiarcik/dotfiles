@@ -32,7 +32,7 @@ workflows:
 jobs:
   azlint:
     docker:
-      - image: matejkosiarcik/azlint:0.6.11
+      - image: matejkosiarcik/azlint:0.6.12
     steps:
       - checkout
       - run: |
