@@ -36,8 +36,6 @@ alias ytda='yt-dlp --ignore-error --format "bestaudio[ext=m4a]" --'
 # azlint
 alias azlint_lint='docker run --interactive --volume "$PWD:/project:ro" matejkosiarcik/azlint:dev lint'
 alias azlint_fmt='docker run --interactive --volume "$PWD:/project" matejkosiarcik/azlint:dev fmt'
-alias azc='printf "Formatting...\n" && azlint_fmt --only-changed && printf "Linting...\n" && azlint_lint --only-changed'
-alias az='printf "Formatting...\n" && azlint_fmt && printf "Linting...\n" && azlint_lint'
 
 # Other
 alias whatsmyip='curl --silent ipinfo.io | jq -r .ip'
