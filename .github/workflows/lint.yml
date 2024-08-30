@@ -13,7 +13,7 @@ jobs:
     name: AZLint
     runs-on: ubuntu-latest
     container:
-      image: matejkosiarcik/azlint:0.6.12
+      image: matejkosiarcik/azlint:0.6.13
       options: --user root
     steps:
       - name: Checkout
@@ -56,7 +56,7 @@ jobs:
           fetch-depth: 0 # Full git history is needed to get a proper list of changed files
 
       - name: Run SuperLinter
-        uses: super-linter/super-linter@v7.0.0
+        uses: super-linter/super-linter@v7.1.0
         env:
           # global settings
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,6 +84,7 @@ jobs:
           VALIDATE_HTML_PRETTIER: false
           VALIDATE_JSON_PRETTIER: false
           VALIDATE_MARKDOWN_PRETTIER: false
+          VALIDATE_PYTHON_PYINK: false
           VALIDATE_VUE_PRETTIER: false
 
           # config files
