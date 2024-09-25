@@ -17,7 +17,7 @@ jobs:
       options: --user root
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
         with:
           fetch-depth: 0 # Full git history is needed to get a proper list of changed files
 
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
         with:
           fetch-depth: 0 # Full git history is needed to get a proper list of changed files
 
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
         with:
           fetch-depth: 0 # Full git history is needed to get a proper list of changed files
 
