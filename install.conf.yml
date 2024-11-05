@@ -17,10 +17,11 @@
 
 - link:
     # general config
-    ~/.vimrc: config/.vimrc
-    ~/.tigrc: config/.tigrc
     ~/.emacs: config/.emacs
     ~/.lftp/rc: config/.lftp/rc
+    ~/.mertrc: config/.mertrc
+    ~/.tigrc: config/.tigrc
+    ~/.vimrc: config/.vimrc
 
     # shell config
     ~/.matejkosiarcik-dotfiles/config/shell/config.sh: config/shell/config.sh

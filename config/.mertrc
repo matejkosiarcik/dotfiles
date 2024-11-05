@@ -1,0 +1,10 @@
+homelab:
+  root: "~/"
+  launch_strategy: in_place
+  layout:
+    -
+      - ssh 10.1.4.2
+      - ssh 10.1.4.4
+    -
+      - ssh 10.1.4.3
+      - ssh 10.1.4.8
