@@ -14,7 +14,6 @@ alias pbfix='pbpaste | pbcopy'
 alias o='open'
 alias exa='exa --long --tree --git-ignore --time modified --time-style long-iso --extended  --all --ignore-glob ".git"'
 # TODO: install exa as project dependency
-alias diff='git diff --no-index'
 
 # Git aliases
 # TODO: install diff2html as project dependency
@@ -133,4 +132,12 @@ line() {
     (if [ "$#" -lt 2 ]; then cat; else cat "$2"; fi) |
         head -n "$1" |
         tail -n 1
+}
+
+gdiff() {
+    if [ "$#" -lt 2 ]; then
+        printf 'Not enough arguments' >&2
+        return 1
+    fi
+    git diff --no-index "$1" "$2" | diff2html -s side -i stdin
 }
