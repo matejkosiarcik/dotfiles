@@ -38,6 +38,7 @@
     ~/.matejkosiarcik-dotfiles/bin/photo-exif-rename: scripts/photo-exif-rename.sh
     ~/.matejkosiarcik-dotfiles/bin/project-update: scripts/project-update/main.sh
     ~/.matejkosiarcik-dotfiles/bin/system-update: scripts/system-update.sh
+    ~/.matejkosiarcik-dotfiles/bin/mert-homelab: scripts/mert-homelab.sh
 
     # old scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
