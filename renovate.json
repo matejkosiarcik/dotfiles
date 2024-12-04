@@ -15,6 +15,6 @@
       "automergeStrategy": "squash"
     }
   ],
-  "prConcurrentLimit": 10,
-  "prHourlyLimit": 10
+  "prConcurrentLimit": 20,
+  "prHourlyLimit": 20
 }
