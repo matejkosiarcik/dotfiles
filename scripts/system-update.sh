@@ -9,7 +9,7 @@ cd "$HOME" # to be sure we don't update project instead of system
 
 update_brew() {
     brew update --quiet
-    brew upgrade --quiet
+    brew upgrade --quiet --overwrite
     brew cleanup --quiet
 }
 
