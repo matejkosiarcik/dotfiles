@@ -114,14 +114,12 @@ glob 'Gemfile' | while read -r file; do
     if [ "$target" = 'major' ] || [ "$target" = 'minor' ] || [ "$target" = 'patch' ]; then
         (
             cd "$(dirname "$file")" &&
-            echo "here 2" &&
             bundle config set frozen false &&
             BUNDLE_DISABLE_SHARED_GEMS=true \
             BUNDLE_PATH__SYSTEM=false \
             BUNDLE_PATH="$tmpdir" \
             BUNDLE_GEMFILE="$PWD/Gemfile" \
-                bundle update --all "--$target" --quiet &&
-            echo "here 3"
+                bundle update --all "--$target" --quiet
         )
     fi
 
