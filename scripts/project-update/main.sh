@@ -102,6 +102,40 @@ glob '*requirements*.txt' | while read -r file; do
     fi
 done
 
+# Ruby
+printf '## Ruby > Gem ##\n'
+glob 'Gemfile' | while read -r file; do
+    if [ ! -e "$file" ]; then
+        continue
+    fi
+
+    tmpdir="$(mktemp -d)"
+
+    if [ "$target" = 'major' ] || [ "$target" = 'minor' ] || [ "$target" = 'patch' ]; then
+        (
+            cd "$(dirname "$file")" &&
+                bundle config set frozen false &&
+                BUNDLE_DISABLE_SHARED_GEMS=true \
+                    BUNDLE_PATH__SYSTEM=false \
+                    BUNDLE_PATH="$tmpdir" \
+                    BUNDLE_GEMFILE="$PWD/Gemfile" \
+                    bundle update --all "--$target" --quiet
+        )
+    fi
+
+    (
+        cd "$(dirname "$file")" &&
+            bundle config set frozen false &&
+            BUNDLE_DISABLE_SHARED_GEMS=true \
+                BUNDLE_PATH__SYSTEM=false \
+                BUNDLE_PATH="$tmpdir" \
+                BUNDLE_GEMFILE="$PWD/Gemfile" \
+                bundle lock --normalize-platforms
+    )
+
+    rm -rf "$tmpdir"
+done
+
 # Rust
 glob 'Cargo.toml' | while read -r file; do
     if [ ! -e "$file" ]; then
