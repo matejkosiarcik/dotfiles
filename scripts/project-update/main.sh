@@ -114,23 +114,23 @@ glob 'Gemfile' | while read -r file; do
     if [ "$target" = 'major' ] || [ "$target" = 'minor' ] || [ "$target" = 'patch' ]; then
         (
             cd "$(dirname "$file")" &&
-            bundle config set frozen false &&
-            BUNDLE_DISABLE_SHARED_GEMS=true \
-            BUNDLE_PATH__SYSTEM=false \
-            BUNDLE_PATH="$tmpdir" \
-            BUNDLE_GEMFILE="$PWD/Gemfile" \
-                bundle update --all "--$target" --quiet
+                bundle config set frozen false &&
+                BUNDLE_DISABLE_SHARED_GEMS=true \
+                    BUNDLE_PATH__SYSTEM=false \
+                    BUNDLE_PATH="$tmpdir" \
+                    BUNDLE_GEMFILE="$PWD/Gemfile" \
+                    bundle update --all "--$target" --quiet
         )
     fi
 
     (
         cd "$(dirname "$file")" &&
-        bundle config set frozen false &&
-        BUNDLE_DISABLE_SHARED_GEMS=true \
-        BUNDLE_PATH__SYSTEM=false \
-        BUNDLE_PATH="$tmpdir" \
-        BUNDLE_GEMFILE="$PWD/Gemfile" \
-            bundle lock --normalize-platforms
+            bundle config set frozen false &&
+            BUNDLE_DISABLE_SHARED_GEMS=true \
+                BUNDLE_PATH__SYSTEM=false \
+                BUNDLE_PATH="$tmpdir" \
+                BUNDLE_GEMFILE="$PWD/Gemfile" \
+                bundle lock --normalize-platforms
     )
 
     rm -rf "$tmpdir"
