@@ -130,8 +130,8 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'ruby' ]; then
         if [ "$target" = 'major' ] || [ "$target" = 'minor' ] || [ "$target" = 'patch' ]; then
             (
                 cd "$(dirname "$file")" &&
-                    bundle config set frozen false &&
                     BUNDLE_DISABLE_SHARED_GEMS=true \
+                        BUNDLE_FROZEN=true \
                         BUNDLE_PATH__SYSTEM=false \
                         BUNDLE_PATH="$tmpdir" \
                         BUNDLE_GEMFILE="$PWD/Gemfile" \
