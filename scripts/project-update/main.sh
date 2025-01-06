@@ -135,7 +135,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'ruby' ]; then
                         BUNDLE_PATH__SYSTEM=false \
                         BUNDLE_PATH="$tmpdir" \
                         BUNDLE_GEMFILE="$PWD/Gemfile" \
-                        bundle install --quiet && \
+                        bundle install --quiet &&
                     BUNDLE_DISABLE_SHARED_GEMS=true \
                         BUNDLE_FROZEN=false \
                         BUNDLE_PATH__SYSTEM=false \
