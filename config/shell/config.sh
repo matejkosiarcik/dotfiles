@@ -4,6 +4,9 @@
 export PATH="$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
 export PATH="$HOME/.bin/sshpass/usr/local/bin:$PATH"
 
+# Hide NodeJS warnings
+export NODE_NO_WARNINGS=1
+
 # gpg
 GPG_TTY="$(tty)"
 export GPG_TTY
