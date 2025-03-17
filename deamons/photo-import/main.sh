@@ -16,7 +16,7 @@ find "$watchdir" \
     -maxdepth 1 \
     -type f \
     -print0 \
-    \( -iname '*.jpe' -or -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.mov' -or -iname '*.mp4' -or -name '*.heic' -or -name '*.heif' \)|
+    \( -iname '*.jpe' -or -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.mov' -or -iname '*.mp4' -or -name '*.heic' -or -name '*.heif' \) |
     grep -E -i -z '\.(?:hei[cf]|jpeg|jp[eg]|mov|mp4|png)$' |
     grep -E -v -z '/[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}(?: [0-9]+)?\.[A-Za-z0-9-]+$' >"$tmpfile" || true
 # shellcheck disable=SC2016
