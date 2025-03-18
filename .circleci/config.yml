@@ -22,12 +22,6 @@ workflows:
               image:
                 - alpine:latest
                 - alpine:edge
-      - install-4:
-          matrix:
-            parameters:
-              image:
-                - fedora:latest
-                - fedora:rawhide
 
 jobs:
   azlint:
