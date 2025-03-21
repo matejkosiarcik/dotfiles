@@ -1,7 +1,7 @@
 #!/bin/sh
 set -euf
 
-PATH="/opt/homebrew/bin:$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
+PATH="/opt/homebrew/bin:$HOME/.config/matejkosiarcik/bin:$PATH"
 export PATH
 
 # Prepare target directory

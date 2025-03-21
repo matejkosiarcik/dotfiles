@@ -1,7 +1,7 @@
 #!/bin/sh
 set -euf
 
-PATH="$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
+PATH="$HOME/.config/matejkosiarcik/bin:$PATH"
 
 command -v convert2pdf
 command -v dir2sha

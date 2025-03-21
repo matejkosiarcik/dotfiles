@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Customize PATH
-export PATH="$HOME/.matejkosiarcik-dotfiles/bin:$PATH"
+export PATH="$HOME/.config/matejkosiarcik/bin:$PATH"
 export PATH="$HOME/.bin/sshpass/usr/local/bin:$PATH"
 
 # Hide NodeJS warnings
