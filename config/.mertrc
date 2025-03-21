@@ -6,5 +6,6 @@ homelab:
       - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.4
       - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.8
     -
+      - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" homelab@10.1.4.1
       - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.2
       - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.3
