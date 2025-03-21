@@ -5,6 +5,14 @@ homelab:
     -
       - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.4
       - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.8
+
+homelab-all:
+  root: "~/"
+  launch_strategy: in_place
+  layout:
+    -
+      - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.4
+      - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.8
     -
       - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" homelab@10.1.4.1
       - sh "$HOME/.matejkosiarcik-dotfiles/bin/mert-homelab" 10.1.4.2
