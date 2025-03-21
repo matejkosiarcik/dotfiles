@@ -24,21 +24,21 @@
     ~/.vimrc: config/.vimrc
 
     # shell config
-    ~/.matejkosiarcik-dotfiles/config/shell/config.sh: config/shell/config.sh
-    ~/.matejkosiarcik-dotfiles/config/shell/config.bash: config/shell/config.bash
-    ~/.matejkosiarcik-dotfiles/config/shell/config.zsh: config/shell/config.zsh
+    ~/.config/matejkosiarcik/config/config.sh: config/shell/config.sh
+    ~/.config/matejkosiarcik/config/config.bash: config/shell/config.bash
+    ~/.config/matejkosiarcik/config/config.zsh: config/shell/config.zsh
 
     # git config
-    ~/.matejkosiarcik-dotfiles/config/git/general.gitconfig: config/git/general.gitconfig
+    ~/.config/matejkosiarcik/config/main.gitconfig: config/git/main.gitconfig
 
     # scripts
-    ~/.matejkosiarcik-dotfiles/bin/dir2sha: scripts/dir2sha.py
-    ~/.matejkosiarcik-dotfiles/bin/convert2pdf: scripts/convert2pdf/dist/convert.js
-    ~/.matejkosiarcik-dotfiles/bin/git-update: scripts/git-update.sh
-    ~/.matejkosiarcik-dotfiles/bin/photo-exif-rename: scripts/photo-exif-rename.sh
-    ~/.matejkosiarcik-dotfiles/bin/project-update: scripts/project-update/main.sh
-    ~/.matejkosiarcik-dotfiles/bin/system-update: scripts/system-update.sh
-    ~/.matejkosiarcik-dotfiles/bin/mert-homelab: scripts/mert-homelab.sh
+    ~/.config/matejkosiarcik/bin/dir2sha: scripts/dir2sha.py
+    ~/.config/matejkosiarcik/bin/convert2pdf: scripts/convert2pdf/dist/convert.js
+    ~/.config/matejkosiarcik/bin/git-update: scripts/git-update.sh
+    ~/.config/matejkosiarcik/bin/photo-exif-rename: scripts/photo-exif-rename.sh
+    ~/.config/matejkosiarcik/bin/project-update: scripts/project-update/main.sh
+    ~/.config/matejkosiarcik/bin/system-update: scripts/system-update.sh
+    ~/.config/matejkosiarcik/bin/mert-homelab: scripts/mert-homelab.sh
 
     # old scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
@@ -57,10 +57,10 @@
     # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
 
     # background deamons
-    ~/.matejkosiarcik-dotfiles/deamons/main.sh: deamons/main.sh
-    ~/.matejkosiarcik-dotfiles/deamons/photo-import/main.sh: deamons/photo-import/main.sh
-    ~/.matejkosiarcik-dotfiles/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
-    ~/.matejkosiarcik-dotfiles/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
+    ~/.config/matejkosiarcik/deamons/main.sh: deamons/main.sh
+    ~/.config/matejkosiarcik/deamons/photo-import/main.sh: deamons/photo-import/main.sh
+    ~/.config/matejkosiarcik/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
+    ~/.config/matejkosiarcik/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
 
 - shell:
     - description: Setup
