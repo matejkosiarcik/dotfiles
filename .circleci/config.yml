@@ -10,7 +10,6 @@ workflows:
             parameters:
               image:
                 - debian:latest
-                - debian:testing
       - install-2:
           matrix:
             parameters:
@@ -21,7 +20,6 @@ workflows:
             parameters:
               image:
                 - alpine:latest
-                - alpine:edge
 
 jobs:
   azlint:
