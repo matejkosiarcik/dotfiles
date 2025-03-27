@@ -168,8 +168,8 @@ defaults write 'com.apple.textedit' RichText -int 0
 # Reload changes
 #
 
-killall Finder
-killall SystemUIServer
-killall Dock
+killall Finder || true
+killall SystemUIServer || true
+killall Dock || true
 
 printf 'Some apps (Mail, TextEdit, Xcode) may need a restart to see changes.\n'
