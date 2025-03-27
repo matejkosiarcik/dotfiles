@@ -87,7 +87,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'js' ]; then
         cp "$directory/package.json" "$tmpdir/package.json"
         docker run --rm \
             --volume "$tmpdir:/src/$dirname" \
-            --volume "$HOME/.npmrc:/src/$dirname.npmrc:ro" \
+            --volume "$HOME/.npmrc:/src/$dirname/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY=0 \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
             --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
