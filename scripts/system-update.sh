@@ -69,6 +69,9 @@ python3 -m pip install --upgrade pip setuptools wheel $pip_extra_args
 # shellcheck disable=SC2248
 python3 -m pip list --outdated | tail -n +3 | cut -d ' ' -f 1 | xargs -n1 python3 -m pip install --upgrade $pip_extra_args
 
+# Pipx
+pipx upgrade-all
+
 # Ruby
 printf '%s\n' '--- Ruby ---'
 gem update --system --quiet
