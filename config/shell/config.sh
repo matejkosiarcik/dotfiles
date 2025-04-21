@@ -42,6 +42,7 @@ alias azlint_fmt='docker run --interactive --volume "$PWD:/project" matejkosiarc
 # Other
 alias whatsmyip='curl --silent ipinfo.io | jq -r .ip'
 alias csv2json='mlr --icsv --ojson --jlistwrap cat'
+alias drawio='/Applications/draw.io.app/Contents/MacOS/draw.io'
 
 # Open new terminal at current directory
 tdup() {
