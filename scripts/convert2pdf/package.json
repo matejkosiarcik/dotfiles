@@ -20,7 +20,7 @@
     "@types/node": "^22.15.3",
     "@types/pngjs": "^6.0.5",
     "@types/yargs": "^17.0.33",
-    "npm-run-all2": "^7.0.2",
+    "npm-run-all2": "^8.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
