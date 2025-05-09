@@ -16,12 +16,12 @@ fi
 # Rename existing files
 tmpfile="$(mktemp)"
 find "$watchdir" -maxdepth 1 -type f -iname '*.png' -print0 |
-    grep -E -i -z '/Screenshot [0-9]{4}-[0-9]{2}-[0-9]{2} at [0-9]{2}\.[0-9]{2}\.[0-9]{2}(?: [0-9]+)?\.png$' >"$tmpfile" || true
+    grep -E -i -z '/Screenshot [0-9]{4}-[0-9]{2}-[0-9]{2} at [0-9]{2}\.[0-9]{2}\.[0-9]{2}(?: [\(]?[0-9]+[\)]?)?\.png$' >"$tmpfile" || true
 # shellcheck disable=SC2016
 xargs -0 -n1 sh -c 'sh "$source_dir/rename.sh" "$1" || true' - <"$tmpfile"
 rm -f "$tmpfile"
 
 # Watch for new files
 # shellcheck disable=SC2016
-fswatch "$watchdir" --event=Created --event=MovedTo --event=Renamed -E --exclude '(^|/)\..+$' --exclude '(^|/)[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}( [0-9]+)?\.png$' --print0 |
+fswatch "$watchdir" --event=Created --event=MovedTo --event=Renamed -E --exclude '(^|/)\..+$' --exclude '(^|/)[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}(?: [0-9]+)?\.png$' --print0 |
     xargs -0 -n1 sh -c 'if [ -f "$2" ]; then sh "$1/rename.sh" "$2" || true; fi' - "$source_dir"
