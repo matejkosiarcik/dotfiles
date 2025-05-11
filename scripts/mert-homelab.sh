@@ -8,4 +8,4 @@ fi
 
 host="$1"
 
-ssh -t "$host" 'cd "$HOME/git/homelab/servers/.current"; exec "$SHELL"'
+ssh -t "$host" 'cd "$HOME/git/homelab/servers/.current"; exec "$SHELL";'
