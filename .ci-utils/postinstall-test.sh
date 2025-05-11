@@ -5,6 +5,5 @@ PATH="$HOME/.config/matejkosiarcik/bin:$PATH"
 
 command -v convert2pdf
 command -v dir2sha
-command -v photo-exif-rename
 command -v project-update
 command -v system-update

@@ -35,7 +35,6 @@
     ~/.config/matejkosiarcik/bin/dir2sha: scripts/dir2sha.py
     ~/.config/matejkosiarcik/bin/convert2pdf: scripts/convert2pdf/dist/convert.js
     ~/.config/matejkosiarcik/bin/git-update: scripts/git-update.sh
-    ~/.config/matejkosiarcik/bin/photo-exif-rename: scripts/photo-exif-rename.sh
     ~/.config/matejkosiarcik/bin/project-update: scripts/project-update/main.sh
     ~/.config/matejkosiarcik/bin/system-update: scripts/system-update.sh
     ~/.config/matejkosiarcik/bin/mert-homelab: scripts/mert-homelab.sh

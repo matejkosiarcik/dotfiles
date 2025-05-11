@@ -1,7 +1,10 @@
 #!/bin/sh
 set -euf
 
-PATH="/opt/homebrew/bin:$HOME/.config/matejkosiarcik/bin:$PATH"
+source_dir="$(dirname "$(readlink "$0")")"
+export source_dir
+
+PATH="/opt/homebrew/bin:$PATH"
 export PATH
 
 # Prepare target directory
@@ -20,10 +23,10 @@ find "$watchdir" \
     grep -E -i -z '\.(?:hei[cf]|jpeg|jp[eg]|mov|mp4|png)$' |
     grep -E -v -z '/[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}(?: [0-9]+)?\.[A-Za-z0-9-]+$' >"$tmpfile" || true
 # shellcheck disable=SC2016
-xargs -0 -n1 sh -c 'photo-exif-rename "$1" || true' - <"$tmpfile"
+xargs -0 -n1 sh -c 'sh "$source_dir/rename.sh" "$1" || true' - <"$tmpfile"
 rm -f "$tmpfile"
 
 # Watch for new files
 # shellcheck disable=SC2016
 fswatch "$watchdir" --event=Created --event=MovedTo --event=Renamed -E --exclude '(^|/)\..+$' --exclude '(^|/)[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}( [0-9]+)?\.[A-Za-z0-9-]+$' --print0 |
-    xargs -0 -n1 sh -c 'if [ -f "$1" ]; then photo-exif-rename "$1" || true; fi' -
+    xargs -0 -n1 sh -c 'if [ -f "$2" ]; then sh "$1/rename.sh" "$2" || true; fi' - "$source_dir"
