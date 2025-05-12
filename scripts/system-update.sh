@@ -73,9 +73,9 @@ printf '%s\n' '--- Python ---'
 pipx upgrade-all
 
 # Ruby
-printf '%s\n' '--- Ruby ---'
-gem update --system --quiet
-gem update --quiet
+# printf '%s\n' '--- Ruby ---'
+# gem update --system --quiet
+# gem update --quiet
 
 # Rust
 printf '%s\n' '--- Rust ---'
