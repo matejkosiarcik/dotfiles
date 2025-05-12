@@ -10,12 +10,11 @@ workflows:
             parameters:
               image:
                 - debian:latest
-      - install-2:
-          matrix:
-            parameters:
-              image:
-                - ubuntu:lts
-                - ubuntu:latest
+      # - install-2:
+      #     matrix:
+      #       parameters:
+      #         image:
+      #           - ubuntu:latest
       - install-3:
           matrix:
             parameters:
