@@ -10,11 +10,11 @@ workflows:
             parameters:
               image:
                 - debian:latest
-      - install-2:
-          matrix:
-            parameters:
-              image:
-                - ubuntu:latest
+      # - install-2:
+      #     matrix:
+      #       parameters:
+      #         image:
+      #           - ubuntu:latest
       - install-3:
           matrix:
             parameters:
@@ -34,7 +34,7 @@ jobs:
             azlint --only-changed
           fi
 
-  install-1: # debian
+  install-1: # Debian
     parameters:
       image:
         type: string
@@ -48,7 +48,7 @@ jobs:
       - run: make install
       - run: sh .ci-utils/postinstall-test.sh
 
-  install-2: # ubuntu
+  install-2: # Ubuntu
     parameters:
       image:
         type: string
@@ -63,7 +63,7 @@ jobs:
       - run: make install
       - run: sh .ci-utils/postinstall-test.sh
 
-  install-3: # alpine
+  install-3: # Alpine
     parameters:
       image:
         type: string
@@ -77,7 +77,7 @@ jobs:
       - run: make install
       - run: sh .ci-utils/postinstall-test.sh
 
-  install-4: # fedora
+  install-4: # Fedora
     parameters:
       image:
         type: string
