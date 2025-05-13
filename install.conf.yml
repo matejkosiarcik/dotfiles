@@ -55,11 +55,11 @@
     # ~/.bin/old/gitup: scripts/git/backup/gitup.sh
     # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
 
-    # background deamons
-    ~/.config/matejkosiarcik/deamons/main.sh: deamons/main.sh
-    ~/.config/matejkosiarcik/deamons/photo-import/main.sh: deamons/photo-import/main.sh
-    ~/.config/matejkosiarcik/deamons/screenrecording-rename/main.sh: deamons/screenrecording-rename/main.sh
-    ~/.config/matejkosiarcik/deamons/screenshots-rename/main.sh: deamons/screenshots-rename/main.sh
+    # background daemons
+    ~/.config/matejkosiarcik/daemons/main.sh: daemons/main.sh
+    ~/.config/matejkosiarcik/daemons/photo-import/main.sh: daemons/photo-import/main.sh
+    ~/.config/matejkosiarcik/daemons/screenrecording-rename/main.sh: daemons/screenrecording-rename/main.sh
+    ~/.config/matejkosiarcik/daemons/screenshots-rename/main.sh: daemons/screenshots-rename/main.sh
 
 - shell:
     - description: Setup
