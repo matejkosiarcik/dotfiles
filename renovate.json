@@ -5,6 +5,7 @@
     "config:recommended"
   ],
   "lockFileMaintenance": {
+    "automerge": true,
     "enabled": true
   },
   "packageRules": [
