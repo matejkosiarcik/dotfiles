@@ -9,7 +9,7 @@
   "dependencies": {
     "alphanumeric-sort": "^0.0.1",
     "execa": "^9.6.0",
-    "glob": "^11.0.2",
+    "glob": "^11.0.3",
     "jpeg-js": "^0.4.4",
     "p-all": "^5.0.0",
     "pngjs": "^7.0.0",
