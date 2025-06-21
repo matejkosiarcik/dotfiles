@@ -5,6 +5,7 @@ homelab:
     -
       - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" matej@10.1.4.4
       - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" matej@10.1.4.8
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.11
 
 homelab-all:
   root: "~/"
@@ -13,6 +14,7 @@ homelab-all:
     -
       - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" matej@10.1.4.4
       - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" matej@10.1.4.8
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.11
     -
       - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.1
       - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" matej@10.1.4.2
