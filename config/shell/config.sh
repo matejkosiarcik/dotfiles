@@ -8,7 +8,7 @@ export PATH="$HOME/.bin/sshpass/usr/local/bin:$PATH"
 NODE_NO_WARNINGS='1'
 export NODE_NO_WARNINGS
 
-# Docker compose ba∫ake
+# Docker compose bake
 COMPOSE_BAKE='true'
 export COMPOSE_BAKE
 
