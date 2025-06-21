@@ -5,7 +5,12 @@ export PATH="$HOME/.config/matejkosiarcik/bin:$PATH"
 export PATH="$HOME/.bin/sshpass/usr/local/bin:$PATH"
 
 # Hide NodeJS warnings
-export NODE_NO_WARNINGS=1
+NODE_NO_WARNINGS='1'
+export NODE_NO_WARNINGS
+
+# Docker compose bake
+COMPOSE_BAKE='true'
+export COMPOSE_BAKE
 
 # gpg
 GPG_TTY="$(tty)"
