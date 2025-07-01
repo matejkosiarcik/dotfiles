@@ -12,6 +12,10 @@ export NODE_NO_WARNINGS
 COMPOSE_BAKE='true'
 export COMPOSE_BAKE
 
+# Default HOMELAB_ENV value
+HOMELAB_ENV='dev'
+export HOMELAB_ENV
+
 # gpg
 GPG_TTY="$(tty)"
 export GPG_TTY

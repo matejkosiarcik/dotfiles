@@ -15,3 +15,5 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 alias ........='cd ../../../../../..'
+
+zsh-defer eval "$(task --completion zsh)"
