@@ -27,6 +27,8 @@ rules:
   comments:
     min-spaces-from-content: 1
 
+  comments-indentation: disable
+
   # few CI services (github actions, travis) use "on" as a key meaning "when"
   truthy:
     check-keys: false

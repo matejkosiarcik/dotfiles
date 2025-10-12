@@ -7,7 +7,12 @@ DISABLE:
   - TYPESCRIPT
 
 DISABLE_LINTERS:
+  - ANSIBLE_ANSIBLE_LINT # Unable to disable "syntax-check[unknown-module]" errors, even if collections are available
+  - GO_GOLANGCI_LINT
+  - GO_REVIVE
+  - JSON_NPM_PACKAGE_JSON_LINT
   - PYTHON_BANDIT
+  - PYTHON_MYPY
   - REPOSITORY_DEVSKIM
   - REPOSITORY_GRYPE
   - REPOSITORY_KICS
@@ -15,7 +20,6 @@ DISABLE_LINTERS:
   - REPOSITORY_TRIVY
   - RUST_CLIPPY
   - SPELL_CSPELL
-  - JSON_NPM_PACKAGE_JSON_LINT
 
 # Override default config files
 DOCKERFILE_HADOLINT_CONFIG_FILE: .hadolint.yaml

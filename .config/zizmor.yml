@@ -1,0 +1,9 @@
+rules:
+  unpinned-uses:
+    ignore:
+      - dependabot-auto-merge.yml
+      - docker-build.yml
+      - lint.yml
+  template-injection:
+    ignore:
+      - docker-build.yml
