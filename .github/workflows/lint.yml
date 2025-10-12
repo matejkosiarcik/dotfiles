@@ -79,7 +79,6 @@ jobs:
           VALIDATE_DOCKERFILE_HADOLINT: false
           VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_JAVASCRIPT_PRETTIER: false
-          VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSCPD: false
           VALIDATE_JSON: false # Because eslint considers .json as .js (so rules like single-quote don't make sense)
           VALIDATE_RUST_2015: false
@@ -87,7 +86,6 @@ jobs:
           VALIDATE_TRIVY: false
           VALIDATE_TYPESCRIPT_ES: false
           VALIDATE_TYPESCRIPT_PRETTIER: false
-          VALIDATE_TYPESCRIPT_STANDARD: false
 
           # TODO: Try to reenable these below
           VALIDATE_CSS_PRETTIER: false
@@ -95,7 +93,6 @@ jobs:
           VALIDATE_JSON_PRETTIER: false
           VALIDATE_MARKDOWN_PRETTIER: false
           VALIDATE_PYTHON_MYPY: false
-          VALIDATE_PYTHON_PYINK: false
           VALIDATE_VUE_PRETTIER: false
 
           # config files
