@@ -3,18 +3,17 @@ homelab:
   launch_strategy: in_place
   layout:
     -
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" matej@10.1.4.4
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.8
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.11
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.1
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.3
 
 homelab-all:
   root: "~/"
   launch_strategy: in_place
   layout:
     -
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.8
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.11
-    -
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.4
       - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.1
       - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.3
+    -
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.5
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.6
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@10.1.4.7
