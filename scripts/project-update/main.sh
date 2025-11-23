@@ -68,6 +68,9 @@ glob() {
 # JavaScript+NodeJS
 if [ "$runtime" = 'all' ] || [ "$runtime" = 'js' ]; then
     printf '## JavaScript > NodeJS ##\n'
+    if [ ! -e "$HOME/.npmrc" ] || [ "$(wc -c <"$HOME/.npmrc")" -eq '0' ]; then
+        printf '# Placeholder\n' >>"$HOME/.npmrc"
+    fi
     ncu_target="$target"
     if [ "$ncu_target" = 'major' ]; then
         ncu_target='latest'
@@ -87,12 +90,13 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'js' ]; then
         cp "$directory/package.json" "$tmpdir/package.json"
         docker run --rm \
             --volume "$tmpdir:/src/$dirname" \
-            --volume "$HOME/.npmrc:/src/$dirname/.npmrc:ro" \
+            --volume "$HOME/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY=0 \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
             --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
             --env NODE_OPTIONS='--dns-result-order=ipv4first' \
             --entrypoint /bin/sh \
+            --user root \
             node:latest \
             -c "cd \"/src/$dirname\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
         mv "$tmpdir/package-lock.json" "$directory/package-lock.json"
