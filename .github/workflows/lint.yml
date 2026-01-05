@@ -44,7 +44,7 @@ jobs:
           persist-credentials: false
 
       - name: Run MegaLinter
-        uses: oxsecurity/megalinter@v9.2.0
+        uses: oxsecurity/megalinter@v9.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
