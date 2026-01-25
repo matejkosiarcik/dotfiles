@@ -1,14 +1,13 @@
 version: 2
 
 updates:
+  # GitHub Actions
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: daily
       time: "01:00"
       timezone: Europe/Bratislava
-    reviewers:
-      - matejkosiarcik
     assignees:
       - matejkosiarcik
     open-pull-requests-limit: 1
@@ -16,51 +15,5 @@ updates:
       github-actions:
         patterns:
           - "*"
-
-  - package-ecosystem: pip
-    directory: /
-    schedule:
-      interval: daily
-      time: "01:30"
-      timezone: Europe/Bratislava
-    reviewers:
-      - matejkosiarcik
-    assignees:
-      - matejkosiarcik
-    open-pull-requests-limit: 1
-    groups:
-      pip[main]:
-        patterns:
-          - "*"
-
-  - package-ecosystem: npm
-    directory: /scripts/project-update
-    schedule:
-      interval: daily
-      time: "02:00"
-      timezone: Europe/Bratislava
-    reviewers:
-      - matejkosiarcik
-    assignees:
-      - matejkosiarcik
-    open-pull-requests-limit: 1
-    groups:
-      npm[project-update]:
-        patterns:
-          - "*"
-
-  - package-ecosystem: npm
-    directory: /scripts/convert2pdf
-    schedule:
-      interval: daily
-      time: "02:30"
-      timezone: Europe/Bratislava
-    reviewers:
-      - matejkosiarcik
-    assignees:
-      - matejkosiarcik
-    open-pull-requests-limit: 1
-    groups:
-      npm[convert2pdf]:
-        patterns:
-          - "*"
+    cooldown:
+      default-days: 1
