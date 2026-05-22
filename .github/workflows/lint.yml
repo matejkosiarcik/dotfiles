@@ -24,9 +24,9 @@ jobs:
 
       - name: Run AZLint
         run: |
-          ln -s -f "$(which true)" "$(which python)" # TODO: Reenable python and pip checks
-          ln -s -f "$(which true)" "$(which python3)" # TODO: Reenable python and pip checks
-          ln -s -f "$(which true)" '/app/linters/node_modules/.bin/markdown-link-check' # TODO: Reenable markdown-link-check
+          ln -s -f "$(which true)" "$(which python)" # TODO: Re-enable python and pip checks
+          ln -s -f "$(which true)" "$(which python3)" # TODO: Re-enable python and pip checks
+          ln -s -f "$(which true)" '/app/linters/node_modules/.bin/markdown-link-check' # TODO: Re-enable markdown-link-check
           if [ "$GITHUB_REF_NAME" = main ]; then
             azlint
           else
@@ -73,7 +73,7 @@ jobs:
           ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
 
           # Disabled linters below
-          VALIDATE_ANSIBLE: false # TODO: Reenable
+          VALIDATE_ANSIBLE: false # TODO: Re-enable
           VALIDATE_BASH_EXEC: false
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
