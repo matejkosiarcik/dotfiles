@@ -70,6 +70,7 @@ jobs:
           DEFAULT_BRANCH: main
           LINTER_RULES_PATH: .config/
           MULTI_STATUS: false
+          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
 
           # Disabled linters below
           VALIDATE_ANSIBLE: false # TODO: Reenable
