@@ -19,7 +19,9 @@
       ]
     },
     {
-      "matchDatasources": ["npm"],
+      "matchDatasources": [
+        "npm"
+      ],
       "minimumReleaseAge": "2 days"
     }
   ],
