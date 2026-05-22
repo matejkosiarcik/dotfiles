@@ -33,3 +33,6 @@ YAML_YAMLLINT_CONFIG_FILE: .yamllint.yml
 
 # Config
 JSON_V8R_FILTER_REGEX_EXCLUDE: (composer.json\|package\.json\|package\-lock\.json)
+
+ACTION_ZIZMOR_UNSECURED_ENV_VARIABLES:
+  - GITHUB_TOKEN
