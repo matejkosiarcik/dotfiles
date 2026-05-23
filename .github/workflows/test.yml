@@ -35,7 +35,7 @@ jobs:
       #   if: ${{ matrix.os == 'macos-latest' }}
       #   shell: bash
       #   run: |
-      #     brew install platypus # TODO: Reenable platypus after https://github.com/sveinbjornt/Platypus/issues/262
+      #     brew install platypus # TODO: Re-enable platypus after https://github.com/sveinbjornt/Platypus/issues/262
 
       - name: Install project dependencies
         shell: bash
