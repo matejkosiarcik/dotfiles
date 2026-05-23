@@ -91,7 +91,7 @@ jobs:
           VALIDATE_TYPESCRIPT_ES: false
           VALIDATE_TYPESCRIPT_PRETTIER: false
 
-          # TODO: Try to reenable these below
+          # TODO: Try to re-enable these below
           VALIDATE_CSS_PRETTIER: false
           VALIDATE_HTML_PRETTIER: false
           VALIDATE_JSON_PRETTIER: false
