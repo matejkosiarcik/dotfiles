@@ -65,12 +65,14 @@ jobs:
         uses: super-linter/super-linter@v8.3.2
         env:
           # global settings
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           DEFAULT_BRANCH: main
+          ENABLE_GITHUB_ACTIONS_GROUP_TITLE: false
+          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: false
+          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: .config/
           MULTI_STATUS: false
-          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
+          VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
           # Disabled linters below
           VALIDATE_ANSIBLE: false # TODO: Re-enable
