@@ -17,7 +17,7 @@ jobs:
       options: --user root
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0 # Full git history is needed to get a proper list of changed files
           persist-credentials: false
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0 # Full git history is needed to get a proper list of changed files
           persist-credentials: false
@@ -56,13 +56,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0 # Full git history is needed to get a proper list of changed files
           persist-credentials: false
 
       - name: Run SuperLinter
-        uses: super-linter/super-linter@v8.6.0
+        uses: super-linter/super-linter@v8.7.0
         env:
           # global settings
           DEFAULT_BRANCH: main
