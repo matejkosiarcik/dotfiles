@@ -1,11 +1,8 @@
 rules:
   unpinned-uses:
-    ignore:
-      - dependabot-auto-merge.yml
-      - docker-build.yml
-      - docker-deploy.yml
-      - lint.yml
-      - "*.yml"
+    config:
+      policies:
+        "*": ref-pin
   template-injection:
     ignore:
       - docker-build.yml
