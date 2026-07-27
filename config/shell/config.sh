@@ -108,7 +108,7 @@ if [ "$(uname)" != 'Darwin' ]; then
     fi
 fi
 
-# runs specified commnand N times
+# runs specified command N times
 runN() {
     if [ "$#" -lt 2 ]; then
         printf 'Not enough arguments. Run like "runN 2 echo foo".\n' >&2
