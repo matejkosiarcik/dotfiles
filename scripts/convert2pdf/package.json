@@ -13,7 +13,7 @@
     "jpeg-js": "^0.4.4",
     "p-all": "^5.0.1",
     "pngjs": "^7.0.0",
-    "yargs": "^18.0.0"
+    "yargs": "^18.1.0"
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.8",
