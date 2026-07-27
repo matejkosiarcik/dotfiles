@@ -12,6 +12,12 @@ export NODE_NO_WARNINGS
 COMPOSE_BAKE='true'
 export COMPOSE_BAKE
 
+# Enable buildkit
+export DOCKER_BUILDKIT=1
+
+# Better compose builds
+export COMPOSE_DOCKER_CLI_BUILD=1
+
 # Default HOMELAB_ENV value
 HOMELAB_ENV='dev'
 export HOMELAB_ENV
