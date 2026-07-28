@@ -60,7 +60,7 @@ defaults write 'NSGlobalDomain' NSAutomaticSpellingCorrectionEnabled -bool false
 # Highlight hover effect
 defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
-# Show at botton of the screen
+# Show at bottom of the screen
 defaults write com.apple.dock orientation -string bottom
 
 # Set icon size for Dock items
@@ -117,6 +117,12 @@ defaults write 'NSGlobalDomain' NSTableViewDefaultSizeMode -int 3
 
 # Show icons immediately in header
 defaults write 'NSGlobalDomain' NSToolbarTitleViewRolloverDelay -float 0
+
+#
+## Pictures ##
+#
+
+mkdir -p "$HOME/Pictures/Other"
 
 #
 ## Screenshots ##
