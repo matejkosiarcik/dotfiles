@@ -119,6 +119,12 @@ defaults write 'NSGlobalDomain' NSTableViewDefaultSizeMode -int 3
 defaults write 'NSGlobalDomain' NSToolbarTitleViewRolloverDelay -float 0
 
 #
+## Pictures ##
+#
+
+mkdir -p "$HOME/Pictures/Other"
+
+#
 ## Screenshots ##
 #
 screenshots_dir="$HOME/Pictures/Screenshots"
