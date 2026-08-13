@@ -5,12 +5,10 @@ export PATH="$HOME/.config/matejkosiarcik/bin:$PATH"
 export PATH="$HOME/.bin/sshpass/usr/local/bin:$PATH"
 
 # Hide NodeJS warnings
-NODE_NO_WARNINGS='1'
-export NODE_NO_WARNINGS
+export NODE_NO_WARNINGS='1'
 
 # Docker compose bake
-COMPOSE_BAKE='true'
-export COMPOSE_BAKE
+export COMPOSE_BAKE='true'
 
 # Enable buildkit
 export DOCKER_BUILDKIT=1
@@ -19,8 +17,7 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
 # Default HOMELAB_ENV value
-HOMELAB_ENV='dev'
-export HOMELAB_ENV
+export HOMELAB_ENV='dev'
 
 # gpg
 GPG_TTY="$(tty)"
