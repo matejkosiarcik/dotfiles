@@ -21,5 +21,5 @@ while [ "$i" -lt "$count" ]; do
     part_2="$(openssl rand -hex 5)" # alphanumeric length is 2x
     part_3="$(bw generate --lowercase --uppercase --number --length 15)"
     printf '%s%s%s\n' "$part_1" "$part_2" "$part_3"
-    i="$((i+1))"
+    i="$((i + 1))"
 done
