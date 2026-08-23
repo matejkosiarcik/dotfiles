@@ -16,7 +16,8 @@ printf '  4) %s\n' "$server_4_name"
 printf '  5) %s\n' "$server_5_name"
 printf '\n'
 
-read -p 'Enter server: ' choice
+printf 'Enter server: '
+read -r choice
 
 chosen_server=''
 case "$choice" in
