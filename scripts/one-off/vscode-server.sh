@@ -20,25 +20,25 @@ read -p 'Enter server: ' choice
 
 chosen_server=''
 case "$choice" in
-    1)
-        chosen_server="$server_1_name"
-        ;;
-    2)
-        chosen_server="$server_2_name"
-        ;;
-    3)
-        chosen_server="$server_3_name"
-        ;;
-    4)
-        chosen_server="$server_4_name"
-        ;;
-    5)
-        chosen_server="$server_5_name"
-        ;;
-    *)
-        printf 'Invalid input\n' >&2
-        exit 1
-        ;;
+1)
+    chosen_server="$server_1_name"
+    ;;
+2)
+    chosen_server="$server_2_name"
+    ;;
+3)
+    chosen_server="$server_3_name"
+    ;;
+4)
+    chosen_server="$server_4_name"
+    ;;
+5)
+    chosen_server="$server_5_name"
+    ;;
+*)
+    printf 'Invalid input\n' >&2
+    exit 1
+    ;;
 esac
 
 server_address="$(printf 'server-%s.matejhome.com' "$chosen_server" | tr '[:upper:]' '[:lower:]' | sed 's~ ~-~g')"
