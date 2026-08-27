@@ -19,7 +19,7 @@ def get_files(dir_path: str) -> list[str]:
     found_files = []
     for root, _, files in os.walk(dir_path, topdown=False):
         for file in files:
-            filepath = unicodedata.normalize("NFC", path.join(root, file))
+            filepath = path.join(root, file)
             if path.exists(filepath) and path.isfile(filepath):
                 filepath = re.sub(f"{dir_path}/", "./", filepath, count=1)
                 found_files.append(filepath)
@@ -30,7 +30,7 @@ def get_files(dir_path: str) -> list[str]:
 
 def get_file_hash(filepath: str) -> str:
     if not path.exists(filepath):
-        raise FileNotFoundError(f"File {filepath} does not exist")
+        raise FileNotFoundError(f'File "{filepath}" does not exist')
 
     with open(filepath, "rb") as open_file:
         sha = hashlib.sha1()
@@ -51,19 +51,24 @@ def main(argv: list[str]):
     if not path.exists(root_dir):
         raise FileNotFoundError(f"Directory {root_dir} does not exist")
     root_dir = path.abspath(path.realpath(root_dir))
-    print(f"Searching files in: {root_dir}", file=sys.stderr)
+    print(f"Analyzing {root_dir}", file=sys.stderr)
 
-    found_files = get_files(args.directory)
+    found_files = get_files(root_dir)
     files_all_count = len(found_files)
+    files_all_count_str = str(files_all_count)
 
-    print(f"Total files: {files_all_count}", file=sys.stderr)
     for [file_index, file] in enumerate(found_files):
-        file_hash = get_file_hash(path.join(root_dir, re.sub("./", "", file, count=1)))
-        print(f"{file_hash} {file}", flush=True)
+        filepath_full = path.join(root_dir, re.sub("./", "", file, count=1))
+        filepath_partial = unicodedata.normalize("NFC", file)
+        file_hash = get_file_hash(filepath_full)
+        print(f"{file_hash} {filepath_partial}", flush=True)
+
         files_done_count = file_index + 1
         files_done_percent = f"{(files_done_count / files_all_count * 100):.2f}"
-        print(f"\rIn progress: {str(files_done_count).rjust(len(str(files_all_count)), ' ')} {files_done_percent}%", end="", file=sys.stderr)
-    print(f"\nFinished: {root_dir}", file=sys.stderr)
+
+        print(f"\rProgress {str(files_done_count).rjust(len(files_all_count_str), ' ')} / {files_all_count_str} - {files_done_percent.rjust(6, ' ')}%", end="", file=sys.stderr)
+
+    print("\nDone\n", file=sys.stderr)
 
 
 if __name__ == "__main__":
