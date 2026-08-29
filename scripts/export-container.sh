@@ -31,7 +31,7 @@ if [ -z "${output_directory:-}" ]; then
     exit 1
 fi
 
-output_directory="$(realpath -q "${output_directory}" || if printf '%s' "${output_directory}" | grep '^/' >/dev/null 2>&1; then printf '%s' "${output_directory}"; else printf '%s/%s' "${PWD}" "${output_directory}"; fi )"
+output_directory="$(realpath -q "${output_directory}" || if printf '%s' "${output_directory}" | grep '^/' >/dev/null 2>&1; then printf '%s' "${output_directory}"; else printf '%s/%s' "${PWD}" "${output_directory}"; fi; true)"
 
 if [ ! -e "${output_directory}" ]; then
     mkdir -p "${output_directory}"
