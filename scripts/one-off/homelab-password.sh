@@ -9,7 +9,7 @@ while [ "$#" -gt 0 ]; do
         shift 2
         ;;
     *)
-        printf 'Unknown argument %s\n' "$1"
+        printf 'Unknown argument: %s\n' "$1"
         exit 1
         ;;
     esac
