@@ -16,30 +16,31 @@
     - "~"
 
 - link:
-    # general config
+    # General config
     ~/.emacs: config/.emacs
     ~/.lftp/rc: config/.lftp/rc
     ~/.mertrc: config/.mertrc
     ~/.tigrc: config/.tigrc
     ~/.vimrc: config/.vimrc
 
-    # shell config
+    # Shell config
     ~/.config/matejkosiarcik/config/config.sh: config/shell/config.sh
     ~/.config/matejkosiarcik/config/config.bash: config/shell/config.bash
     ~/.config/matejkosiarcik/config/config.zsh: config/shell/config.zsh
 
-    # git config
+    # Git config
     ~/.config/matejkosiarcik/config/main.gitconfig: config/git/main.gitconfig
 
-    # scripts
+    # Scripts
     ~/.config/matejkosiarcik/bin/dir2sha: scripts/dir2sha.py
     ~/.config/matejkosiarcik/bin/convert2pdf: scripts/convert2pdf/dist/convert.js
     ~/.config/matejkosiarcik/bin/git-update: scripts/git-update.sh
     ~/.config/matejkosiarcik/bin/project-update: scripts/project-update/main.sh
     ~/.config/matejkosiarcik/bin/system-update: scripts/system-update.sh
     ~/.config/matejkosiarcik/bin/mert-homelab: scripts/mert-homelab.sh
+    ~/.config/matejkosiarcik/bin/export-container-fs: scripts/export-container-fs.sh
 
-    # old scripts
+    # Old scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
     # ~/.bin/old/check-video: scripts/backup/check-video.sh
     # ~/.bin/old/dir-clean: scripts/backup/dir-clean.sh
@@ -55,7 +56,7 @@
     # ~/.bin/old/gitup: scripts/git/backup/gitup.sh
     # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
 
-    # background daemons
+    # Background daemons
     ~/.config/matejkosiarcik/daemons/main.sh: daemons/main.sh
     ~/.config/matejkosiarcik/daemons/photo-import/main.sh: daemons/photo-import/main.sh
     ~/.config/matejkosiarcik/daemons/screenrecording-rename/main.sh: daemons/screenrecording-rename/main.sh
