@@ -23,7 +23,7 @@ def get_files(dir_path: str) -> list[str]:
                 file_path_full = re.sub(f"{dir_path}/", "./", file_path_full, count=1)
                 found_files.append(file_path_full)
 
-    found_files.sort(key=lambda x: unicodedata.normalize("NFC", str.lower(x)))
+    found_files.sort(key=lambda x: unicodedata.normalize("NFC", x).casefold())
     return found_files
 
 
@@ -32,10 +32,7 @@ def get_file_hash(filepath: str) -> str:
         raise FileNotFoundError(f'File "{filepath}" does not exist')
 
     with open(filepath, "rb") as open_file:
-        sha = hashlib.sha256()
-        while buffer := open_file.read(16 * 1024 * 1024):
-            sha.update(buffer)
-        return sha.hexdigest()
+        return hashlib.file_digest(open_file, lambda: hashlib.blake2b(digest_size=10)).hexdigest()
 
 
 # - Computes sha hash of individual files
