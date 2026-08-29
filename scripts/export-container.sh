@@ -31,7 +31,7 @@ if [ -z "${output_directory:-}" ]; then
     exit 1
 fi
 
-output_directory="$(realpath -q "${output_directory}" || if printf '%s' "${output_directory}" | grep -v '^/' >/dev/null 2>&1; then printf '%s/' "${PWD}"; fi; printf '%s' "${output_directory}")"
+output_directory="$(realpath -q "${output_directory}" || if printf '%s' "${output_directory}" | grep '^/' >/dev/null 2>&1; then printf '%s' "${output_directory}"; else printf '%s/%s' "${PWD}" "${output_directory}"; fi;)"
 
 if [ ! -e "${output_directory}" ]; then
     mkdir -p "${output_directory}"
@@ -55,7 +55,7 @@ docker stats "${container_name}" --no-stream >"${output_directory}/stats.txt"
 
 # Export filesystem
 tmpdir="$(mktemp -d)"
-docker export "${container_name}" -o "${tmpdir}/container.tar"
+docker export "${container_name}" --output "${tmpdir}/container.tar"
 mkdir -p "${output_directory}/fs"
 tar -xf "${tmpdir}/container.tar" -C "${output_directory}/fs"
 rm -rf "${tmpdir}"

@@ -38,7 +38,8 @@
     ~/.config/matejkosiarcik/bin/project-update: scripts/project-update/main.sh
     ~/.config/matejkosiarcik/bin/system-update: scripts/system-update.sh
     ~/.config/matejkosiarcik/bin/mert-homelab: scripts/mert-homelab.sh
-    ~/.config/matejkosiarcik/bin/export-container-fs: scripts/export-container-fs.sh
+    ~/.config/matejkosiarcik/bin/export-container: scripts/export-container.sh
+    ~/.config/matejkosiarcik/bin/export-image: scripts/export-image.sh
 
     # Old scripts
     # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
