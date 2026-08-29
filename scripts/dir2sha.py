@@ -9,9 +9,8 @@ import unicodedata
 from os import path
 
 
-# - Search files in given directory
-# - Normalizes unicode encoding for all files (important when running this on multiple systems to get the same output)
-# - Sorts files alphabetically (case insensitive)
+# - Search files in given directory and
+# - Sorts files alphabetically (case insensitive and unicode encoding normalized)
 def get_files(dir_path: str) -> list[str]:
     if not path.exists(dir_path):
         raise FileNotFoundError(f"Directory {dir_path} does not exist")
@@ -20,11 +19,11 @@ def get_files(dir_path: str) -> list[str]:
     for root, _, files in os.walk(dir_path, topdown=False):
         for file in files:
             filepath = path.join(root, file)
-            if path.exists(filepath) and path.isfile(filepath):
+            if path.exists(filepath) and path.isfile(filepath) and not path.islink(filepath):
                 filepath = re.sub(f"{dir_path}/", "./", filepath, count=1)
                 found_files.append(filepath)
 
-    found_files.sort(key=str.casefold)
+    found_files.sort(key=lambda x: unicodedata.normalize("NFC", str.lower(x)))
     return found_files
 
 
