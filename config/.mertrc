@@ -3,11 +3,11 @@ homelab:
   launch_strategy: in_place
   layout:
     -
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@server-odroid-h4-ultra.matejhome.com
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@server-odroid-h3.matejhome.com
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-connect-to-server" 'homelab@server-odroid-h4-ultra.matejhome.com'
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-connect-to-server" 'homelab@server-odroid-h3.matejhome.com'
     -
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@server-raspberry-pi-4b-4g.matejhome.com
-      - sh "$HOME/.config/matejkosiarcik/bin/mert-homelab" homelab@server-raspberry-pi-4b-2g.matejhome.com
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-connect-to-server" 'homelab@server-raspberry-pi-4b-4g.matejhome.com'
+      - sh "$HOME/.config/matejkosiarcik/bin/mert-connect-to-server" 'homelab@server-raspberry-pi-4b-2g.matejhome.com'
 
 local-homelab:
   root: "~/"
