@@ -37,7 +37,7 @@
     ~/.config/matejkosiarcik/bin/git-update: scripts/git-update.sh
     ~/.config/matejkosiarcik/bin/project-update: scripts/project-update/main.sh
     ~/.config/matejkosiarcik/bin/system-update: scripts/system-update.sh
-    ~/.config/matejkosiarcik/bin/mert-homelab: scripts/mert-homelab.sh
+    ~/.config/matejkosiarcik/bin/mert-connect-to-server: scripts/mert-connect-to-server.sh
     ~/.config/matejkosiarcik/bin/export-container: scripts/export-container.sh
     ~/.config/matejkosiarcik/bin/export-image: scripts/export-image.sh
 
