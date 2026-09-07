@@ -1,5 +1,10 @@
 {
   "$schema": "https://biomejs.dev/schemas/next/schema.json",
+  "files": {
+    "ignore": [
+      "**/package-lock.json"
+    ]
+  },
   "formatter": {
     "enabled": true,
     "includes": [
