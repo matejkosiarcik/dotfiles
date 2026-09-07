@@ -43,6 +43,9 @@ if [ "$(find "${output_directory}" -mindepth 1 -maxdepth 1 | wc -c)" -gt '0' ]; 
     exit 1
 fi
 
+# Pull image and ignore errors (image may already exist locally)
+docker pull "${image_name}" >/dev/null || true
+
 # Export env
 docker image inspect "${image_name}" --format '{{range .Config.Env}}{{println .}}{{end}}' >"${output_directory}/env.txt"
 
