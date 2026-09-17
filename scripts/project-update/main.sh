@@ -82,6 +82,8 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs' ]; then
             continue
         fi
 
+        printf '# Updating NPM package file at %s\n' "$file" >&2
+
         if [ "$target" != 'lock' ]; then
             ncu --cwd "$(dirname "$file")" --target "$ncu_target" --upgrade # package.json
         fi
@@ -114,6 +116,8 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'python' ]; then
             continue
         fi
 
+        printf '# Updating pip requirements file at %s\n' "$file" >&2
+
         if [ "$target" = 'major' ]; then
             pur --force --requirement "$file"
         elif [ "$target" != 'lock' ]; then
@@ -132,6 +136,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'ruby' ]; then
             continue
         fi
 
+        printf '# Updating Gemfile file at %s\n' "$file" >&2
         tmpdir="$(mktemp -d)"
 
         if [ "$target" = 'major' ] || [ "$target" = 'minor' ] || [ "$target" = 'patch' ]; then
@@ -173,6 +178,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'rust' ]; then
         if [ ! -e "$file" ]; then
             continue
         fi
+        printf '# Updating cargo file at %s\n' "$file" >&2
 
         if [ "$target" = 'major' ]; then
             (cd "$(dirname "$file")" && cargo upgrade --incompatible) # main
@@ -190,9 +196,12 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'gitman' ]; then
         if [ ! -e "$file" ]; then
             continue
         fi
+        printf '# Updating gitman file at %s\n' "$file" >&2
 
         if [ "$target" != 'lock' ]; then
-            (cd "$(dirname "$file")" && gitman update --force) # main
+            (cd "$(dirname "$file")" && gitman update --force --fetch) # main
+        else
+            (cd "$(dirname "$file")" && gitman install --force --fetch) # no-file
         fi
         (cd "$(dirname "$file")" && gitman lock) # lock
     done
