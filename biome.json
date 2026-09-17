@@ -1,11 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/next/schema.json",
   "formatter": {
-    "enabled": true,
-    "includes": [
-      "**",
-      "!**/*.json"
-    ]
+    "enabled": false
   },
   "linter": {
     "enabled": true,
