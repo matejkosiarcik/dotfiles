@@ -37,16 +37,18 @@ while getopts "h?t:r:" o; do
 done
 
 if printf '%s' "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
-    printf 'Unsupported target %s\n' "$target"
+    printf 'Unsupported target %s\n' "$target" >&2
     print_help
     exit 1
 fi
 
-if printf '%s' "$runtime" | grep -qvE '^(all|js|python|ruby|rust|gitman)$'; then
-    printf 'Unsupported runtime %s\n' "$target"
+if printf '%s' "$runtime" | grep -qvE '^(all|nodejs|python|ruby|rust|gitman)$'; then
+    printf 'Unsupported runtime %s\n' "$runtime" >&2
     print_help
     exit 1
 fi
+
+printf 'Updating %s runtime(s) to version: %s\n\n' "$runtime" "$target" >&2
 
 glob() {
     if git rev-parse --show-toplevel >/dev/null 2>&1; then
@@ -66,8 +68,8 @@ glob() {
 }
 
 # JavaScript+NodeJS
-if [ "$runtime" = 'all' ] || [ "$runtime" = 'js' ]; then
-    printf '## JavaScript > NodeJS ##\n'
+if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs' ]; then
+    printf '## JavaScript > NodeJS ##\n' >&2
     if [ ! -e "$HOME/.npmrc" ] || [ "$(wc -c <"$HOME/.npmrc")" -eq '0' ]; then
         printf '# Placeholder\n' >>"$HOME/.npmrc"
     fi
@@ -89,7 +91,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'js' ]; then
         tmpdir="$(mktemp -d)"
         cp "$directory/package.json" "$tmpdir/package.json"
         docker run --rm \
-            --volume "$tmpdir:/src/$dirname" \
+            --volume "$tmpdir:/app/$dirname" \
             --volume "$HOME/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY=0 \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
@@ -98,7 +100,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'js' ]; then
             --entrypoint /bin/sh \
             --user root \
             node:latest \
-            -c "cd \"/src/$dirname\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
+            -c "cd \"/app/$dirname\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
         mv "$tmpdir/package-lock.json" "$directory/package-lock.json"
         rm -rf "$tmpdir"
     done
@@ -107,7 +109,7 @@ fi
 # Python+Pip
 if [ "$runtime" = 'all' ] || [ "$runtime" = 'python' ]; then
     # TODO: Pipfile
-    printf '## Python > Pip ##\n'
+    printf '## Python > Pip ##\n' >&2
     glob '*requirements*.txt' | while read -r file; do
         if [ ! -e "$file" ]; then
             continue
@@ -123,7 +125,7 @@ fi
 
 # Ruby+Gem
 if [ "$runtime" = 'all' ] || [ "$runtime" = 'ruby' ]; then
-    printf '## Ruby > Gem ##\n'
+    printf '## Ruby > Gem ##\n' >&2
     glob 'Gemfile' | while read -r file; do
         if [ ! -e "$file" ]; then
             continue
@@ -165,7 +167,7 @@ fi
 
 # Rust+Cargo
 if [ "$runtime" = 'all' ] || [ "$runtime" = 'rust' ]; then
-    printf '## Rust > Cargo ##\n'
+    printf '## Rust > Cargo ##\n' >&2
     glob 'Cargo.toml' | while read -r file; do
         if [ ! -e "$file" ]; then
             continue
@@ -182,7 +184,7 @@ fi
 
 # Gitman
 if [ "$runtime" = 'all' ] || [ "$runtime" = 'gitman' ]; then
-    printf '## Gitman ##\n'
+    printf '## Gitman ##\n' >&2
     glob 'gitman.yml' '.gitman.yml' | while read -r file; do
         if [ ! -e "$file" ]; then
             continue
