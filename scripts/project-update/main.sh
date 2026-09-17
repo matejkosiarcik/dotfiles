@@ -72,7 +72,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'js' ]; then
         printf '# Placeholder\n' >>"$HOME/.npmrc"
     fi
     ncu_target="$target"
-    if [ "$ncu_target" = 'major' ]; then
+    if [ "$target" = 'major' ]; then
         ncu_target='latest'
     fi
     glob 'package.json' | while read -r file; do
