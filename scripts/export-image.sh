@@ -43,6 +43,9 @@ if [ "$(find "${output_directory}" -mindepth 1 -maxdepth 1 | wc -c)" -gt '0' ]; 
     exit 1
 fi
 
+# Pull image and ignore errors (image may already exist locally)
+docker pull "${image_name}" >/dev/null || true
+
 # Export env
 docker image inspect "${image_name}" --format '{{range .Config.Env}}{{println .}}{{end}}' >"${output_directory}/env.txt"
 
@@ -51,11 +54,21 @@ docker image inspect "${image_name}" >"${output_directory}/metadata.txt"
 
 # Export filesystem
 tmpdir="$(mktemp -d)"
-docker create --name "$(basename "${tmpdir}")" "${image_name}" --quiet >/dev/null
-docker export "$(basename "${tmpdir}")" --output "${tmpdir}/container.tar"
+temporary_container_name="$(basename "${tmpdir}")"
+cleanup() {
+    docker rm "${temporary_container_name}" >/dev/null 2>&1 || true
+    rm -rf "${tmpdir}"
+}
+trap cleanup EXIT HUP INT TERM
+docker create --name "${temporary_container_name}" "${image_name}" --quiet >/dev/null
+docker export "${temporary_container_name}" --output "${tmpdir}/container.tar"
 mkdir -p "${output_directory}/fs"
-tar -xf "${tmpdir}/container.tar" -C "${output_directory}/fs"
-docker rm "$(basename "${tmpdir}")" >/dev/null
-rm -rf "${tmpdir}"
+tar -xf "${tmpdir}/container.tar" \
+    -C "${output_directory}/fs" \
+    --exclude='dev/*' \
+    --exclude='proc/*' \
+    --exclude='sys/*'
+cleanup
+trap - EXIT HUP INT TERM
 
 printf 'Container %s exported to %s\n' "${image_name}" "${output_directory}" >&2

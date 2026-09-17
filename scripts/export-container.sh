@@ -57,9 +57,15 @@ docker stats "${container_name}" --no-stream >"${output_directory}/stats.txt"
 
 # Export filesystem
 tmpdir="$(mktemp -d)"
+trap 'rm -rf "${tmpdir}"' EXIT HUP INT TERM
 docker export "${container_name}" --output "${tmpdir}/container.tar"
 mkdir -p "${output_directory}/fs"
-tar -xf "${tmpdir}/container.tar" -C "${output_directory}/fs"
+tar -xf "${tmpdir}/container.tar" \
+    -C "${output_directory}/fs" \
+    --exclude='dev/*' \
+    --exclude='proc/*' \
+    --exclude='sys/*'
 rm -rf "${tmpdir}"
+trap - EXIT HUP INT TERM
 
 printf 'Container %s exported to %s\n' "${container_name}" "${output_directory}" >&2
