@@ -91,14 +91,14 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs' ]; then
         tmpdir="$(mktemp -d)"
         cp "$directory/package.json" "$tmpdir/package.json"
         docker run --rm \
-            --volume "$tmpdir:/app/$dirname" \
+            --volume "$tmpdir:/app/$dirname:rw" \
             --volume "$HOME/.npmrc:/root/.npmrc:ro" \
-            --env CYPRESS_INSTALL_BINARY=0 \
-            --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-            --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
+            --env CYPRESS_INSTALL_BINARY='0' \
+            --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+            --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
             --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-            --entrypoint /bin/sh \
-            --user root \
+            --entrypoint '/bin/sh' \
+            --user 'root' \
             node:latest \
             -c "cd \"/app/$dirname\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
         mv "$tmpdir/package-lock.json" "$directory/package-lock.json"
@@ -108,7 +108,6 @@ fi
 
 # Python+Pip
 if [ "$runtime" = 'all' ] || [ "$runtime" = 'python' ]; then
-    # TODO: Pipfile
     printf '## Python > Pip ##\n' >&2
     glob '*requirements*.txt' | while read -r file; do
         if [ ! -e "$file" ]; then
@@ -121,6 +120,8 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'python' ]; then
             pur --force "--$target" '*' --requirement "$file"
         fi
     done
+
+    # TODO: Also update Pipfile
 fi
 
 # Ruby+Gem
