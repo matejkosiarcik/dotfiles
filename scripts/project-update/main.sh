@@ -199,7 +199,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'gitman' ]; then
         printf '# Updating gitman file at %s\n' "$file" >&2
 
         if [ "$target" != 'lock' ]; then
-            (cd "$(dirname "$file")" && gitman update --force --fetch) # main
+            (cd "$(dirname "$file")" && gitman update --force) # main
         else
             (cd "$(dirname "$file")" && gitman install --force --fetch) # no-file
         fi
