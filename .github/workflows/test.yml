@@ -26,14 +26,22 @@ jobs:
           persist-credentials: false
 
       - name: Setup Python
-        uses: actions/setup-python@v7.0.0
+        uses: Wandalen/wretry.action@v3.8.0
         with:
-          python-version: 3.x
+          action: actions/setup-python@v7.0.0
+          attempt_limit: 3
+          attempt_delay: 2500
+          with: |
+            python-version: 3.x
 
       - name: Setup NodeJS
-        uses: actions/setup-node@v7.0.0
+        uses: Wandalen/wretry.action@v3.8.0
         with:
-          node-version: latest
+          action: actions/setup-node@v7.0.0
+          attempt_limit: 3
+          attempt_delay: 2500
+          with: |
+            node-version: latest
 
       # - name: Install HomeBrew dependencies
       #   if: ${{ matrix.os == 'macos-latest' }}
