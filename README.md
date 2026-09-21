@@ -14,12 +14,12 @@
 
 Repository is split into multiple directories:
 
-| Directory  | Purpose                                                                                          |
-|------------|--------------------------------------------------------------------------------------------------|
-| `apps/`    | Applications - usually wrapping scripts using platypus                                           |
-| `config/`  | Config files - installed into `$HOME`                                                            |
-| `daemons/` | Scripts executed automatically in the background (system startup, directory monitoring, cron, …) |
-| `scripts/` | Scripts - to be added to `$PATH` and used interactively                                          |
+| Directory   | Purpose                                                                                          |
+|-------------|--------------------------------------------------------------------------------------------------|
+| `./apps`    | Applications - usually wrapping scripts using platypus                                           |
+| `./config`  | Config files - installed into `$HOME`                                                            |
+| `./daemons` | Scripts executed automatically in the background (system startup, directory monitoring, cron, …) |
+| `./scripts` | Scripts - to be added to `$PATH` and used interactively                                          |
 
 ## Installation
 
@@ -53,4 +53,4 @@ make all install
 ## License
 
 This project is licensed under the MIT License, see
-[LICENSE.txt](LICENSE.txt) for full license details.
+[LICENSE.txt](./LICENSE.txt) for full license details.

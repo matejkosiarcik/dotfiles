@@ -116,12 +116,12 @@ check_dir() {
 
 dirfile="$(mktemp)"
 if [ "$recursive" -eq 1 ]; then
-    find . -type d >"$dirfile"
+    find '.' -type d >"$dirfile"
 else
-    if [ "$(find . -type d -mindepth 1 | wc -l)" -gt 0 ]; then
+    if [ "$(find '.' -type d -mindepth 1 | wc -l)" -gt 0 ]; then
         printf 'WARNING: Found nested directories. Ignoring them and proceeding.\n'
     fi
-    printf '.\n' >"$dirfile"
+    printf './\n' >"$dirfile"
 fi
 
 while read -r dir; do

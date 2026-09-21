@@ -23,7 +23,7 @@ make_default_program() {
     done <"$file_list"
 }
 
-make_default_program 'com.microsoft.VSCode' 'textfiles.txt'
-make_default_program 'com.apple.dt.Xcode' 'xcodefiles.txt'
-make_default_program 'org.videolan.vlc' 'mediafiles.txt'
-make_default_program 'com.apple.Safari' 'webfiles.txt'
+make_default_program 'com.microsoft.VSCode' './textfiles.txt'
+make_default_program 'com.apple.dt.Xcode' './xcodefiles.txt'
+make_default_program 'org.videolan.vlc' './mediafiles.txt'
+make_default_program 'com.apple.Safari' './webfiles.txt'
