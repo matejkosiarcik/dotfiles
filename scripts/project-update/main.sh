@@ -10,9 +10,9 @@ print_help() {
 }
 
 source_dir="$(dirname "$(readlink "$0")")"
-PATH="$source_dir/python/bin:$source_dir/node_modules/.bin:/opt/homebrew/bin:$PATH"
+PATH="$source_dir/python-vendor/bin:$source_dir/node_modules/.bin:/opt/homebrew/bin:$PATH"
 export PATH
-PYTHONPATH="$source_dir/python"
+PYTHONPATH="$source_dir/python-vendor"
 export PYTHONPATH
 
 target='major'

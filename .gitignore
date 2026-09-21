@@ -17,5 +17,5 @@ Package Control.*
 build/
 dist/
 node_modules/
-python/
+python-vendor/
 venv/
