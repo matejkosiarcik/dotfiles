@@ -67,4 +67,4 @@ jobs:
 
       - name: Test project installation
         shell: bash
-        run: sh .ci-utils/postinstall-test.sh
+        run: sh './.ci-utils/postinstall-test.sh'

@@ -17,7 +17,7 @@ osascript -e 'tell application "System Preferences" to quit'
 chflags nohidden "$HOME/Library"
 
 # Show /Volumes
-sudo chflags nohidden /Volumes
+sudo chflags nohidden '/Volumes'
 
 # Set system to restart when it freezes
 sudo systemsetup -setrestartfreeze on

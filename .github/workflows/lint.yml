@@ -53,7 +53,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           DEFAULT_BRANCH: main
-          MEGALINTER_CONFIG: .config/.mega-linter.yml
+          MEGALINTER_CONFIG: "./.config/.mega-linter.yml"
 
   super-linter:
     name: SuperLinter
@@ -74,7 +74,7 @@ jobs:
           ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: false
           ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: .config/
+          LINTER_RULES_PATH: "./.config/"
           MULTI_STATUS: false
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
