@@ -4,9 +4,9 @@ set -euf
 print_help() {
     printf 'Usage: project-update [-h] [-t <target>]\n'
     printf '\n'
-    printf '  -h                                  print help message\n'
-    printf '  -t {major, minor, patch, lock}      semver upgrade target\n'
-    printf '  -r {all, js, python, ruby, rust, gitman}  which runtime to update\n'
+    printf '  -h                                            print help message\n'
+    printf '  -t {major, minor, patch, lock}                semver upgrade target\n'
+    printf '  -r {all, nodejs, python, ruby, rust, gitman}  which runtime to update\n'
 }
 
 source_dir="$(dirname "$(readlink "$0")")"
