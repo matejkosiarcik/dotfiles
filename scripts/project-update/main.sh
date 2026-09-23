@@ -6,7 +6,7 @@ print_help() {
     printf '\n'
     printf '  -h                                                              print help message\n'
     printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs-npm, python-pip, ruby-gem, rust-cargo, gitman}  which runtime to update\n'
+    printf '  -r {all, nodejs-npm, php-composer, python-pip, ruby-gem, rust-cargo, gitman}  which runtime to update\n'
 }
 
 source_dir="$(dirname "$(readlink "$0")")"
@@ -42,7 +42,7 @@ if printf '%s' "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "$runtime" | grep -qvE '^(all|nodejs-npm|python-pip|ruby-gem|rust-cargo|gitman)$'; then
+if printf '%s' "$runtime" | grep -qvE '^(all|nodejs\-npm|php\-composer|python\-pip|ruby\-gem|rust\-cargo|gitman)$'; then
     printf 'Unsupported runtime %s\n' "$runtime" >&2
     print_help
     exit 1
@@ -105,6 +105,66 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs-npm' ]; then
             -c "cd \"/app/$dirname\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
         mv "$tmpdir/package-lock.json" "$directory/package-lock.json"
         rm -rf "$tmpdir"
+    done
+fi
+
+# PHP+Composer
+if [ "$runtime" = 'all' ] || [ "$runtime" = 'php-composer' ]; then
+    printf '## PHP > Composer ##\n' >&2
+    glob 'composer.json' | while read -r file; do
+        if [ ! -e "$file" ]; then
+            continue
+        fi
+
+        printf '# Updating Composer package file at %s\n' "$file" >&2
+        (
+            cd "$(dirname "$file")"
+            if [ "$target" = 'major' ]; then
+                if [ -e composer.lock ]; then
+                    composer_major_updates="$(composer outdated --locked --direct --major-only --format=json)"
+                    composer_major_packages="$(
+                        printf '%s\n' "$composer_major_updates" | php -r '
+                            $updates = json_decode(stream_get_contents(STDIN), true, 512, JSON_THROW_ON_ERROR);
+                            $manifest = json_decode(file_get_contents("composer.json"), true, 512, JSON_THROW_ON_ERROR);
+                            $require = $manifest["require"] ?? [];
+                            $requireDev = $manifest["require-dev"] ?? [];
+
+                            foreach ($updates["locked"] ?? [] as $update) {
+                                $package = $update["name"] ?? "";
+                                if (!is_string($package) || $package === "") {
+                                    continue;
+                                }
+                                if (array_key_exists($package, $require)) {
+                                    printf("production\t%s\n", $package);
+                                } elseif (array_key_exists($package, $requireDev)) {
+                                    printf("development\t%s\n", $package);
+                                }
+                            }
+                        '
+                    )"
+
+                    printf '%s\n' "$composer_major_packages" | while IFS="$(printf '\t')" read -r dependency_type package; do
+                        if [ -z "$package" ]; then
+                            continue
+                        fi
+
+                        printf '# Updating major Composer constraint for %s\n' "$package" >&2
+                        if [ "$dependency_type" = 'development' ]; then
+                            composer require --dev --no-update --no-interaction --no-scripts "$package"
+                        else
+                            composer require --no-update --no-interaction --no-scripts "$package"
+                        fi
+                    done
+                fi
+                composer update --with-all-dependencies --no-install --no-interaction --no-scripts
+            elif [ "$target" = 'patch' ]; then
+                composer update --patch-only --no-install --no-interaction --no-scripts
+            elif [ "$target" = 'lock' ]; then
+                composer update --lock --no-install --no-interaction --no-scripts
+            else
+                composer update --with-all-dependencies --no-install --no-interaction --no-scripts
+            fi
+        )
     done
 fi
 
