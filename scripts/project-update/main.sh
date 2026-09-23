@@ -2,11 +2,11 @@
 set -euf
 
 print_help() {
-    printf 'Usage: project-update [-h] [-t <target>]\n'
+    printf 'Usage: project-update [-h] [-t <target>] [-r <runtime>]\n'
     printf '\n'
-    printf '  -h                                            print help message\n'
-    printf '  -t {major, minor, patch, lock}                semver upgrade target\n'
-    printf '  -r {all, nodejs, python, ruby, rust, gitman}  which runtime to update\n'
+    printf '  -h                                                              print help message\n'
+    printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
+    printf '  -r {all, nodejs-npm, python-pip, ruby-gem, rust-cargo, gitman}  which runtime to update\n'
 }
 
 source_dir="$(dirname "$(readlink "$0")")"
@@ -42,7 +42,7 @@ if printf '%s' "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "$runtime" | grep -qvE '^(all|nodejs|python|ruby|rust|gitman)$'; then
+if printf '%s' "$runtime" | grep -qvE '^(all|nodejs-npm|python-pip|ruby-gem|rust-cargo|gitman)$'; then
     printf 'Unsupported runtime %s\n' "$runtime" >&2
     print_help
     exit 1
@@ -68,7 +68,7 @@ glob() {
 }
 
 # JavaScript+NodeJS
-if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs' ]; then
+if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs-npm' ]; then
     printf '## JavaScript > NodeJS ##\n' >&2
     if [ ! -e "$HOME/.npmrc" ] || [ "$(wc -c <"$HOME/.npmrc")" -eq '0' ]; then
         printf '# Placeholder\n' >>"$HOME/.npmrc"
@@ -109,7 +109,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs' ]; then
 fi
 
 # Python+Pip
-if [ "$runtime" = 'all' ] || [ "$runtime" = 'python' ]; then
+if [ "$runtime" = 'all' ] || [ "$runtime" = 'python-pip' ]; then
     printf '## Python > Pip ##\n' >&2
     glob '*requirements*.txt' | while read -r file; do
         if [ ! -e "$file" ]; then
@@ -129,7 +129,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'python' ]; then
 fi
 
 # Ruby+Gem
-if [ "$runtime" = 'all' ] || [ "$runtime" = 'ruby' ]; then
+if [ "$runtime" = 'all' ] || [ "$runtime" = 'ruby-gem' ]; then
     printf '## Ruby > Gem ##\n' >&2
     glob 'Gemfile' | while read -r file; do
         if [ ! -e "$file" ]; then
@@ -172,7 +172,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'ruby' ]; then
 fi
 
 # Rust+Cargo
-if [ "$runtime" = 'all' ] || [ "$runtime" = 'rust' ]; then
+if [ "$runtime" = 'all' ] || [ "$runtime" = 'rust-cargo' ]; then
     printf '## Rust > Cargo ##\n' >&2
     glob 'Cargo.toml' | while read -r file; do
         if [ ! -e "$file" ]; then
