@@ -123,6 +123,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'php-composer' ]; then
                 if [ -e composer.lock ]; then
                     composer_major_updates="$(composer outdated --locked --direct --major-only --format=json)"
                     composer_major_packages="$(
+                        # shellcheck disable=SC2016
                         printf '%s\n' "$composer_major_updates" | php -r '
                             $updates = json_decode(stream_get_contents(STDIN), true, 512, JSON_THROW_ON_ERROR);
                             $manifest = json_decode(file_get_contents("composer.json"), true, 512, JSON_THROW_ON_ERROR);
