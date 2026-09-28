@@ -50,7 +50,7 @@ docker inspect "${container_name}" --format '{{range .Config.Env}}{{println .}}{
 docker inspect "${container_name}" | cat -s | jq --sort-keys '.' >"${output_directory}/metadata.txt"
 
 # Export filesystem diff
-docker diff "${container_name}" | cat -s >"${output_directory}/diff.txt"
+docker diff "${container_name}" | cat -s | sort --human-numeric-sort --key=2 >"${output_directory}/diff.txt"
 
 # Export stats
 docker stats "${container_name}" --no-stream | cat -s >"${output_directory}/stats.txt"
