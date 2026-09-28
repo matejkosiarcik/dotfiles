@@ -44,7 +44,7 @@ if [ "$(find "${output_directory}" -mindepth 1 -maxdepth 1 | wc -c)" -gt '0' ]; 
 fi
 
 # Export env
-docker inspect "${container_name}" --format '{{range .Config.Env}}{{println .}}{{end}}' | cat -s | sort --human-numeric-sort  >"${output_directory}/env.txt"
+docker inspect "${container_name}" --format '{{range .Config.Env}}{{println .}}{{end}}' | cat -s | sort --human-numeric-sort >"${output_directory}/env.txt"
 
 # Export general metadata
 docker inspect "${container_name}" | cat -s | jq --sort-keys '.' >"${output_directory}/metadata.txt"
