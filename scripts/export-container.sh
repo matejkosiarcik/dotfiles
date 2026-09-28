@@ -47,7 +47,7 @@ fi
 docker inspect "${container_name}" --format '{{range .Config.Env}}{{println .}}{{end}}' | cat -s | sort --human-numeric-sort  >"${output_directory}/env.txt"
 
 # Export general metadata
-docker inspect "${container_name}" | cat -s >"${output_directory}/metadata.txt"
+docker inspect "${container_name}" | cat -s | jq --sort-keys '.' >"${output_directory}/metadata.txt"
 
 # Export filesystem diff
 docker diff "${container_name}" | cat -s >"${output_directory}/diff.txt"
