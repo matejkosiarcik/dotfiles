@@ -47,10 +47,10 @@ fi
 docker pull "${image_name}" >/dev/null || true
 
 # Export env
-docker image inspect "${image_name}" --format '{{range .Config.Env}}{{println .}}{{end}}' >"${output_directory}/env.txt"
+docker image inspect "${image_name}" --format '{{range .Config.Env}}{{println .}}{{end}}' | cat -s | sort --human-numeric-sort >"${output_directory}/env.txt"
 
 # Export general metadata
-docker image inspect "${image_name}" >"${output_directory}/metadata.txt"
+docker image inspect "${image_name}" | cat -s | jq --sort-keys '.' >"${output_directory}/metadata.txt"
 
 # Export filesystem
 tmpdir="$(mktemp -d)"
