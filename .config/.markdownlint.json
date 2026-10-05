@@ -3,20 +3,23 @@
     "style": "fenced"
   },
   "line-length": {
-    "line_length": 180
+    "line_length": 300
   },
   "no-duplicate-heading": {
     "siblings_only": true
   },
   "no-inline-html": {
     "allowed_elements": [
+      "br",
       "details",
+      "p",
       "summary"
     ]
   },
   "single-h1": {
     "front_matter_title": ""
   },
+  "table-column-style": false,
   "ul-indent": {
     "indent": 4
   }
