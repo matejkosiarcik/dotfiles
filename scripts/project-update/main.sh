@@ -6,7 +6,7 @@ print_help() {
     printf '\n'
     printf '  -h                                                              print help message\n'
     printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs-npm, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
+    printf '  -r {all, nodejs, dart-pub, dotnet-nuget, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
 }
 
 source_dir="$(dirname "$(readlink "${0}")")"
@@ -42,7 +42,7 @@ if printf '%s' "${target}" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs\-npm|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
+if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|dotnet\-nuget|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
     printf 'Unsupported runtime %s\n' "${runtime}" >&2
     print_help
     exit 1
@@ -67,6 +67,70 @@ glob() {
     fi
 }
 
+detect_nodejs_package_manager() {
+    if [ -e "${1}/pnpm-lock.yaml" ]; then
+        printf '%s\n' 'pnpm'
+    elif [ -e "${1}/yarn.lock" ]; then
+        printf '%s\n' 'yarn'
+    elif [ -e "${1}/bun.lock" ] || [ -e "${1}/bun.lockb" ]; then
+        printf '%s\n' 'bun'
+    else
+        printf '%s\n' 'npm'
+    fi
+}
+
+# Dart / Flutter - Pub
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
+    printf '## Dart / Flutter > Pub ##\n' >&2
+    glob 'pubspec.yaml' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        printf '# Updating Dart / Flutter package file at %s\n' "${file}" >&2
+        (
+            cd "$(dirname "${file}")"
+            if [ "${target}" = 'major' ]; then
+                dart pub upgrade --major-versions
+            elif [ "${target}" = 'minor' ]; then
+                # This may not be 100% semantically valid, but it should be close enough in practice to upgrade to latest minor version
+                dart pub upgrade --tighten
+            elif [ "${target}" = 'patch' ]; then
+                dart pub upgrade
+            else
+                # There is no builtin way to update only lockfile, so skip it
+                true
+            fi
+        )
+    done
+fi
+
+# .NET - NuGet
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
+    printf '## .NET > NuGet ##\n' >&2
+    glob '*.csproj' '*.fsproj' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        printf '# Updating NuGet project at %s\n' "${file}" >&2
+        (
+            cd "$(dirname "${file}")"
+            if [ "${target}" = 'major' ]; then
+                if dotnet package update --project "$(basename "${file}")"; then
+                    true
+                else
+                    exit_code="${?}"
+                    # Exit code 2 indicates that every package is already up to date.
+                    if [ "${exit_code}" -ne 2 ]; then
+                        exit "${exit_code}"
+                    fi
+                fi
+            fi
+        )
+    done
+fi
+
 # Gitman
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
     printf '## Gitman ##\n' >&2
@@ -78,9 +142,9 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
 
         (
             cd "$(dirname "${file}")"
-            if [ "${target}" != 'lock' ]; then
+            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
                 gitman update --force # main
-            else
+            elif [ "${target}" = 'lock' ]; then
                 gitman install --force --fetch # no-file
             fi
             gitman lock # lock
@@ -89,7 +153,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
 fi
 
 # JavaScript - NodeJS/NPM
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs-npm' ]; then
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
     printf '## JavaScript > NodeJS ##\n' >&2
     if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
         printf '# Placeholder\n' >>"${HOME}/.npmrc"
@@ -103,28 +167,91 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs-npm' ]; then
             continue
         fi
 
-        printf '# Updating NPM package file at %s\n' "${file}" >&2
+        directory="$(dirname "${file}")"
+        package_manager="$(detect_nodejs_package_manager "${directory}")"
+
+        printf '# Updating %s package file at %s\n' "${package_manager}" "${file}" >&2
 
         if [ "${target}" != 'lock' ]; then
-            ncu --cwd "$(dirname "${file}")" --target "${ncu_target}" --upgrade # package.json
+            ncu --cwd "${directory}" --packageManager "${package_manager}" --target "${ncu_target}" --upgrade # package.json
         fi
 
-        directory="$(dirname "${file}")"
         dirname="$(cd "${directory}" >/dev/null 2>&1 && basename "${PWD}")"
         tmpdir="$(mktemp -d)"
         cp "${directory}/package.json" "${tmpdir}/package.json"
-        docker run --rm \
-            --volume "${tmpdir}:/app/${dirname}:rw" \
-            --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-            --env CYPRESS_INSTALL_BINARY='0' \
-            --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-            --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-            --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-            --entrypoint '/bin/sh' \
-            --user 'root' \
-            node:latest \
-            -c "cd \"/app/${dirname}\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
-        mv "${tmpdir}/package-lock.json" "${directory}/package-lock.json"
+
+        case "${package_manager}" in
+        npm)
+            docker run --rm \
+                --volume "${tmpdir}:/app/${dirname}:rw" \
+                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+                --env CYPRESS_INSTALL_BINARY='0' \
+                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
+                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --entrypoint '/bin/sh' \
+                --user 'root' \
+                node:latest \
+                -c "cd \"/app/${dirname}\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
+            lockfile='package-lock.json'
+            ;;
+        pnpm)
+            docker run --rm \
+                --volume "${tmpdir}:/app/${dirname}:rw" \
+                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+                --env CYPRESS_INSTALL_BINARY='0' \
+                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
+                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --entrypoint '/bin/sh' \
+                --user 'root' \
+                node:latest \
+                -c "npm install --global corepack@latest --no-audit --no-fund --loglevel=error && corepack pnpm install --dir \"/app/${dirname}\" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent"
+            lockfile='pnpm-lock.yaml'
+            ;;
+        yarn)
+            docker run --rm \
+                --volume "${tmpdir}:/app/${dirname}:rw" \
+                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+                --env CYPRESS_INSTALL_BINARY='0' \
+                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
+                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --entrypoint '/bin/sh' \
+                --user 'root' \
+                node:latest \
+                -c "npm install --global corepack@latest --no-audit --no-fund --loglevel=error && if corepack yarn --version | grep -q '^1\\.'; then corepack yarn install --cwd \"/app/${dirname}\" --ignore-scripts --non-interactive --no-progress; else corepack yarn install --cwd \"/app/${dirname}\" --mode=update-lockfile; fi"
+            lockfile='yarn.lock'
+            ;;
+        bun)
+            docker run --rm \
+                --volume "${tmpdir}:/app/${dirname}:rw" \
+                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+                --env CYPRESS_INSTALL_BINARY='0' \
+                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
+                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --entrypoint '/bin/sh' \
+                --user 'root' \
+                oven/bun:latest \
+                -c "cd \"/app/${dirname}\" && bun install --lockfile-only --ignore-scripts --no-progress"
+            if [ -e "${tmpdir}/bun.lock" ]; then
+                lockfile='bun.lock'
+            else
+                lockfile='bun.lockb'
+            fi
+            ;;
+        *)
+            printf 'Unsupported NodeJS package manager %s\n' "${package_manager}" >&2
+            rm -rf "${tmpdir}"
+            exit 1
+            ;;
+        esac
+
+        mv "${tmpdir}/${lockfile}" "${directory}/${lockfile}"
+        if [ "${package_manager}" = 'bun' ] && [ "${lockfile}" = 'bun.lock' ] && [ -e "${directory}/bun.lockb" ]; then
+            rm "${directory}/bun.lockb"
+        fi
         rm -rf "${tmpdir}"
     done
 fi
@@ -179,12 +306,12 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
                     done
                 fi
                 composer update --with-all-dependencies --no-install --no-interaction --no-scripts
+            elif [ "${target}" = 'minor' ]; then
+                composer update --with-all-dependencies --no-install --no-interaction --no-scripts
             elif [ "${target}" = 'patch' ]; then
                 composer update --patch-only --no-install --no-interaction --no-scripts
             elif [ "${target}" = 'lock' ]; then
                 composer update --lock --no-install --no-interaction --no-scripts
-            else
-                composer update --with-all-dependencies --no-install --no-interaction --no-scripts
             fi
         )
     done
@@ -202,8 +329,11 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
 
         if [ "${target}" = 'major' ]; then
             pur --force --requirement "${file}"
-        elif [ "${target}" != 'lock' ]; then
+        elif [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
             pur --force "--${target}" '*' --requirement "${file}"
+        elif [ "${target}" = 'lock' ]; then
+            # There is no builtin way to update only lockfile, so skip it
+            true
         fi
     done
 
@@ -225,14 +355,14 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
             (
                 cd "$(dirname "${file}")"
                 BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle install --quiet
-                BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle update --all "--${target}" --quiet
+                BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle update --all --quiet "--${target}" --strict
             )
         fi
 
+        # Update lockfile always
         (
             cd "$(dirname "${file}")"
-            bundle config set frozen false
-            BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle lock --normalize-platforms
+            BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle lock --normalize-platforms
         )
 
         rm -rf "${tmpdir}"
@@ -271,12 +401,15 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
 
         (
             cd "$(dirname "${file}")"
-            if [ "${target}" = 'patch' ]; then
-                go get -u=patch ./...
-            elif [ "${target}" != 'lock' ]; then
+            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ]; then
                 go get -u ./...
+            elif [ "${target}" = 'patch' ]; then
+                go get -u=patch ./...
             fi
-            go mod tidy
+
+            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
+                go mod tidy
+            fi
         )
     done
 fi
@@ -292,11 +425,12 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
 
         (
             cd "$(dirname "${file}")"
-            if [ "${target}" = 'lock' ]; then
-                swift package resolve
-            else
+            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
                 swift package update
             fi
+
+            # Update lockfile always
+            swift package resolve
         )
     done
 fi
