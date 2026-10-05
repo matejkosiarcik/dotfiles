@@ -6,7 +6,7 @@ print_help() {
     printf '\n'
     printf '  -h                                                              print help message\n'
     printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs-npm, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
+    printf '  -r {all, nodejs, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
 }
 
 source_dir="$(dirname "$(readlink "${0}")")"
@@ -42,7 +42,7 @@ if printf '%s' "${target}" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs\-npm|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
+if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
     printf 'Unsupported runtime %s\n' "${runtime}" >&2
     print_help
     exit 1
@@ -64,6 +64,18 @@ glob() {
             find . -name "${1}" -maxdepth 1 | sed -E 's~^./~~'
             shift
         done
+    fi
+}
+
+detect_nodejs_package_manager() {
+    if [ -e "${1}/pnpm-lock.yaml" ]; then
+        printf '%s\n' 'pnpm'
+    elif [ -e "${1}/yarn.lock" ]; then
+        printf '%s\n' 'yarn'
+    elif [ -e "${1}/bun.lock" ] || [ -e "${1}/bun.lockb" ]; then
+        printf '%s\n' 'bun'
+    else
+        printf '%s\n' 'npm'
     fi
 }
 
@@ -89,7 +101,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
 fi
 
 # JavaScript - NodeJS/NPM
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs-npm' ]; then
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
     printf '## JavaScript > NodeJS ##\n' >&2
     if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
         printf '# Placeholder\n' >>"${HOME}/.npmrc"
@@ -103,28 +115,91 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs-npm' ]; then
             continue
         fi
 
-        printf '# Updating NPM package file at %s\n' "${file}" >&2
+        directory="$(dirname "${file}")"
+        package_manager="$(detect_nodejs_package_manager "${directory}")"
+
+        printf '# Updating %s package file at %s\n' "${package_manager}" "${file}" >&2
 
         if [ "${target}" != 'lock' ]; then
-            ncu --cwd "$(dirname "${file}")" --target "${ncu_target}" --upgrade # package.json
+            ncu --cwd "${directory}" --packageManager "${package_manager}" --target "${ncu_target}" --upgrade # package.json
         fi
 
-        directory="$(dirname "${file}")"
         dirname="$(cd "${directory}" >/dev/null 2>&1 && basename "${PWD}")"
         tmpdir="$(mktemp -d)"
         cp "${directory}/package.json" "${tmpdir}/package.json"
-        docker run --rm \
-            --volume "${tmpdir}:/app/${dirname}:rw" \
-            --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-            --env CYPRESS_INSTALL_BINARY='0' \
-            --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-            --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-            --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-            --entrypoint '/bin/sh' \
-            --user 'root' \
-            node:latest \
-            -c "cd \"/app/${dirname}\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
-        mv "${tmpdir}/package-lock.json" "${directory}/package-lock.json"
+
+        case "${package_manager}" in
+        npm)
+            docker run --rm \
+                --volume "${tmpdir}:/app/${dirname}:rw" \
+                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+                --env CYPRESS_INSTALL_BINARY='0' \
+                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
+                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --entrypoint '/bin/sh' \
+                --user 'root' \
+                node:latest \
+                -c "cd \"/app/${dirname}\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
+            lockfile='package-lock.json'
+            ;;
+        pnpm)
+            docker run --rm \
+                --volume "${tmpdir}:/app/${dirname}:rw" \
+                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+                --env CYPRESS_INSTALL_BINARY='0' \
+                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
+                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --entrypoint '/bin/sh' \
+                --user 'root' \
+                node:latest \
+                -c "npm install --global corepack@latest --no-audit --no-fund --loglevel=error && corepack pnpm install --dir \"/app/${dirname}\" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent"
+            lockfile='pnpm-lock.yaml'
+            ;;
+        yarn)
+            docker run --rm \
+                --volume "${tmpdir}:/app/${dirname}:rw" \
+                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+                --env CYPRESS_INSTALL_BINARY='0' \
+                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
+                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --entrypoint '/bin/sh' \
+                --user 'root' \
+                node:latest \
+                -c "npm install --global corepack@latest --no-audit --no-fund --loglevel=error && if corepack yarn --version | grep -q '^1\\.'; then corepack yarn install --cwd \"/app/${dirname}\" --ignore-scripts --non-interactive --no-progress; else corepack yarn install --cwd \"/app/${dirname}\" --mode=update-lockfile; fi"
+            lockfile='yarn.lock'
+            ;;
+        bun)
+            docker run --rm \
+                --volume "${tmpdir}:/app/${dirname}:rw" \
+                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+                --env CYPRESS_INSTALL_BINARY='0' \
+                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
+                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
+                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --entrypoint '/bin/sh' \
+                --user 'root' \
+                oven/bun:latest \
+                -c "cd \"/app/${dirname}\" && bun install --lockfile-only --ignore-scripts --no-progress"
+            if [ -e "${tmpdir}/bun.lock" ]; then
+                lockfile='bun.lock'
+            else
+                lockfile='bun.lockb'
+            fi
+            ;;
+        *)
+            printf 'Unsupported NodeJS package manager %s\n' "${package_manager}" >&2
+            rm -rf "${tmpdir}"
+            exit 1
+            ;;
+        esac
+
+        mv "${tmpdir}/${lockfile}" "${directory}/${lockfile}"
+        if [ "${package_manager}" = 'bun' ] && [ "${lockfile}" = 'bun.lock' ] && [ -e "${directory}/bun.lockb" ]; then
+            rm "${directory}/bun.lockb"
+        fi
         rm -rf "${tmpdir}"
     done
 fi
