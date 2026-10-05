@@ -12,17 +12,17 @@ function usage {
     printf ' -f     force\n'
 }
 
-if [ "$#" -lt 1 ]; then
+if [ "${#}" -lt 1 ]; then
     printf 'Not enough arguments\n\n' >&2
     usage >&2
     exit 1
 fi
-dir="$1"
+dir="${1}"
 shift
 
 mode=''
 while getopts "h?n?i?f?" opt; do
-    case "$opt" in
+    case "${opt}" in
     h)
         usage
         ;;
@@ -41,33 +41,33 @@ while getopts "h?n?i?f?" opt; do
         ;;
     esac
 done
-if [ "$mode" = '' ]; then
+if [ "${mode}" = '' ]; then
     printf 'No mode specified (specify either -n|-i|-f)\n\n' >&2
     usage >&2
     exit 1
 fi
 
 function remove_file {
-    mode="$1"
-    file="$2"
+    mode="${1}"
+    file="${2}"
 
-    case "$mode" in
+    case "${mode}" in
     n)
-        printf 'Would remove %s\n' "$file"
+        printf 'Would remove %s\n' "${file}"
         ;;
     i)
-        read -r -p "Remove $file? [y/N] " response
-        if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
-            printf 'Removing %s\n' "$file"
-            rm -rf "$file"
+        read -r -p "Remove ${file}? [y/N] " response
+        if [ "${response}" = "y" ] || [ "${response}" = "Y" ]; then
+            printf 'Removing %s\n' "${file}"
+            rm -rf "${file}"
         fi
         ;;
     f)
-        printf 'Removing %s\n' "$file"
-        rm -rf "$file"
+        printf 'Removing %s\n' "${file}"
+        rm -rf "${file}"
         ;;
     *)
-        printf 'Unrecognized mode: %s\n' "$mode"
+        printf 'Unrecognized mode: %s\n' "${mode}"
         exit 1
         ;;
     esac
@@ -75,7 +75,7 @@ function remove_file {
 export -f remove_file
 
 printf '### Remove dev folders ###\n'
-find "$dir" -type d \( \
+find "${dir}" -type d \( \
     -name '.bundle' -or \
     -name '.gradle' -or \
     -name '.idea' -or \
@@ -93,12 +93,12 @@ find "$dir" -type d \( \
     -name 'target' -or \
     -name 'vendor' -or \
     -name 'venv' \
-    \) -prune -exec bash -c 'remove_file "$0" "$1"' "$mode" '{}' \;
+    \) -prune -exec bash -c 'remove_file "${0}" "${1}"' "${mode}" '{}' \;
 
 # TODO: check manually: *.framework
 
 printf '### Remove OS junk files and dev cache files ###\n'
-find "$dir" -type f \( \
+find "${dir}" -type f \( \
     -iname '.AppleDouble' -or \
     -iname '.DS_Store' -or \
     -iname '.localized' -or \
@@ -109,10 +109,10 @@ find "$dir" -type f \( \
     -iname 'ehthumbs.db' -or \
     -iname 'Thumbs.db' -or \
     -name '._*' \
-    \) -exec bash -c 'remove_file "$0" "$1"' "$mode" '{}' \;
+    \) -exec bash -c 'remove_file "${0}" "${1}"' "${mode}" '{}' \;
 
 printf '### Remove Windows reserved files ###\n'
-find "$dir" \( \
+find "${dir}" \( \
     -iname 'CON' -or \
     -iname 'PRN' -or \
     -iname 'AUX' -or \
@@ -135,6 +135,6 @@ find "$dir" \( \
     -iname 'LPT7' -or \
     -iname 'LPT8' -or \
     -iname 'LPT9' \
-    \) -exec bash -c 'remove_file "$0" "$1"' "$mode" '{}' \;
+    \) -exec bash -c 'remove_file "${0}" "${1}"' "${mode}" '{}' \;
 
 # TODO: remove extended attributes with pyxattr

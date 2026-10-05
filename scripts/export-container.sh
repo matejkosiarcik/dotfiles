@@ -5,18 +5,18 @@ set -euf
 
 container_name=''
 output_directory=''
-while [ "$#" -gt 0 ]; do
-    case "$1" in
+while [ "${#}" -gt 0 ]; do
+    case "${1}" in
     -c | --container)
-        container_name="$2"
+        container_name="${2}"
         shift 2
         ;;
     -o | --output)
-        output_directory="$2"
+        output_directory="${2}"
         shift 2
         ;;
     *)
-        printf 'Unknown argument: %s\n' "$1"
+        printf 'Unknown argument: %s\n' "${1}"
         exit 1
         ;;
     esac

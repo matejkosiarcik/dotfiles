@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Customize PATH
-export PATH="$HOME/.config/matejkosiarcik/bin:$PATH"
-export PATH="$HOME/.bin/sshpass/usr/local/bin:$PATH"
+export PATH="${HOME}/.config/matejkosiarcik/bin:${PATH}"
+export PATH="${HOME}/.bin/sshpass/usr/local/bin:${PATH}"
 
 # Hide NodeJS warnings
 export NODE_NO_WARNINGS='1'
@@ -48,8 +48,8 @@ alias ytdv='yt-dlp --ignore-error --format "bestvideo[ext=mp4]+bestaudio[ext=m4a
 alias ytda='yt-dlp --ignore-error --format "bestaudio[ext=m4a]" --'
 
 # azlint
-alias azlint_lint='docker run --interactive --volume "$PWD:/project:ro" matejkosiarcik/azlint:dev lint'
-alias azlint_fmt='docker run --interactive --volume "$PWD:/project" matejkosiarcik/azlint:dev fmt'
+alias azlint_lint='docker run --interactive --volume "${PWD}:/project:ro" matejkosiarcik/azlint:dev lint'
+alias azlint_fmt='docker run --interactive --volume "${PWD}:/project" matejkosiarcik/azlint:dev fmt'
 
 # Other
 alias whatsmyip='curl --silent ipinfo.io | jq -r .ip'
@@ -60,13 +60,13 @@ alias drawio='/Applications/draw.io.app/Contents/MacOS/draw.io'
 tdup() {
     # TODO: make iterm2, hyper.js compatible
     # TODO: make ubuntu compatible
-    open -a 'Terminal' "$PWD"
+    open -a 'Terminal' "${PWD}"
 }
 
 # Create directory (if not exists) and navigate to it
 mcd() {
     # Validate argument count
-    case "$#" in
+    case "${#}" in
     0)
         printf 'No arguments provided\n' >&2
         return 1
@@ -79,8 +79,8 @@ mcd() {
     esac
 
     # Run function
-    mkdir -p "$1" || return 1
-    cd "$1" || return 1
+    mkdir -p "${1}" || return 1
+    cd "${1}" || return 1
 }
 
 # Normalize 'open' on non-Macs
@@ -107,36 +107,36 @@ fi
 
 # runs specified command N times
 runN() {
-    if [ "$#" -lt 2 ]; then
+    if [ "${#}" -lt 2 ]; then
         printf 'Not enough arguments. Run like "runN 2 echo foo".\n' >&2
         return 1
     fi
 
-    count="$1"
-    if [ "$count" -lt 0 ]; then
+    count="${1}"
+    if [ "${count}" -lt 0 ]; then
         printf "Can't repeat command negative amount of times." >&2
         return 1
     fi
     shift
 
-    printf 'Executing "%s" for %s times.\n' "$*" "$count" >&2
+    printf 'Executing "%s" for %s times.\n' "${*}" "${count}" >&2
     i='1'
-    while [ "$i" -le "$count" ]; do
+    while [ "${i}" -le "${count}" ]; do
         printf '\n'
-        printf '%s\n' "--- $i. run ---"
+        printf '%s\n' "--- ${i}. run ---"
         printf '%s\n' "Start at: $(date +'%Y-%m-%d %H:%M:%S')"
         printf '\n'
 
-        (set -euf && time "$@")
-        statuscode="$?"
-        if [ "$statuscode" != 0 ]; then
-            printf 'Command "%s" returned %s. Stopping.\n' "$*" "$statuscode"
+        (set -euf && time "${@}")
+        statuscode="${?}"
+        if [ "${statuscode}" != 0 ]; then
+            printf 'Command "%s" returned %s. Stopping.\n' "${*}" "${statuscode}"
             return 1
         fi
 
         printf '\n'
         printf '%s\n' "End at: $(date +'%Y-%m-%d %H:%M:%S')"
-        printf '%s\n' "^^^ $i. run ^^^"
+        printf '%s\n' "^^^ ${i}. run ^^^"
 
         i="$((i + 1))"
     done
@@ -145,15 +145,15 @@ runN() {
 # print n-th line of file
 # usage: `line 3 example.txt` or `line 3 <example.txt`
 line() {
-    (if [ "$#" -lt 2 ]; then cat; else cat "$2"; fi) |
-        head -n "$1" |
+    (if [ "${#}" -lt 2 ]; then cat; else cat "${2}"; fi) |
+        head -n "${1}" |
         tail -n 1
 }
 
 gdiff() {
-    if [ "$#" -lt 2 ]; then
+    if [ "${#}" -lt 2 ]; then
         printf 'Not enough arguments' >&2
         return 1
     fi
-    git diff --no-index "$1" "$2" | diff2html -s side -i stdin
+    git diff --no-index "${1}" "${2}" | diff2html -s side -i stdin
 }
