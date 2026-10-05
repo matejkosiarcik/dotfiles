@@ -13,7 +13,7 @@ function usage {
     printf ' -f     force\n'
 }
 
-if [ "${#}" -lt 1 ]; then
+if [[ "${#}" -lt 1 ]]; then
     printf 'Not enough arguments\n\n' >&2
     usage >&2
     exit 1
@@ -42,7 +42,7 @@ while getopts "h?n?i?f?" opt; do
         ;;
     esac
 done
-if [ "${mode}" = '' ]; then
+if [[ "${mode}" = '' ]]; then
     printf 'No mode specified (specify either -n|-i|-f)\n\n' >&2
     usage >&2
     exit 1
@@ -58,7 +58,7 @@ function remove_file {
         ;;
     i)
         read -r -p "Remove ${file}? [y/N] " response
-        if [ "${response}" = "y" ] || [ "${response}" = "Y" ]; then
+        if [[ "${response}" = "y" ]] || [[ "${response}" = "Y" ]]; then
             printf 'Removing %s\n' "${file}"
             rm -rf "${file}"
         fi
