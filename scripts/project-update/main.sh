@@ -6,7 +6,7 @@ print_help() {
     printf '\n'
     printf '  -h                                                              print help message\n'
     printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
+    printf '  -r {all, nodejs, dart-pub, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
 }
 
 source_dir="$(dirname "$(readlink "${0}")")"
@@ -42,7 +42,7 @@ if printf '%s' "${target}" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
+if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
     printf 'Unsupported runtime %s\n' "${runtime}" >&2
     print_help
     exit 1
@@ -78,6 +78,29 @@ detect_nodejs_package_manager() {
         printf '%s\n' 'npm'
     fi
 }
+
+# Dart / Flutter - Pub
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
+    printf '## Dart / Flutter > Pub ##\n' >&2
+    glob 'pubspec.yaml' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        printf '# Updating Dart / Flutter package file at %s\n' "${file}" >&2
+        (
+            cd "$(dirname "${file}")"
+            if [ "${target}" = 'major' ]; then
+                dart pub upgrade --major-versions
+            elif [ "${target}" = 'minor' ]; then
+                # This may not be 100% semantically valid, but it should be close enough in practice to upgrade to latest minor version
+                dart pub upgrade --tighten
+            else
+                dart pub upgrade
+            fi
+        )
+    done
+fi
 
 # Gitman
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
