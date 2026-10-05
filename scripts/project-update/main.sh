@@ -95,8 +95,11 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
             elif [ "${target}" = 'minor' ]; then
                 # This may not be 100% semantically valid, but it should be close enough in practice to upgrade to latest minor version
                 dart pub upgrade --tighten
-            else
+            elif [ "${target}" = 'patch' ]; then
                 dart pub upgrade
+            else
+                # There is no builtin way to update only lockfile, so skip it
+                true
             fi
         )
     done
@@ -303,12 +306,12 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
                     done
                 fi
                 composer update --with-all-dependencies --no-install --no-interaction --no-scripts
+            elif [ "${target}" = 'minor' ]; then
+                composer update --with-all-dependencies --no-install --no-interaction --no-scripts
             elif [ "${target}" = 'patch' ]; then
                 composer update --patch-only --no-install --no-interaction --no-scripts
             elif [ "${target}" = 'lock' ]; then
                 composer update --lock --no-install --no-interaction --no-scripts
-            else
-                composer update --with-all-dependencies --no-install --no-interaction --no-scripts
             fi
         )
     done
@@ -326,8 +329,11 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
 
         if [ "${target}" = 'major' ]; then
             pur --force --requirement "${file}"
-        elif [ "${target}" != 'lock' ]; then
+        elif [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
             pur --force "--${target}" '*' --requirement "${file}"
+        elif [ "${target}" = 'lock' ]; then
+            # There is no builtin way to update only lockfile, so skip it
+            true
         fi
     done
 
@@ -353,6 +359,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
             )
         fi
 
+        # Update lockfile always
         (
             cd "$(dirname "${file}")"
             bundle config set frozen false
@@ -395,12 +402,15 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
 
         (
             cd "$(dirname "${file}")"
-            if [ "${target}" = 'patch' ]; then
-                go get -u=patch ./...
-            elif [ "${target}" != 'lock' ]; then
+            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ]; then
                 go get -u ./...
+            elif [ "${target}" = 'patch' ]; then
+                go get -u=patch ./...
             fi
-            go mod tidy
+
+            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
+                go mod tidy
+            fi
         )
     done
 fi
@@ -416,11 +426,12 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
 
         (
             cd "$(dirname "${file}")"
-            if [ "${target}" = 'lock' ]; then
-                swift package resolve
-            else
+            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
                 swift package update
             fi
+
+            # Update lockfile always
+            swift package resolve
         )
     done
 fi
