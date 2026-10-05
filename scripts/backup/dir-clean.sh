@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck shell=sh
 
 # must use bash instead of plain sh
 # because we need to export functions into subshells
