@@ -6,7 +6,7 @@ print_help() {
     printf '\n'
     printf '  -h                                                              print help message\n'
     printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs-npm, php-composer, python-pip, ruby-gem, rust-cargo, gitman}  which runtime to update\n'
+    printf '  -r {all, nodejs-npm, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, gitman}  which runtime to update\n'
 }
 
 source_dir="$(dirname "$(readlink "$0")")"
@@ -42,7 +42,7 @@ if printf '%s' "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "$runtime" | grep -qvE '^(all|nodejs\-npm|php\-composer|python\-pip|ruby\-gem|rust\-cargo|gitman)$'; then
+if printf '%s' "$runtime" | grep -qvE '^(all|nodejs\-npm|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|gitman)$'; then
     printf 'Unsupported runtime %s\n' "$runtime" >&2
     print_help
     exit 1
@@ -247,6 +247,27 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'rust-cargo' ]; then
             (cd "$(dirname "$file")" && cargo upgrade) # main
         fi
         (cd "$(dirname "$file")" && cargo update) # lock
+    done
+fi
+
+# Go+Modules
+if [ "$runtime" = 'all' ] || [ "$runtime" = 'go-mod' ]; then
+    printf '## Go > Modules ##\n' >&2
+    glob 'go.mod' | while read -r file; do
+        if [ ! -e "$file" ]; then
+            continue
+        fi
+        printf '# Updating Go module at %s\n' "$file" >&2
+
+        (
+            cd "$(dirname "$file")"
+            if [ "$target" = 'patch' ]; then
+                go get -u=patch ./...
+            elif [ "$target" != 'lock' ]; then
+                go get -u ./...
+            fi
+            go mod tidy
+        )
     done
 fi
 
