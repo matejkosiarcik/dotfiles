@@ -2,6 +2,7 @@
 # must use bash instead of plain sh
 # because we need to export functions into subshells
 set -eufo pipefail
+# shellcheck shell=sh
 
 function usage {
     printf 'Usage: dir-clean dir [-h] [-n] [-i] [-f]\n'
