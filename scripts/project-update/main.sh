@@ -36,8 +36,8 @@ while getopts "h?t:r:" o; do
     esac
 done
 
-if printf '%s' "$target" | grep -qvE '^(major|minor|patch|lock)$'; then
-    printf 'Unsupported target %s\n' "$target" >&2
+if printf '%s' "${target}" | grep -qvE '^(major|minor|patch|lock)$'; then
+    printf 'Unsupported target %s\n' "${target}" >&2
     print_help
     exit 1
 fi
@@ -48,7 +48,7 @@ if printf '%s' "$runtime" | grep -qvE '^(all|nodejs\-npm|php\-composer|python\-p
     exit 1
 fi
 
-printf 'Updating %s runtime(s) to version: %s\n\n' "$runtime" "$target" >&2
+printf 'Updating %s runtime(s) to version: %s\n\n' "$runtime" "${target}" >&2
 
 glob() {
     if git rev-parse --show-toplevel >/dev/null 2>&1; then
@@ -73,8 +73,8 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs-npm' ]; then
     if [ ! -e "$HOME/.npmrc" ] || [ "$(wc -c <"$HOME/.npmrc")" -eq '0' ]; then
         printf '# Placeholder\n' >>"$HOME/.npmrc"
     fi
-    ncu_target="$target"
-    if [ "$target" = 'major' ]; then
+    ncu_target="${target}"
+    if [ "${target}" = 'major' ]; then
         ncu_target='latest'
     fi
     glob 'package.json' | while read -r file; do
@@ -84,12 +84,12 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'nodejs-npm' ]; then
 
         printf '# Updating NPM package file at %s\n' "$file" >&2
 
-        if [ "$target" != 'lock' ]; then
+        if [ "${target}" != 'lock' ]; then
             ncu --cwd "$(dirname "$file")" --target "$ncu_target" --upgrade # package.json
         fi
 
         directory="$(dirname "$file")"
-        dirname="$(cd "$directory" >/dev/null 2>&1 && basename "$PWD")"
+        dirname="$(cd "$directory" >/dev/null 2>&1 && basename "${PWD}")"
         tmpdir="$(mktemp -d)"
         cp "$directory/package.json" "$tmpdir/package.json"
         docker run --rm \
@@ -119,7 +119,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'php-composer' ]; then
         printf '# Updating Composer package file at %s\n' "$file" >&2
         (
             cd "$(dirname "$file")"
-            if [ "$target" = 'major' ]; then
+            if [ "${target}" = 'major' ]; then
                 if [ -e composer.lock ]; then
                     composer_major_updates="$(composer outdated --locked --direct --major-only --format=json)"
                     composer_major_packages="$(
@@ -158,9 +158,9 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'php-composer' ]; then
                     done
                 fi
                 composer update --with-all-dependencies --no-install --no-interaction --no-scripts
-            elif [ "$target" = 'patch' ]; then
+            elif [ "${target}" = 'patch' ]; then
                 composer update --patch-only --no-install --no-interaction --no-scripts
-            elif [ "$target" = 'lock' ]; then
+            elif [ "${target}" = 'lock' ]; then
                 composer update --lock --no-install --no-interaction --no-scripts
             else
                 composer update --with-all-dependencies --no-install --no-interaction --no-scripts
@@ -179,10 +179,10 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'python-pip' ]; then
 
         printf '# Updating pip requirements file at %s\n' "$file" >&2
 
-        if [ "$target" = 'major' ]; then
+        if [ "${target}" = 'major' ]; then
             pur --force --requirement "$file"
-        elif [ "$target" != 'lock' ]; then
-            pur --force "--$target" '*' --requirement "$file"
+        elif [ "${target}" != 'lock' ]; then
+            pur --force "--${target}" '*' --requirement "$file"
         fi
     done
 
@@ -200,32 +200,18 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'ruby-gem' ]; then
         printf '# Updating Gemfile file at %s\n' "$file" >&2
         tmpdir="$(mktemp -d)"
 
-        if [ "$target" = 'major' ] || [ "$target" = 'minor' ] || [ "$target" = 'patch' ]; then
+        if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
             (
-                cd "$(dirname "$file")" &&
-                    BUNDLE_DISABLE_SHARED_GEMS=true \
-                        BUNDLE_FROZEN=false \
-                        BUNDLE_PATH__SYSTEM=false \
-                        BUNDLE_PATH="$tmpdir" \
-                        BUNDLE_GEMFILE="$PWD/Gemfile" \
-                        bundle install --quiet &&
-                    BUNDLE_DISABLE_SHARED_GEMS=true \
-                        BUNDLE_FROZEN=false \
-                        BUNDLE_PATH__SYSTEM=false \
-                        BUNDLE_PATH="$tmpdir" \
-                        BUNDLE_GEMFILE="$PWD/Gemfile" \
-                        bundle update --all "--$target" --quiet
+                cd "$(dirname "$file")"
+                BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="$tmpdir" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle install --quiet
+                BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="$tmpdir" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle update --all "--${target}" --quiet
             )
         fi
 
         (
-            cd "$(dirname "$file")" &&
-                bundle config set frozen false &&
-                BUNDLE_DISABLE_SHARED_GEMS=true \
-                    BUNDLE_PATH__SYSTEM=false \
-                    BUNDLE_PATH="$tmpdir" \
-                    BUNDLE_GEMFILE="$PWD/Gemfile" \
-                    bundle lock --normalize-platforms
+            cd "$(dirname "$file")"
+            bundle config set frozen false
+            BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="$tmpdir" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle lock --normalize-platforms
         )
 
         rm -rf "$tmpdir"
@@ -241,12 +227,15 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'rust-cargo' ]; then
         fi
         printf '# Updating cargo file at %s\n' "$file" >&2
 
-        if [ "$target" = 'major' ]; then
-            (cd "$(dirname "$file")" && cargo upgrade --incompatible) # main
-        elif [ "$target" = 'minor' ]; then
-            (cd "$(dirname "$file")" && cargo upgrade) # main
-        fi
-        (cd "$(dirname "$file")" && cargo update) # lock
+        (
+            cd "$(dirname "$file")"
+            if [ "${target}" = 'major' ]; then
+                cargo upgrade --incompatible # main
+            elif [ "${target}" = 'minor' ]; then
+                cargo upgrade # main
+            fi
+            cargo update # lock
+        )
     done
 fi
 
@@ -261,9 +250,9 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'go-mod' ]; then
 
         (
             cd "$(dirname "$file")"
-            if [ "$target" = 'patch' ]; then
+            if [ "${target}" = 'patch' ]; then
                 go get -u=patch ./...
-            elif [ "$target" != 'lock' ]; then
+            elif [ "${target}" != 'lock' ]; then
                 go get -u ./...
             fi
             go mod tidy
@@ -282,7 +271,7 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'swift-swiftpm' ]; then
 
         (
             cd "$(dirname "$file")"
-            if [ "$target" = 'lock' ]; then
+            if [ "${target}" = 'lock' ]; then
                 swift package resolve
             else
                 swift package update
@@ -300,11 +289,14 @@ if [ "$runtime" = 'all' ] || [ "$runtime" = 'gitman' ]; then
         fi
         printf '# Updating gitman file at %s\n' "$file" >&2
 
-        if [ "$target" != 'lock' ]; then
-            (cd "$(dirname "$file")" && gitman update --force) # main
-        else
-            (cd "$(dirname "$file")" && gitman install --force --fetch) # no-file
-        fi
-        (cd "$(dirname "$file")" && gitman lock) # lock
+        (
+            cd "$(dirname "$file")"
+            if [ "${target}" != 'lock' ]; then
+                gitman update --force # main
+            else
+                gitman install --force --fetch # no-file
+            fi
+            gitman lock # lock
+        )
     done
 fi
