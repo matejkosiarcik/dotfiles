@@ -6,7 +6,7 @@ print_help() {
     printf '\n'
     printf '  -h                                                              print help message\n'
     printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs, dart-pub, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
+    printf '  -r {all, nodejs, dart-pub, dotnet-nuget, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
 }
 
 source_dir="$(dirname "$(readlink "${0}")")"
@@ -42,7 +42,7 @@ if printf '%s' "${target}" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
+if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|dotnet\-nuget|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
     printf 'Unsupported runtime %s\n' "${runtime}" >&2
     print_help
     exit 1
@@ -97,6 +97,32 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
                 dart pub upgrade --tighten
             else
                 dart pub upgrade
+            fi
+        )
+    done
+fi
+
+# .NET - NuGet
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
+    printf '## .NET > NuGet ##\n' >&2
+    glob '*.csproj' '*.fsproj' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        printf '# Updating NuGet project at %s\n' "${file}" >&2
+        (
+            cd "$(dirname "${file}")"
+            if [ "${target}" = 'major' ]; then
+                if dotnet package update --project "$(basename "${file}")"; then
+                    true
+                else
+                    exit_code="${?}"
+                    # Exit code 2 indicates that every package is already up to date.
+                    if [ "${exit_code}" -ne 2 ]; then
+                        exit "${exit_code}"
+                    fi
+                fi
             fi
         )
     done
