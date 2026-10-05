@@ -18,20 +18,20 @@ bootstrap:
 	rm -rf './venv' && \
 		python3 -m venv './venv'
 
-	PATH="$$PWD/venv/bin:$$PATH" \
+	PATH="$${PWD}/venv/bin:$${PATH}" \
 	PIP_DISABLE_PIP_VERSION_CHECK=1 \
 		python3 -m pip install --requirement './requirements.txt' --quiet --upgrade
 
 	# Python dependencies
 	printf '%s\n' './scripts/project-update' | \
 	while read -r dir; do \
-		cd "$(PROJECT_DIR)/$$dir" && \
+		cd "$(PROJECT_DIR)/$${dir}" && \
 		PIP_DISABLE_PIP_VERSION_CHECK=1 \
 			python3 -m pip install --requirement './requirements.txt' --target './python-vendor' --quiet --upgrade && \
 		find './python-vendor/bin' -type f | while read -r file; do \
-			if cat "$$file" | grep -E '^\#\!' >/dev/null 2>&1; then \
-				content="$$(tail -n +2 "$$file")" && \
-				printf '#%s/usr/bin/env python3\n%s\n' '!' "$$content" >"$$file" && \
+			if cat "$${file}" | grep -E '^\#\!' >/dev/null 2>&1; then \
+				content="$$(tail -n +2 "$${file}")" && \
+				printf '#%s/usr/bin/env python3\n%s\n' '!' "$${content}" >"$${file}" && \
 			true; fi && \
 		true; done && \
 	true; done
@@ -41,7 +41,7 @@ bootstrap:
 		'./scripts/convert2pdf' \
 		'./scripts/project-update' | \
 	while read -r dir; do \
-		cd "$(PROJECT_DIR)/$$dir" && \
+		cd "$(PROJECT_DIR)/$${dir}" && \
 		npm ci --no-save --no-progress --no-audit --no-fund --loglevel=error && \
 	true; done
 
@@ -51,7 +51,7 @@ build:
 
 .PHONY: install
 install:
-	PATH="$(PROJECT_DIR)/venv/bin:$$PATH" \
+	PATH="$(PROJECT_DIR)/venv/bin:$${PATH}" \
 		dotbot -c './install.conf.yml'
 
 .PHONY: clean

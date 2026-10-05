@@ -17,9 +17,9 @@ Repository is split into multiple directories:
 | Directory   | Purpose                                                                                          |
 |-------------|--------------------------------------------------------------------------------------------------|
 | `./apps`    | Applications - usually wrapping scripts using platypus                                           |
-| `./config`  | Config files - installed into `$HOME`                                                            |
+| `./config`  | Config files - installed into `${HOME}`                                                          |
 | `./daemons` | Scripts executed automatically in the background (system startup, directory monitoring, cron, …) |
-| `./scripts` | Scripts - to be added to `$PATH` and used interactively                                          |
+| `./scripts` | Scripts - to be added to `${PATH}` and used interactively                                        |
 
 ## Installation
 

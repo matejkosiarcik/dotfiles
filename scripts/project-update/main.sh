@@ -67,7 +67,28 @@ glob() {
     fi
 }
 
-# JavaScript+NodeJS
+# Gitman
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
+    printf '## Gitman ##\n' >&2
+    glob 'gitman.yml' '.gitman.yml' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+        printf '# Updating gitman file at %s\n' "${file}" >&2
+
+        (
+            cd "$(dirname "${file}")"
+            if [ "${target}" != 'lock' ]; then
+                gitman update --force # main
+            else
+                gitman install --force --fetch # no-file
+            fi
+            gitman lock # lock
+        )
+    done
+fi
+
+# JavaScript - NodeJS/NPM
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs-npm' ]; then
     printf '## JavaScript > NodeJS ##\n' >&2
     if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
@@ -108,7 +129,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs-npm' ]; then
     done
 fi
 
-# PHP+Composer
+# PHP - Composer
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
     printf '## PHP > Composer ##\n' >&2
     glob 'composer.json' | while read -r file; do
@@ -169,7 +190,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
     done
 fi
 
-# Python+Pip
+# Python - Pip
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
     printf '## Python > Pip ##\n' >&2
     glob '*requirements*.txt' | while read -r file; do
@@ -189,7 +210,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
     # TODO: Also update Pipfile
 fi
 
-# Ruby+Gem
+# Ruby - Gem
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
     printf '## Ruby > Gem ##\n' >&2
     glob 'Gemfile' | while read -r file; do
@@ -218,7 +239,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
     done
 fi
 
-# Rust+Cargo
+# Rust - Cargo
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
     printf '## Rust > Cargo ##\n' >&2
     glob 'Cargo.toml' | while read -r file; do
@@ -239,7 +260,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
     done
 fi
 
-# Go+Modules
+# Go - Modules
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
     printf '## Go > Modules ##\n' >&2
     glob 'go.mod' | while read -r file; do
@@ -260,7 +281,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
     done
 fi
 
-# Swift+Package Manager
+# Swift - Swift Package Manager
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
     printf '## Swift > Package Manager ##\n' >&2
     glob 'Package.swift' | while read -r file; do
@@ -276,27 +297,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
             else
                 swift package update
             fi
-        )
-    done
-fi
-
-# Gitman
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
-    printf '## Gitman ##\n' >&2
-    glob 'gitman.yml' '.gitman.yml' | while read -r file; do
-        if [ ! -e "${file}" ]; then
-            continue
-        fi
-        printf '# Updating gitman file at %s\n' "${file}" >&2
-
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" != 'lock' ]; then
-                gitman update --force # main
-            else
-                gitman install --force --fetch # no-file
-            fi
-            gitman lock # lock
         )
     done
 fi
