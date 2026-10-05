@@ -142,9 +142,9 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
 
         (
             cd "$(dirname "${file}")"
-            if [ "${target}" != 'lock' ]; then
+            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
                 gitman update --force # main
-            else
+            elif [ "${target}" = 'lock' ]; then
                 gitman install --force --fetch # no-file
             fi
             gitman lock # lock
@@ -362,8 +362,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
         # Update lockfile always
         (
             cd "$(dirname "${file}")"
-            bundle config set frozen false
-            BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle lock --normalize-platforms
+            BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle lock --normalize-platforms
         )
 
         rm -rf "${tmpdir}"
