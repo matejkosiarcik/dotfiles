@@ -4,7 +4,7 @@ set -euf
 # This script backs up all system installed packages to Dropbox
 
 tmpdir="$(mktemp -d)"
-cd "$tmpdir"
+cd "${tmpdir}"
 printf 'Running packages backup...\n'
 
 if command -v brew >/dev/null 2>&1; then
@@ -64,9 +64,9 @@ if command -v code >/dev/null 2>&1; then
     code --list-extensions >'./vscode-extensions.txt'
 fi
 case "$(uname -s)" in
-Darwin) cp "$HOME/Library/Application Support/Code/User/settings.json" './vscode-settings.json' ;;
-Windows) cp "$APPDATA/Code/User/settings.json" './vscode-settings.json' ;;
-Linux) cp "$HOME/.config/Code/User/settings.json" './vscode-settings.json' ;;
+Darwin) cp "${HOME}/Library/Application Support/Code/User/settings.json" './vscode-settings.json' ;;
+Windows) cp "${APPDATA}/Code/User/settings.json" './vscode-settings.json' ;;
+Linux) cp "${HOME}/.config/Code/User/settings.json" './vscode-settings.json' ;;
 *) printf 'Could not copy VSCode settings, unsupported system %s\n' "$(uname -a)" ;;
 esac
 
@@ -74,9 +74,9 @@ touch "./.$(date '+%Y-%m-%dT%H-%M-%S%z')" # mark datetime of current export
 
 # Copy created directory to Dropbox under this computer's name
 computername="$(scutil --get ComputerName || cat '/etc/hostname' || uname -n)"
-target="$HOME/Dropbox/Packages/$computername"
-[ -e "$target" ] && rm -rf "$target"
-mkdir -p "$target"
-cp -r "$tmpdir/" "$target/"
+target="${HOME}/Dropbox/Packages/${computername}"
+[ -e "${target}" ] && rm -rf "${target}"
+mkdir -p "${target}"
+cp -r "${tmpdir}/" "${target}/"
 
 printf 'Successfuly run packages backup.\n'

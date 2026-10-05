@@ -14,7 +14,7 @@ osascript -e 'tell application "System Preferences" to quit'
 #
 
 # Show ~/Library
-chflags nohidden "$HOME/Library"
+chflags nohidden "${HOME}/Library"
 
 # Show /Volumes
 sudo chflags nohidden '/Volumes'
@@ -122,19 +122,19 @@ defaults write 'NSGlobalDomain' NSToolbarTitleViewRolloverDelay -float 0
 ## Pictures ##
 #
 
-mkdir -p "$HOME/Pictures/Other"
+mkdir -p "${HOME}/Pictures/Other"
 
 #
 ## Screenshots ##
 #
-screenshots_dir="$HOME/Pictures/Screenshots"
-mkdir -p "$screenshots_dir"
+screenshots_dir="${HOME}/Pictures/Screenshots"
+mkdir -p "${screenshots_dir}"
 
 # No shadows
 defaults write 'com.apple.screencapture' disable-shadow -bool false
 
 # Change location
-defaults write 'com.apple.screencapture' location -string "$screenshots_dir"
+defaults write 'com.apple.screencapture' location -string "${screenshots_dir}"
 
 # Save screenshot immediately
 defaults write 'com.apple.screencapture' show-thumbnail -bool false

@@ -3,7 +3,7 @@ set -euf
 # This file updates all package-managers
 # both system type and language specific
 
-cd "$HOME" # to be sure we don't update project instead of system
+cd "${HOME}" # to be sure we don't update project instead of system
 
 # TODO: Add chronic from moreutils
 
@@ -65,9 +65,9 @@ printf '%s\n' '--- Python ---'
 #     pip_extra_args='--break-system-packages'
 # fi
 # shellcheck disable=SC2248
-# python3 -m pip install --upgrade pip setuptools wheel $pip_extra_args
+# python3 -m pip install --upgrade pip setuptools wheel ${pip_extra_args}
 # shellcheck disable=SC2248
-# python3 -m pip list --outdated | tail -n +3 | cut -d ' ' -f 1 | xargs -n1 python3 -m pip install --upgrade $pip_extra_args
+# python3 -m pip list --outdated | tail -n +3 | cut -d ' ' -f 1 | xargs -n1 python3 -m pip install --upgrade ${pip_extra_args}
 
 # Pipx
 pipx upgrade-all
