@@ -1,0 +1,22 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+      force: true
+    clean:
+      force: false
+
+- clean:
+    - "~"
+
+- shell:
+    - description: PreSetup
+      command: sh -c 'rm -rf "${HOME}/.config/matejkosiarcik" && mkdir -p "${HOME}/.config/matejkosiarcik"'
+      stdin: true
+      stdout: true
+
+- link:
+    # Scripts
+    "~/.config/matejkosiarcik/bin/dir2sha": "./scripts/dir2sha.py"
+    "~/.config/matejkosiarcik/bin/export-container": "./scripts/export-container.sh"
+    "~/.config/matejkosiarcik/bin/export-image": "./scripts/export-image.sh"

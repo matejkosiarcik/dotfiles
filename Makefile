@@ -45,6 +45,15 @@ bootstrap:
 		npm ci --no-save --no-progress --no-audit --no-fund --loglevel=error && \
 	true; done
 
+.PHONY: server-bootstrap
+server-bootstrap:
+	rm -rf './venv' && \
+		python3 -m venv './venv'
+
+	PATH="$${PWD}/venv/bin:$${PATH}" \
+	PIP_DISABLE_PIP_VERSION_CHECK=1 \
+		python3 -m pip install --requirement './requirements.txt' --quiet --upgrade
+
 .PHONY: build
 build:
 	npm --prefix './scripts/convert2pdf' run build
@@ -53,6 +62,11 @@ build:
 install:
 	PATH="$(PROJECT_DIR)/venv/bin:$${PATH}" \
 		dotbot -c './install.conf.yml'
+
+.PHONY: server-install
+server-install:
+	PATH="$(PROJECT_DIR)/venv/bin:$${PATH}" \
+		dotbot -c './install-server.conf.yml'
 
 .PHONY: clean
 clean:
