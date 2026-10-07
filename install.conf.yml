@@ -24,38 +24,39 @@
     "~/.vimrc": "./config/.vimrc"
 
     # Shell config
-    "~/.config/matejkosiarcik/config/config.sh": "./config/shell/config.sh"
     "~/.config/matejkosiarcik/config/config.bash": "./config/shell/config.bash"
+    "~/.config/matejkosiarcik/config/config.sh": "./config/shell/config.sh"
     "~/.config/matejkosiarcik/config/config.zsh": "./config/shell/config.zsh"
 
     # Git config
     "~/.config/matejkosiarcik/config/main.gitconfig": "./config/git/main.gitconfig"
 
     # Scripts
-    "~/.config/matejkosiarcik/bin/dir2sha": "./scripts/dir2sha.py"
     "~/.config/matejkosiarcik/bin/convert2pdf": "./scripts/convert2pdf/dist/convert.js"
-    "~/.config/matejkosiarcik/bin/git-update": "./scripts/git-update.sh"
-    "~/.config/matejkosiarcik/bin/project-update": "./scripts/project-update/main.sh"
-    "~/.config/matejkosiarcik/bin/system-update": "./scripts/system-update.sh"
-    "~/.config/matejkosiarcik/bin/mert-connect-to-server": "./scripts/mert-connect-to-server.sh"
+    "~/.config/matejkosiarcik/bin/dir2sha": "./scripts/dir2sha.py"
     "~/.config/matejkosiarcik/bin/export-container": "./scripts/export-container.sh"
     "~/.config/matejkosiarcik/bin/export-image": "./scripts/export-image.sh"
+    "~/.config/matejkosiarcik/bin/git-update": "./scripts/git-update.sh"
+    "~/.config/matejkosiarcik/bin/mert-connect-to-server": "./scripts/mert-connect-to-server.sh"
+    "~/.config/matejkosiarcik/bin/project-update": "./scripts/project-update/main.sh"
+    "~/.config/matejkosiarcik/bin/system-update": "./scripts/system-update.sh"
+    "~/.config/matejkosiarcik/bin/vscode-server": "./scripts/vscode-server.sh"
 
     # Old scripts
-    # ~/.bin/old/backup-packages: scripts/backup/backup-packages.sh
-    # ~/.bin/old/check-video: scripts/backup/check-video.sh
-    # ~/.bin/old/dir-clean: scripts/backup/dir-clean.sh
-    # ~/.bin/old/dirs2sha: scripts/backup/dirs2sha.sh
-    # ~/.bin/old/exiff: scripts/backup/exiff.sh
-    # ~/.bin/old/exifd: scripts/backup/exifd.sh
-    # ~/.bin/old/lsdir: scripts/backup/lsdir.py
-    # ~/.bin/old/newterm: scripts/backup/newterm.scpt
-    # ~/.bin/old/project-update: scripts/backup/project-update.sh
-    # ~/.bin/old/relock: scripts/backup/relock.sh
-    # ~/.bin/old/report-tabs: scripts/backup/report-tabs.sh
-    # ~/.bin/old/ulozto-autodownload: scripts/backup/ulozto-autodownload.sh
-    # ~/.bin/old/gitup: scripts/git/backup/gitup.sh
-    # ~/.bin/old/gitmon: scripts/backup/gitmon.sh
+    # ~/.config/matejkosiarcik/bin/old/backup-packages: scripts/backup/backup-packages.sh
+    # ~/.config/matejkosiarcik/bin/old/check-video: scripts/backup/check-video.sh
+    # ~/.config/matejkosiarcik/bin/old/dir-clean: scripts/backup/dir-clean.sh
+    # ~/.config/matejkosiarcik/bin/old/dirs2sha: scripts/backup/dirs2sha.sh
+    # ~/.config/matejkosiarcik/bin/old/exifd: scripts/backup/exifd.sh
+    # ~/.config/matejkosiarcik/bin/old/exiff: scripts/backup/exiff.sh
+    # ~/.config/matejkosiarcik/bin/old/gitmon: scripts/backup/gitmon.sh
+    # ~/.config/matejkosiarcik/bin/old/gitup: scripts/git/backup/gitup.sh
+    # ~/.config/matejkosiarcik/bin/old/lsdir: scripts/backup/lsdir.py
+    # ~/.config/matejkosiarcik/bin/old/newterm: scripts/backup/newterm.scpt
+    # ~/.config/matejkosiarcik/bin/old/project-update: scripts/backup/project-update.sh
+    # ~/.config/matejkosiarcik/bin/old/relock: scripts/backup/relock.sh
+    # ~/.config/matejkosiarcik/bin/old/report-tabs: scripts/backup/report-tabs.sh
+    # ~/.config/matejkosiarcik/bin/old/ulozto-autodownload: scripts/backup/ulozto-autodownload.sh
 
     # Background daemons
     "~/.config/matejkosiarcik/daemons/main.sh": "./daemons/main.sh"
