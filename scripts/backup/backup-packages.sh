@@ -75,7 +75,9 @@ touch "./.$(date '+%Y-%m-%dT%H-%M-%S%z')" # mark datetime of current export
 # Copy created directory to Dropbox under this computer's name
 computername="$(scutil --get ComputerName || cat '/etc/hostname' || uname -n)"
 target="${HOME}/Dropbox/Packages/${computername}"
-[ -e "${target}" ] && rm -rf "${target}"
+if [ -e "${target}" ] || [ -L "${target}" ]; then
+    rm -rf "${target}"
+fi
 mkdir -p "${target}"
 cp -r "${tmpdir}/" "${target}/"
 

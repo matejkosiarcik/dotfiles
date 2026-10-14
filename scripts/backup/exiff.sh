@@ -87,7 +87,7 @@ elif [ "${mode}" = 'f' ]; then
                 # Check if the new file already exists (2 photos with the exact date taken)
                 # In such case name the second photo with an iterator suffix
                 i=0
-                while [ -e "${newfilename}" ]; do
+                while [ -e "${newfilename}" ] || [ -L "${newfilename}" ]; do
                     i="$((i + 1))"
                     newfilename="${date} ${i}.${file_extension_new}"
                 done

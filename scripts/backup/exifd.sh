@@ -100,7 +100,7 @@ check_dir() {
             oldfile="$(dirname "${file}")/${filedate}.${fileext}"
             newfile="$(dirname "${file}")/${filedate} 0.${fileext}"
             if [ -e "${oldfile}" ]; then
-                if [ ! -e "${newfile}" ]; then
+                if [ ! -e "${newfile}" ] && [ ! -L "${newfile}" ]; then
                     mv "${oldfile}" "${newfile}"
                 else
                     printf 'ERROR: %s already exist!\n' "${newfile}" >&2

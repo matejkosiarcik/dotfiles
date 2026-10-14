@@ -59,11 +59,11 @@ fi
 
 # Check if the new file already exists (2 photos with the exact date taken)
 i=1
-if [ -e "${new_filename}" ] || [ -e "${date} 1.${new_extension}" ] || [ -e "${date} 01.${new_extension}" ] || [ -e "${date} 001.${new_extension}" ]; then
+if [ -e "${new_filename}" ] || [ -L "${new_filename}" ] || [ -e "${date} 1.${new_extension}" ] || [ -L "${date} 1.${new_extension}" ] || [ -e "${date} 01.${new_extension}" ] || [ -L "${date} 01.${new_extension}" ] || [ -e "${date} 001.${new_extension}" ] || [ -L "${date} 001.${new_extension}" ]; then
     # If we are adding "A.jpg", but it already exists, we will add "A 2.jpg"
     # But we need to rename the former image to "A 1.jpg"
-    if [ -e "${new_filename}" ]; then
-        if [ ! -e "${date} 1.${new_extension}" ] && [ ! -e "${date} 01.${new_extension}" ] && [ ! -e "${date} 001.${new_extension}" ]; then
+    if [ -e "${new_filename}" ] || [ -L "${new_filename}" ]; then
+        if [ ! -e "${date} 1.${new_extension}" ] && [ ! -L "${date} 1.${new_extension}" ] && [ ! -e "${date} 01.${new_extension}" ] && [ ! -L "${date} 01.${new_extension}" ] && [ ! -e "${date} 001.${new_extension}" ] && [ ! -L "${date} 001.${new_extension}" ]; then
             mv "${new_filename}" "${date} 1.${new_extension}"
         fi
     fi
@@ -72,7 +72,7 @@ if [ -e "${new_filename}" ] || [ -e "${date} 1.${new_extension}" ] || [ -e "${da
 fi
 
 # Determine full filename (increment index until it doesn't exists)
-while [ -e "${new_filename}" ]; do
+while [ -e "${new_filename}" ] || [ -L "${new_filename}" ]; do
     if [ "${new_filename}" = "${old_filename}" ]; then
         break
     fi
