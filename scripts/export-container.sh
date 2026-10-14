@@ -3,45 +3,31 @@ set -euf
 
 # Export container metadata and filesystem into a directory for debugging
 
-container_name=''
-output_directory=''
-while [ "${#}" -gt 0 ]; do
-    case "${1}" in
-    -c | --container)
-        container_name="${2}"
-        shift 2
-        ;;
-    -o | --output)
-        output_directory="${2}"
-        shift 2
-        ;;
-    *)
-        printf 'Unknown argument: %s\n' "${1}"
-        exit 1
-        ;;
-    esac
+if [ "${#}" -eq 1 ] && { [ "${1}" = '-h' ] || [ "${1}" = '--help' ]; }; then
+    printf 'Usage: %s <container-name>\n' "${0}"
+    exit 0
+fi
+
+if [ "${#}" -ne 1 ]; then
+    printf 'Usage: %s <container-name>\n' "${0}" >&2
+    exit 1
+fi
+
+container_name="${1}"
+if ! docker container inspect "${container_name}" >/dev/null 2>&1; then
+    printf 'Container %s does not exist\n' "${container_name}" >&2
+    exit 1
+fi
+
+directory_name="$(printf '%s' "${container_name}" | LC_ALL=C tr -c 'a-zA-Z0-9-' '-')"
+output_directory="${PWD}/${directory_name}"
+suffix='0'
+
+while [ -e "${output_directory}" ] || [ -L "${output_directory}" ]; do
+    suffix=$((suffix + 1))
+    output_directory="${PWD}/${directory_name}-${suffix}"
 done
-
-if [ -z "${container_name:-}" ]; then
-    printf 'Container name not provided, use "-c/--container <name>"\n' >&2
-    exit 1
-fi
-if [ -z "${output_directory:-}" ]; then
-    printf 'Output directory path missing, use "-o/--output <directory>"\n' >&2
-    exit 1
-fi
-
-output_directory="$(
-    realpath -q "${output_directory}" || if printf '%s' "${output_directory}" | grep '^/' >/dev/null 2>&1; then printf '%s' "${output_directory}"; else printf '%s/%s' "${PWD}" "${output_directory}"; fi
-)"
-
-if [ ! -e "${output_directory}" ]; then
-    mkdir -p "${output_directory}"
-fi
-if [ "$(find "${output_directory}" -mindepth 1 -maxdepth 1 | wc -c)" -gt '0' ]; then
-    printf 'Output directory %s not empty\n' "${output_directory}" >&2
-    exit 1
-fi
+mkdir -p "${output_directory}"
 
 # Export env
 docker inspect "${container_name}" --format '{{range .Config.Env}}{{println .}}{{end}}' | cat -s | sort --human-numeric-sort >"${output_directory}/env.txt"
