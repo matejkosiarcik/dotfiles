@@ -24,15 +24,21 @@ import pAll from 'p-all';
 
     let input = args.input;
     if (!Array.isArray(input) || input.length === 0) {
-        throw new Error('Empty input');
+        console.error('Empty input');
+        process.exit(1);
     }
     input = (await Promise.all(input.map(async (file) => {
         return (await glob(file)).sort(compare);
     }))).flat();
+    if (input.length === 0) {
+        console.error('No input files found.');
+        process.exit(1);
+    }
 
     const output = args.output;
     if (path.extname(output).slice(1) !== 'pdf') {
-        throw new Error('Output must be PDF');
+        console.error('Output must be PDF');
+        process.exit(1);
     }
 
     const concurrencyLimit = Math.max(os.cpus.length - 1, 1);
@@ -54,12 +60,15 @@ import pAll from 'p-all';
 
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'tmp'));
 
-    const tmpFiles = await pAll(input.map((file) => async () => {
-        const tmpFile = path.join(tmpDir, path.basename(file, path.extname(file))) + '.jpg';
-        await execa('convert', ['-auto-orient', file, '-quality', '90', '-resize', `${targetResolution.width}x${targetResolution.height}!`, tmpFile]);
-        return tmpFile;
-    }), { concurrency: concurrencyLimit });
+    try {
+        const tmpFiles = await pAll(input.map((file) => async () => {
+            const tmpFile = path.join(tmpDir, path.basename(file, path.extname(file))) + '.jpg';
+            await execa('magick', ['convert', '-auto-orient', file, '-quality', '90', '-resize', `${targetResolution.width}x${targetResolution.height}!`, tmpFile]);
+            return tmpFile;
+        }), { concurrency: concurrencyLimit });
 
-    await execa('convert', [...tmpFiles, output]);
-    await fs.rm(tmpDir, { force: true, recursive: true });
+        await execa('magick', ['convert', ...tmpFiles, output]);
+    } finally {
+        await fs.rm(tmpDir, { force: true, recursive: true });
+    }
 })();

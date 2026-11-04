@@ -81,13 +81,13 @@ detect_nodejs_package_manager() {
 
 # Dart / Flutter - Pub
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
-    printf '## Dart / Flutter > Pub ##\n' >&2
+    printf '\n\n## Dart / Flutter > Pub ##\n' >&2
     glob 'pubspec.yaml' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
 
-        printf '# Updating Dart / Flutter package file at %s\n' "${file}" >&2
+        printf '\n\n# Updating Dart / Flutter package file at %s\n' "${file}" >&2
         (
             cd "$(dirname "${file}")"
             if [ "${target}" = 'major' ]; then
@@ -107,13 +107,13 @@ fi
 
 # .NET - NuGet
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
-    printf '## .NET > NuGet ##\n' >&2
+    printf '\n\n## .NET > NuGet ##\n' >&2
     glob '*.csproj' '*.fsproj' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
 
-        printf '# Updating NuGet project at %s\n' "${file}" >&2
+        printf '\n\n# Updating NuGet project at %s\n' "${file}" >&2
         (
             cd "$(dirname "${file}")"
             if [ "${target}" = 'major' ]; then
@@ -133,12 +133,12 @@ fi
 
 # Gitman
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
-    printf '## Gitman ##\n' >&2
+    printf '\n\n## Gitman ##\n' >&2
     glob 'gitman.yml' '.gitman.yml' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '# Updating gitman file at %s\n' "${file}" >&2
+        printf '\n\n# Updating gitman file at %s\n' "${file}" >&2
 
         (
             cd "$(dirname "${file}")"
@@ -154,7 +154,7 @@ fi
 
 # JavaScript - NodeJS/NPM
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
-    printf '## JavaScript > NodeJS ##\n' >&2
+    printf '\n\n## JavaScript > NodeJS ##\n' >&2
     if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
         printf '# Placeholder\n' >>"${HOME}/.npmrc"
     fi
@@ -170,7 +170,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
         directory="$(dirname "${file}")"
         package_manager="$(detect_nodejs_package_manager "${directory}")"
 
-        printf '# Updating %s package file at %s\n' "${package_manager}" "${file}" >&2
+        printf '\n\n# Updating %s package file at %s\n' "${package_manager}" "${file}" >&2
 
         if [ "${target}" != 'lock' ]; then
             ncu --cwd "${directory}" --packageManager "${package_manager}" --target "${ncu_target}" --upgrade # package.json
@@ -258,13 +258,13 @@ fi
 
 # PHP - Composer
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
-    printf '## PHP > Composer ##\n' >&2
+    printf '\n\n## PHP > Composer ##\n' >&2
     glob 'composer.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
 
-        printf '# Updating Composer package file at %s\n' "${file}" >&2
+        printf '\n\n# Updating Composer package file at %s\n' "${file}" >&2
         (
             cd "$(dirname "${file}")"
             if [ "${target}" = 'major' ]; then
@@ -297,7 +297,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
                             continue
                         fi
 
-                        printf '# Updating major Composer constraint for %s\n' "${package}" >&2
+                        printf '\n\n# Updating major Composer constraint for %s\n' "${package}" >&2
                         if [ "${dependency_type}" = 'development' ]; then
                             composer require --dev --no-update --no-interaction --no-scripts "${package}"
                         else
@@ -319,13 +319,13 @@ fi
 
 # Python - Pip
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
-    printf '## Python > Pip ##\n' >&2
+    printf '\n\n## Python > Pip ##\n' >&2
     glob '*requirements*.txt' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
 
-        printf '# Updating pip requirements file at %s\n' "${file}" >&2
+        printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
 
         if [ "${target}" = 'major' ]; then
             pur --force --requirement "${file}"
@@ -342,13 +342,13 @@ fi
 
 # Ruby - Gem
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
-    printf '## Ruby > Gem ##\n' >&2
+    printf '\n\n## Ruby > Gem ##\n' >&2
     glob 'Gemfile' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
 
-        printf '# Updating Gemfile file at %s\n' "${file}" >&2
+        printf '\n\n# Updating Gemfile file at %s\n' "${file}" >&2
         tmpdir="$(mktemp -d)"
 
         if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
@@ -371,12 +371,12 @@ fi
 
 # Rust - Cargo
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
-    printf '## Rust > Cargo ##\n' >&2
+    printf '\n\n## Rust > Cargo ##\n' >&2
     glob 'Cargo.toml' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '# Updating cargo file at %s\n' "${file}" >&2
+        printf '\n\n# Updating cargo file at %s\n' "${file}" >&2
 
         (
             cd "$(dirname "${file}")"
@@ -392,12 +392,12 @@ fi
 
 # Go - Modules
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
-    printf '## Go > Modules ##\n' >&2
+    printf '\n\n## Go > Modules ##\n' >&2
     glob 'go.mod' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '# Updating Go module at %s\n' "${file}" >&2
+        printf '\n\n# Updating Go module at %s\n' "${file}" >&2
 
         (
             cd "$(dirname "${file}")"
@@ -416,12 +416,12 @@ fi
 
 # Swift - Swift Package Manager
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
-    printf '## Swift > Package Manager ##\n' >&2
+    printf '\n\n## Swift > Package Manager ##\n' >&2
     glob 'Package.swift' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '# Updating Swift package file at %s\n' "${file}" >&2
+        printf '\n\n# Updating Swift package file at %s\n' "${file}" >&2
 
         (
             cd "$(dirname "${file}")"
