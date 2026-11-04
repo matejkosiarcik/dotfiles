@@ -24,15 +24,21 @@ import pAll from 'p-all';
 
     let input = args.input;
     if (!Array.isArray(input) || input.length === 0) {
-        throw new Error('Empty input');
+        console.error('Empty input');
+        process.exit(1);
     }
     input = (await Promise.all(input.map(async (file) => {
         return (await glob(file)).sort(compare);
     }))).flat();
+    if (input.length === 0) {
+        console.error('No input files found.');
+        process.exit(1);
+    }
 
     const output = args.output;
     if (path.extname(output).slice(1) !== 'pdf') {
-        throw new Error('Output must be PDF');
+        console.error('Output must be PDF');
+        process.exit(1);
     }
 
     const concurrencyLimit = Math.max(os.cpus.length - 1, 1);
