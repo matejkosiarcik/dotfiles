@@ -54,12 +54,15 @@ import pAll from 'p-all';
 
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'tmp'));
 
-    const tmpFiles = await pAll(input.map((file) => async () => {
-        const tmpFile = path.join(tmpDir, path.basename(file, path.extname(file))) + '.jpg';
-        await execa('convert', ['-auto-orient', file, '-quality', '90', '-resize', `${targetResolution.width}x${targetResolution.height}!`, tmpFile]);
-        return tmpFile;
-    }), { concurrency: concurrencyLimit });
+    try {
+        const tmpFiles = await pAll(input.map((file) => async () => {
+            const tmpFile = path.join(tmpDir, path.basename(file, path.extname(file))) + '.jpg';
+            await execa('magick', ['convert', '-auto-orient', file, '-quality', '90', '-resize', `${targetResolution.width}x${targetResolution.height}!`, tmpFile]);
+            return tmpFile;
+        }), { concurrency: concurrencyLimit });
 
-    await execa('convert', [...tmpFiles, output]);
-    await fs.rm(tmpDir, { force: true, recursive: true });
+        await execa('magick', ['convert', ...tmpFiles, output]);
+    } finally {
+        await fs.rm(tmpDir, { force: true, recursive: true });
+    }
 })();
