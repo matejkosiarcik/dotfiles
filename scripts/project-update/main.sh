@@ -79,6 +79,108 @@ detect_nodejs_package_manager() {
     fi
 }
 
+resolve_python_version() {
+    directory="${1}"
+
+    while true; do
+        if [ -f "${directory}/.python-version" ]; then
+            version="$(sed -n -E 's~[[:space:]]*#.*$~~;s~^[[:space:]]+~~;s~[[:space:]]+$~~;/^[0-9]+(\.[0-9]+){1,2}$/{ p; q; }' <"${directory}/.python-version")"
+            if [ -n "${version}" ]; then
+                printf '%s\n' "${version}"
+                return
+            fi
+        fi
+
+        parent_directory="$(dirname "${directory}")"
+        if [ "${parent_directory}" = "${directory}" ]; then
+            break
+        fi
+        directory="${parent_directory}"
+    done
+
+    printf '%s\n' 'latest'
+}
+
+update_python_requirements() {
+    requirements_file="${1}"
+    requirements_directory="$(cd "$(dirname "${requirements_file}")" && pwd -P)"
+    requirements_path="${requirements_directory}/$(basename "${requirements_file}")"
+    python_version="$(resolve_python_version "${requirements_directory}")"
+
+    case "${requirements_file}" in
+    *.in)
+        requirements_docker_filename='requirements.in'
+        lockfile="${requirements_file%.in}.txt"
+        ;;
+    *.txt)
+        requirements_docker_filename='requirements.txt'
+        lockfile=''
+        ;;
+    *)
+        printf 'Unsupported Python requirements file %s\n' "${requirements_file}" >&2
+        return 1
+        ;;
+    esac
+
+    printf '# Resolved Python version %s for %s\n' "${python_version}" "${requirements_file}" >&2
+
+    if [ "${target}" != 'lock' ]; then
+        docker run --rm \
+            --mount "type=bind,src=${requirements_path},dst=/input/${requirements_docker_filename},readonly=false" \
+            --env "REQUIREMENTS_FILE=${requirements_docker_filename}" \
+            --env "UPDATE_TARGET=${target}" \
+            --entrypoint '/bin/sh' \
+            "python:${python_version}" \
+            -c '
+                set -euf
+                python3 -m venv /venv
+                /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pur
+
+                mkdir /work
+                cp "/input/${REQUIREMENTS_FILE}" "/work/${REQUIREMENTS_FILE}"
+                cd /work
+
+                case "${UPDATE_TARGET}" in
+                major)
+                    /venv/bin/pur --force --requirement "${REQUIREMENTS_FILE}"
+                    ;;
+                minor | patch)
+                    /venv/bin/pur --force "--${UPDATE_TARGET}" "*" --requirement "${REQUIREMENTS_FILE}"
+                    ;;
+                esac
+
+                cat "${REQUIREMENTS_FILE}" >"/input/${REQUIREMENTS_FILE}"
+            '
+    fi
+
+    if [ -n "${lockfile}" ]; then
+        if [ ! -e "${lockfile}" ]; then
+            touch "${lockfile}"
+        fi
+
+        lockfile_path="${requirements_directory}/$(basename "${lockfile}")"
+
+        docker run --rm \
+            --mount "type=bind,src=${requirements_path},dst=/input/requirements.in,readonly=false" \
+            --mount "type=bind,src=${lockfile_path},dst=/input/requirements.txt,readonly=false" \
+            --entrypoint '/bin/sh' \
+            "python:${python_version}" \
+            -c '
+                set -euf
+                python3 -m venv /venv
+                /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pip-tools
+
+                mkdir -p /work
+                cp /input/requirements.in /input/requirements.txt /work/
+                cd /work
+
+                /venv/bin/pip-compile --generate-hashes --strip-extras --output-file="./requirements.txt" "./requirements.in"
+
+                cat "./requirements.txt" >"/input/requirements.txt"
+            '
+    fi
+}
+
 # Dart / Flutter - Pub
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
     printf '\n\n## Dart / Flutter > Pub ##\n' >&2
@@ -327,23 +429,9 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
             continue
         fi
 
-        lockfile="${file%.in}.txt"
         printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
 
-        if [ "${target}" = 'major' ]; then
-            pur --force --requirement "${file}"
-        elif [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-            pur --force "--${target}" '*' --requirement "${file}"
-        elif [ "${target}" = 'lock' ]; then
-            # There is no builtin way to update only lockfile, so skip it
-            true
-        fi
-
-        (
-            cd "$(dirname "${file}")"
-            pip-compile --generate-hashes --strip-extras --output-file="$(basename "${lockfile}")" "$(basename "${file}")"
-            # TODO: Maybe also add --no-index
-        )
+        update_python_requirements "${file}"
     done
 
     # Only projects with requirements.txt
@@ -359,13 +447,11 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
 
         printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
 
-        if [ "${target}" = 'major' ]; then
-            pur --force --requirement "${file}"
-        elif [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-            pur --force "--${target}" '*' --requirement "${file}"
-        elif [ "${target}" = 'lock' ]; then
+        if [ "${target}" = 'lock' ]; then
             # There is no builtin way to update only lockfile, so skip it
             true
+        else
+            update_python_requirements "${file}"
         fi
     done
 
