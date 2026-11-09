@@ -320,8 +320,40 @@ fi
 # Python - Pip
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
     printf '\n\n## Python > Pip ##\n' >&2
+
+    # Projects with both requirements.in and requirements.txt
+    glob '*requirements*.in' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        lockfile="${file%.in}.txt"
+        printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
+
+        if [ "${target}" = 'major' ]; then
+            pur --force --requirement "${file}"
+        elif [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
+            pur --force "--${target}" '*' --requirement "${file}"
+        elif [ "${target}" = 'lock' ]; then
+            # There is no builtin way to update only lockfile, so skip it
+            true
+        fi
+
+        (
+            cd "$(dirname "${file}")"
+            pip-compile --generate-hashes --strip-extras --output-file="$(basename "${lockfile}")" "$(basename "${file}")"
+            # TODO: Maybe also add --no-index
+        )
+    done
+
+    # Only projects with requirements.txt
     glob '*requirements*.txt' | while read -r file; do
         if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        # Skip update if there is an associated requirements.in
+        if [ -e "${file%.txt}.in" ]; then
             continue
         fi
 
