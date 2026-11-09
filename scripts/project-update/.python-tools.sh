@@ -207,6 +207,7 @@ resolve_python_version() {
 
 update_python_requirements() {
     requirements_file="${1}"
+    update_target="${2}"
     requirements_directory="$(cd "$(dirname "${requirements_file}")" && pwd -P)"
     requirements_path="${requirements_directory}/$(basename "${requirements_file}")"
     python_version="$(resolve_python_version "${requirements_directory}")"
@@ -228,11 +229,11 @@ update_python_requirements() {
 
     printf '# Resolved Python version %s for %s\n' "${python_version}" "${requirements_file}" >&2
 
-    if [ "${target}" != 'lock' ]; then
+    if [ "${update_target}" != 'lock' ]; then
         docker run --rm \
             --mount "type=bind,src=${requirements_path},dst=/input/${requirements_docker_filename},readonly=false" \
             --env "REQUIREMENTS_FILE=${requirements_docker_filename}" \
-            --env "UPDATE_TARGET=${target}" \
+            --env "UPDATE_TARGET=${update_target}" \
             --entrypoint '/bin/sh' \
             "python:${python_version}" \
             -c '

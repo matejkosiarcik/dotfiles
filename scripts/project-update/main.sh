@@ -371,7 +371,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
 
         printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
 
-        update_python_requirements "${file}"
+        update_python_requirements "${file}" "${target}"
     done
 
     # Only projects with requirements.txt
@@ -391,7 +391,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
             # There is no builtin way to update only lockfile, so skip it
             true
         else
-            update_python_requirements "${file}"
+            update_python_requirements "${file}" "${target}"
         fi
     done
 
