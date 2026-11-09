@@ -41,6 +41,10 @@ export PYTHONPATH
 . "${source_dir}/.ruby-tools.sh"
 # shellcheck source=scripts/project-update/.go-tools.sh
 . "${source_dir}/.go-tools.sh"
+# shellcheck source=scripts/project-update/.dotnet-tools.sh
+. "${source_dir}/.dotnet-tools.sh"
+# shellcheck source=scripts/project-update/.dart-tools.sh
+. "${source_dir}/.dart-tools.sh"
 
 target='major'
 runtime='all'
@@ -103,20 +107,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
         fi
 
         printf '\n\n# Updating Dart / Flutter package file at %s\n' "${file}" >&2
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ]; then
-                dart pub upgrade --major-versions
-            elif [ "${target}" = 'minor' ]; then
-                # This may not be 100% semantically valid, but it should be close enough in practice to upgrade to latest minor version
-                dart pub upgrade --tighten
-            elif [ "${target}" = 'patch' ]; then
-                dart pub upgrade
-            else
-                # There is no builtin way to update only lockfile, so skip it
-                true
-            fi
-        )
+        update_dart_dependencies "${file}" "${target}"
     done
 fi
 
@@ -129,20 +120,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
         fi
 
         printf '\n\n# Updating NuGet project at %s\n' "${file}" >&2
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ]; then
-                if dotnet package update --project "$(basename "${file}")"; then
-                    true
-                else
-                    exit_code="${?}"
-                    # Exit code 2 indicates that every package is already up to date.
-                    if [ "${exit_code}" -ne 2 ]; then
-                        exit "${exit_code}"
-                    fi
-                fi
-            fi
-        )
+        update_dotnet_project "${file}" "${target}"
     done
 fi
 
