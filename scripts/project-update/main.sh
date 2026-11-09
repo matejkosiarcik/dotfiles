@@ -9,11 +9,34 @@ print_help() {
     printf '  -r {all, nodejs, dart-pub, dotnet-nuget, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
 }
 
-source_dir="$(dirname "$(readlink "${0}")")"
+# Resolve original script path to source utils
+script_path="${0}"
+case "${script_path}" in
+*/*)
+    ;;
+*)
+    script_path="$(command -v "${script_path}")"
+    ;;
+esac
+while [ -L "${script_path}" ]; do
+    script_directory="$(cd -P "$(dirname "${script_path}")" && pwd)"
+    script_path="$(readlink "${script_path}")"
+    case "${script_path}" in
+    /*)
+        ;;
+    *)
+        script_path="${script_directory}/${script_path}"
+        ;;
+    esac
+done
+source_dir="$(cd -P "$(dirname "${script_path}")" && pwd)"
 PATH="${source_dir}/python-vendor/bin:${source_dir}/node_modules/.bin:/opt/homebrew/bin:${PATH}"
 export PATH
 PYTHONPATH="${source_dir}/python-vendor"
 export PYTHONPATH
+
+# shellcheck source=scripts/project-update/.python-tools.sh
+. "${source_dir}/.python-tools.sh"
 
 target='major'
 runtime='all'
@@ -76,108 +99,6 @@ detect_nodejs_package_manager() {
         printf '%s\n' 'bun'
     else
         printf '%s\n' 'npm'
-    fi
-}
-
-resolve_python_version() {
-    directory="${1}"
-
-    while true; do
-        if [ -f "${directory}/.python-version" ]; then
-            version="$(sed -n -E 's~[[:space:]]*#.*$~~;s~^[[:space:]]+~~;s~[[:space:]]+$~~;/^[0-9]+(\.[0-9]+){1,2}$/{ p; q; }' <"${directory}/.python-version")"
-            if [ -n "${version}" ]; then
-                printf '%s\n' "${version}"
-                return
-            fi
-        fi
-
-        parent_directory="$(dirname "${directory}")"
-        if [ "${parent_directory}" = "${directory}" ]; then
-            break
-        fi
-        directory="${parent_directory}"
-    done
-
-    printf '%s\n' 'latest'
-}
-
-update_python_requirements() {
-    requirements_file="${1}"
-    requirements_directory="$(cd "$(dirname "${requirements_file}")" && pwd -P)"
-    requirements_path="${requirements_directory}/$(basename "${requirements_file}")"
-    python_version="$(resolve_python_version "${requirements_directory}")"
-
-    case "${requirements_file}" in
-    *.in)
-        requirements_docker_filename='requirements.in'
-        lockfile="${requirements_file%.in}.txt"
-        ;;
-    *.txt)
-        requirements_docker_filename='requirements.txt'
-        lockfile=''
-        ;;
-    *)
-        printf 'Unsupported Python requirements file %s\n' "${requirements_file}" >&2
-        return 1
-        ;;
-    esac
-
-    printf '# Resolved Python version %s for %s\n' "${python_version}" "${requirements_file}" >&2
-
-    if [ "${target}" != 'lock' ]; then
-        docker run --rm \
-            --mount "type=bind,src=${requirements_path},dst=/input/${requirements_docker_filename},readonly=false" \
-            --env "REQUIREMENTS_FILE=${requirements_docker_filename}" \
-            --env "UPDATE_TARGET=${target}" \
-            --entrypoint '/bin/sh' \
-            "python:${python_version}" \
-            -c '
-                set -euf
-                python3 -m venv /venv
-                /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pur
-
-                mkdir /work
-                cp "/input/${REQUIREMENTS_FILE}" "/work/${REQUIREMENTS_FILE}"
-                cd /work
-
-                case "${UPDATE_TARGET}" in
-                major)
-                    /venv/bin/pur --force --requirement "${REQUIREMENTS_FILE}"
-                    ;;
-                minor | patch)
-                    /venv/bin/pur --force "--${UPDATE_TARGET}" "*" --requirement "${REQUIREMENTS_FILE}"
-                    ;;
-                esac
-
-                cat "${REQUIREMENTS_FILE}" >"/input/${REQUIREMENTS_FILE}"
-            '
-    fi
-
-    if [ -n "${lockfile}" ]; then
-        if [ ! -e "${lockfile}" ]; then
-            touch "${lockfile}"
-        fi
-
-        lockfile_path="${requirements_directory}/$(basename "${lockfile}")"
-
-        docker run --rm \
-            --mount "type=bind,src=${requirements_path},dst=/input/requirements.in,readonly=false" \
-            --mount "type=bind,src=${lockfile_path},dst=/input/requirements.txt,readonly=false" \
-            --entrypoint '/bin/sh' \
-            "python:${python_version}" \
-            -c '
-                set -euf
-                python3 -m venv /venv
-                /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pip-tools
-
-                mkdir -p /work
-                cp /input/requirements.in /input/requirements.txt /work/
-                cd /work
-
-                /venv/bin/pip-compile --generate-hashes --strip-extras --output-file="./requirements.txt" "./requirements.in"
-
-                cat "./requirements.txt" >"/input/requirements.txt"
-            '
     fi
 }
 
@@ -440,7 +361,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
             continue
         fi
 
-        # Skip update if there is an associated requirements.in
+        # Skip update if there is an associated requirements.in (already handled)
         if [ -e "${file%.txt}.in" ]; then
             continue
         fi
