@@ -39,6 +39,8 @@ export PYTHONPATH
 . "${source_dir}/.python-tools.sh"
 # shellcheck source=scripts/project-update/.js-tools.sh
 . "${source_dir}/.js-tools.sh"
+# shellcheck source=scripts/project-update/.ruby-tools.sh
+. "${source_dir}/.ruby-tools.sh"
 
 target='major'
 runtime='all'
@@ -406,24 +408,50 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
             continue
         fi
 
-        printf '\n\n# Updating Gemfile file at %s\n' "${file}" >&2
-        tmpdir="$(mktemp -d)"
+        directory="$(cd "$(dirname "${file}")" && pwd -P)"
+        gemfile_path="${directory}/Gemfile"
+        lockfile_path="${directory}/Gemfile.lock"
+        ruby_version="$(resolve_ruby_version "${directory}")"
 
-        if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-            (
-                cd "$(dirname "${file}")"
-                BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle install --quiet
-                BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle update --all --quiet "--${target}" --strict
-            )
+        printf '\n\n# Updating Gemfile file at %s\n' "${file}" >&2
+        printf '# Resolved Ruby version %s for %s\n' "${ruby_version}" "${file}" >&2
+
+        if [ ! -e "${lockfile_path}" ]; then
+            touch "${lockfile_path}"
         fi
 
-        # Update lockfile always
-        (
-            cd "$(dirname "${file}")"
-            BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle lock --normalize-platforms
-        )
+        docker run --rm \
+            --mount "type=bind,src=${gemfile_path},dst=/input/Gemfile,readonly=false" \
+            --mount "type=bind,src=${lockfile_path},dst=/input/Gemfile.lock,readonly=false" \
+            --env "UPDATE_TARGET=${target}" \
+            --entrypoint '/bin/sh' \
+            "ruby:${ruby_version}" \
+            -c '
+                set -euf
+                mkdir -p "/work" "/bundle"
+                cp "/input/Gemfile" "/input/Gemfile.lock" "/work/"
+                cd "/work"
 
-        rm -rf "${tmpdir}"
+                export BUNDLE_DISABLE_SHARED_GEMS="true"
+                export BUNDLE_FROZEN="false"
+                export BUNDLE_PATH__SYSTEM="false"
+                export BUNDLE_PATH="/bundle"
+                export BUNDLE_GEMFILE="/work/Gemfile"
+
+                case "${UPDATE_TARGET}" in
+                major | minor | patch)
+                    bundle install --quiet
+                    bundle update --all --quiet "--${UPDATE_TARGET}" --strict
+                    ;;
+                lock)
+                    ;;
+                esac
+
+                bundle lock --normalize-platforms
+
+                cat "./Gemfile" >"/input/Gemfile"
+                cat "./Gemfile.lock" >"/input/Gemfile.lock"
+            '
     done
 fi
 
