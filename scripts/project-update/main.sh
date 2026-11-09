@@ -39,6 +39,8 @@ export PYTHONPATH
 . "${source_dir}/.js-tools.sh"
 # shellcheck source=scripts/project-update/.ruby-tools.sh
 . "${source_dir}/.ruby-tools.sh"
+# shellcheck source=scripts/project-update/.go-tools.sh
+. "${source_dir}/.go-tools.sh"
 
 target='major'
 runtime='all'
@@ -483,18 +485,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
         fi
         printf '\n\n# Updating Go module at %s\n' "${file}" >&2
 
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ]; then
-                go get -u ./...
-            elif [ "${target}" = 'patch' ]; then
-                go get -u=patch ./...
-            fi
-
-            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-                go mod tidy
-            fi
-        )
+        update_go_modules "${file}" "${target}"
     done
 fi
 
