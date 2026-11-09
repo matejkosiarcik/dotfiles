@@ -9,11 +9,36 @@ print_help() {
     printf '  -r {all, nodejs, dart-pub, dotnet-nuget, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
 }
 
-source_dir="$(dirname "$(readlink "${0}")")"
+# Resolve original script path to source utils
+script_path="${0}"
+case "${script_path}" in
+*/*) ;;
+*)
+    script_path="$(command -v "${script_path}")"
+    ;;
+esac
+while [ -L "${script_path}" ]; do
+    script_directory="$(cd -P "$(dirname "${script_path}")" && pwd)"
+    script_path="$(readlink "${script_path}")"
+    case "${script_path}" in
+    /*) ;;
+    *)
+        script_path="${script_directory}/${script_path}"
+        ;;
+    esac
+done
+source_dir="$(cd -P "$(dirname "${script_path}")" && pwd)"
 PATH="${source_dir}/python-vendor/bin:${source_dir}/node_modules/.bin:/opt/homebrew/bin:${PATH}"
 export PATH
 PYTHONPATH="${source_dir}/python-vendor"
 export PYTHONPATH
+
+# shellcheck source=scripts/project-update/.python-tools.sh
+. "${source_dir}/.python-tools.sh"
+# shellcheck source=scripts/project-update/.js-tools.sh
+. "${source_dir}/.js-tools.sh"
+# shellcheck source=scripts/project-update/.ruby-tools.sh
+. "${source_dir}/.ruby-tools.sh"
 
 target='major'
 runtime='all'
@@ -64,18 +89,6 @@ glob() {
             find . -name "${1}" -maxdepth 1 | sed -E 's~^./~~'
             shift
         done
-    fi
-}
-
-detect_nodejs_package_manager() {
-    if [ -e "${1}/pnpm-lock.yaml" ]; then
-        printf '%s\n' 'pnpm'
-    elif [ -e "${1}/yarn.lock" ]; then
-        printf '%s\n' 'yarn'
-    elif [ -e "${1}/bun.lock" ] || [ -e "${1}/bun.lockb" ]; then
-        printf '%s\n' 'bun'
-    else
-        printf '%s\n' 'npm'
     fi
 }
 
@@ -158,10 +171,12 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
     if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
         printf '# Placeholder\n' >>"${HOME}/.npmrc"
     fi
+
     ncu_target="${target}"
     if [ "${target}" = 'major' ]; then
         ncu_target='latest'
     fi
+
     glob 'package.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -169,8 +184,10 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
 
         directory="$(dirname "${file}")"
         package_manager="$(detect_nodejs_package_manager "${directory}")"
+        nodejs_version="$(resolve_nodejs_version "$(cd "${directory}" && pwd -P)")"
 
         printf '\n\n# Updating %s package file at %s\n' "${package_manager}" "${file}" >&2
+        printf '# Resolved NodeJS version %s for %s\n' "${nodejs_version}" "${file}" >&2
 
         if [ "${target}" != 'lock' ]; then
             ncu --cwd "${directory}" --packageManager "${package_manager}" --target "${ncu_target}" --upgrade # package.json
@@ -189,10 +206,16 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
                 --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
                 --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
                 --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --env PROJECT_DIRECTORY="/app/${dirname}" \
                 --entrypoint '/bin/sh' \
                 --user 'root' \
-                node:latest \
-                -c "cd \"/app/${dirname}\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
+                "node:${nodejs_version}" \
+                -c '
+                    set -euf
+                    cd "${PROJECT_DIRECTORY}"
+                    npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error
+                    npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error
+                '
             lockfile='package-lock.json'
             ;;
         pnpm)
@@ -203,10 +226,15 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
                 --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
                 --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
                 --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --env PROJECT_DIRECTORY="/app/${dirname}" \
                 --entrypoint '/bin/sh' \
                 --user 'root' \
-                node:latest \
-                -c "npm install --global corepack@latest --no-audit --no-fund --loglevel=error && corepack pnpm install --dir \"/app/${dirname}\" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent"
+                "node:${nodejs_version}" \
+                -c '
+                    set -euf
+                    npm install --global "corepack@latest" --no-audit --no-fund --loglevel=error
+                    corepack pnpm install --dir "${PROJECT_DIRECTORY}" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent
+                '
             lockfile='pnpm-lock.yaml'
             ;;
         yarn)
@@ -217,10 +245,19 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
                 --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
                 --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
                 --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --env PROJECT_DIRECTORY="/app/${dirname}" \
                 --entrypoint '/bin/sh' \
                 --user 'root' \
-                node:latest \
-                -c "npm install --global corepack@latest --no-audit --no-fund --loglevel=error && if corepack yarn --version | grep -q '^1\\.'; then corepack yarn install --cwd \"/app/${dirname}\" --ignore-scripts --non-interactive --no-progress; else corepack yarn install --cwd \"/app/${dirname}\" --mode=update-lockfile; fi"
+                "node:${nodejs_version}" \
+                -c '
+                    set -euf
+                    npm install --global corepack@latest --no-audit --no-fund --loglevel=error
+                    if corepack yarn --version | grep -q "^1\\."; then
+                        corepack yarn install --cwd "${PROJECT_DIRECTORY}" --ignore-scripts --non-interactive --no-progress
+                    else
+                        corepack yarn install --cwd "${PROJECT_DIRECTORY}" --mode=update-lockfile
+                    fi
+                '
             lockfile='yarn.lock'
             ;;
         bun)
@@ -231,10 +268,15 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
                 --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
                 --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
                 --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --env PROJECT_DIRECTORY="/app/${dirname}" \
                 --entrypoint '/bin/sh' \
                 --user 'root' \
                 oven/bun:latest \
-                -c "cd \"/app/${dirname}\" && bun install --lockfile-only --ignore-scripts --no-progress"
+                -c '
+                    set -euf
+                    cd "${PROJECT_DIRECTORY}"
+                    bun install --lockfile-only --ignore-scripts --no-progress
+                '
             if [ -e "${tmpdir}/bun.lock" ]; then
                 lockfile='bun.lock'
             else
@@ -248,7 +290,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
             ;;
         esac
 
-        mv "${tmpdir}/${lockfile}" "${directory}/${lockfile}"
+        cat "${tmpdir}/${lockfile}" >"${directory}/${lockfile}"
         if [ "${package_manager}" = 'bun' ] && [ "${lockfile}" = 'bun.lock' ] && [ -e "${directory}/bun.lockb" ]; then
             rm "${directory}/bun.lockb"
         fi
@@ -320,20 +362,36 @@ fi
 # Python - Pip
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
     printf '\n\n## Python > Pip ##\n' >&2
-    glob '*requirements*.txt' | while read -r file; do
+
+    # Projects with both requirements.in and requirements.txt
+    glob '*requirements*.in' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
 
         printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
 
-        if [ "${target}" = 'major' ]; then
-            pur --force --requirement "${file}"
-        elif [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-            pur --force "--${target}" '*' --requirement "${file}"
-        elif [ "${target}" = 'lock' ]; then
+        update_python_requirements "${file}" "${target}"
+    done
+
+    # Only projects with requirements.txt
+    glob '*requirements*.txt' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        # Skip update if there is an associated requirements.in (already handled)
+        if [ -e "${file%.txt}.in" ]; then
+            continue
+        fi
+
+        printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
+
+        if [ "${target}" = 'lock' ]; then
             # There is no builtin way to update only lockfile, so skip it
             true
+        else
+            update_python_requirements "${file}" "${target}"
         fi
     done
 
@@ -348,24 +406,50 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
             continue
         fi
 
-        printf '\n\n# Updating Gemfile file at %s\n' "${file}" >&2
-        tmpdir="$(mktemp -d)"
+        directory="$(cd "$(dirname "${file}")" && pwd -P)"
+        gemfile_path="${directory}/Gemfile"
+        lockfile_path="${directory}/Gemfile.lock"
+        ruby_version="$(resolve_ruby_version "${directory}")"
 
-        if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-            (
-                cd "$(dirname "${file}")"
-                BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle install --quiet
-                BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle update --all --quiet "--${target}" --strict
-            )
+        printf '\n\n# Updating Gemfile file at %s\n' "${file}" >&2
+        printf '# Resolved Ruby version %s for %s\n' "${ruby_version}" "${file}" >&2
+
+        if [ ! -e "${lockfile_path}" ]; then
+            touch "${lockfile_path}"
         fi
 
-        # Update lockfile always
-        (
-            cd "$(dirname "${file}")"
-            BUNDLE_DISABLE_SHARED_GEMS=true BUNDLE_FROZEN=false BUNDLE_PATH__SYSTEM=false BUNDLE_PATH="${tmpdir}" BUNDLE_GEMFILE="${PWD}/Gemfile" bundle lock --normalize-platforms
-        )
+        docker run --rm \
+            --mount "type=bind,src=${gemfile_path},dst=/input/Gemfile,readonly=false" \
+            --mount "type=bind,src=${lockfile_path},dst=/input/Gemfile.lock,readonly=false" \
+            --env "UPDATE_TARGET=${target}" \
+            --entrypoint '/bin/sh' \
+            "ruby:${ruby_version}" \
+            -c '
+                set -euf
+                mkdir -p "/work" "/bundle"
+                cp "/input/Gemfile" "/input/Gemfile.lock" "/work/"
+                cd "/work"
 
-        rm -rf "${tmpdir}"
+                export BUNDLE_DISABLE_SHARED_GEMS="true"
+                export BUNDLE_FROZEN="false"
+                export BUNDLE_PATH__SYSTEM="false"
+                export BUNDLE_PATH="/bundle"
+                export BUNDLE_GEMFILE="/work/Gemfile"
+
+                case "${UPDATE_TARGET}" in
+                major | minor | patch)
+                    bundle install --quiet
+                    bundle update --all --quiet "--${UPDATE_TARGET}" --strict
+                    ;;
+                lock)
+                    ;;
+                esac
+
+                bundle lock --normalize-platforms
+
+                cat "./Gemfile" >"/input/Gemfile"
+                cat "./Gemfile.lock" >"/input/Gemfile.lock"
+            '
     done
 fi
 
