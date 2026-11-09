@@ -15,8 +15,7 @@ normalize_ruby_version() {
     ruby[0-9]*)
         version="${version#ruby}"
         ;;
-    *)
-        ;;
+    *) ;;
     esac
 
     if is_ruby_version "${version}"; then

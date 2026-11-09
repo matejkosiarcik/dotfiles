@@ -33,8 +33,7 @@ normalize_nodejs_version() {
     lts/*)
         version="lts-${version#lts/}"
         ;;
-    *)
-        ;;
+    *) ;;
     esac
 
     if is_nodejs_version "${version}"; then

@@ -12,8 +12,7 @@ print_help() {
 # Resolve original script path to source utils
 script_path="${0}"
 case "${script_path}" in
-*/*)
-    ;;
+*/*) ;;
 *)
     script_path="$(command -v "${script_path}")"
     ;;
@@ -22,8 +21,7 @@ while [ -L "${script_path}" ]; do
     script_directory="$(cd -P "$(dirname "${script_path}")" && pwd)"
     script_path="$(readlink "${script_path}")"
     case "${script_path}" in
-    /*)
-        ;;
+    /*) ;;
     *)
         script_path="${script_directory}/${script_path}"
         ;;
@@ -382,7 +380,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
             continue
         fi
 
-        # Skip update if there is an associated requirements.in (already handled)
+        # Skip update if there is an associated requirements.in (already handled)
         if [ -e "${file%.txt}.in" ]; then
             continue
         fi
