@@ -37,6 +37,8 @@ export PYTHONPATH
 
 # shellcheck source=scripts/project-update/.python-tools.sh
 . "${source_dir}/.python-tools.sh"
+# shellcheck source=scripts/project-update/.js-tools.sh
+. "${source_dir}/.js-tools.sh"
 
 target='major'
 runtime='all'
@@ -87,18 +89,6 @@ glob() {
             find . -name "${1}" -maxdepth 1 | sed -E 's~^./~~'
             shift
         done
-    fi
-}
-
-detect_nodejs_package_manager() {
-    if [ -e "${1}/pnpm-lock.yaml" ]; then
-        printf '%s\n' 'pnpm'
-    elif [ -e "${1}/yarn.lock" ]; then
-        printf '%s\n' 'yarn'
-    elif [ -e "${1}/bun.lock" ] || [ -e "${1}/bun.lockb" ]; then
-        printf '%s\n' 'bun'
-    else
-        printf '%s\n' 'npm'
     fi
 }
 
