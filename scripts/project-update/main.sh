@@ -171,10 +171,12 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
     if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
         printf '# Placeholder\n' >>"${HOME}/.npmrc"
     fi
+
     ncu_target="${target}"
     if [ "${target}" = 'major' ]; then
         ncu_target='latest'
     fi
+
     glob 'package.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -182,8 +184,10 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
 
         directory="$(dirname "${file}")"
         package_manager="$(detect_nodejs_package_manager "${directory}")"
+        nodejs_version="$(resolve_nodejs_version "$(cd "${directory}" && pwd -P)")"
 
         printf '\n\n# Updating %s package file at %s\n' "${package_manager}" "${file}" >&2
+        printf '# Resolved NodeJS version %s for %s\n' "${nodejs_version}" "${file}" >&2
 
         if [ "${target}" != 'lock' ]; then
             ncu --cwd "${directory}" --packageManager "${package_manager}" --target "${ncu_target}" --upgrade # package.json
@@ -202,10 +206,16 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
                 --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
                 --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
                 --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --env PROJECT_DIRECTORY="/app/${dirname}" \
                 --entrypoint '/bin/sh' \
                 --user 'root' \
-                node:latest \
-                -c "cd \"/app/${dirname}\" && npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error && npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error"
+                "node:${nodejs_version}" \
+                -c '
+                    set -euf
+                    cd "${PROJECT_DIRECTORY}"
+                    npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error
+                    npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error
+                '
             lockfile='package-lock.json'
             ;;
         pnpm)
@@ -216,10 +226,15 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
                 --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
                 --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
                 --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --env PROJECT_DIRECTORY="/app/${dirname}" \
                 --entrypoint '/bin/sh' \
                 --user 'root' \
-                node:latest \
-                -c "npm install --global corepack@latest --no-audit --no-fund --loglevel=error && corepack pnpm install --dir \"/app/${dirname}\" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent"
+                "node:${nodejs_version}" \
+                -c '
+                    set -euf
+                    npm install --global "corepack@latest" --no-audit --no-fund --loglevel=error
+                    corepack pnpm install --dir "${PROJECT_DIRECTORY}" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent
+                '
             lockfile='pnpm-lock.yaml'
             ;;
         yarn)
@@ -230,10 +245,19 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
                 --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
                 --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
                 --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --env PROJECT_DIRECTORY="/app/${dirname}" \
                 --entrypoint '/bin/sh' \
                 --user 'root' \
-                node:latest \
-                -c "npm install --global corepack@latest --no-audit --no-fund --loglevel=error && if corepack yarn --version | grep -q '^1\\.'; then corepack yarn install --cwd \"/app/${dirname}\" --ignore-scripts --non-interactive --no-progress; else corepack yarn install --cwd \"/app/${dirname}\" --mode=update-lockfile; fi"
+                "node:${nodejs_version}" \
+                -c '
+                    set -euf
+                    npm install --global corepack@latest --no-audit --no-fund --loglevel=error
+                    if corepack yarn --version | grep -q "^1\\."; then
+                        corepack yarn install --cwd "${PROJECT_DIRECTORY}" --ignore-scripts --non-interactive --no-progress
+                    else
+                        corepack yarn install --cwd "${PROJECT_DIRECTORY}" --mode=update-lockfile
+                    fi
+                '
             lockfile='yarn.lock'
             ;;
         bun)
@@ -244,10 +268,15 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
                 --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
                 --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
                 --env NODE_OPTIONS='--dns-result-order=ipv4first' \
+                --env PROJECT_DIRECTORY="/app/${dirname}" \
                 --entrypoint '/bin/sh' \
                 --user 'root' \
                 oven/bun:latest \
-                -c "cd \"/app/${dirname}\" && bun install --lockfile-only --ignore-scripts --no-progress"
+                -c '
+                    set -euf
+                    cd "${PROJECT_DIRECTORY}"
+                    bun install --lockfile-only --ignore-scripts --no-progress
+                '
             if [ -e "${tmpdir}/bun.lock" ]; then
                 lockfile='bun.lock'
             else
@@ -261,7 +290,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
             ;;
         esac
 
-        mv "${tmpdir}/${lockfile}" "${directory}/${lockfile}"
+        cat "${tmpdir}/${lockfile}" >"${directory}/${lockfile}"
         if [ "${package_manager}" = 'bun' ] && [ "${lockfile}" = 'bun.lock' ] && [ -e "${directory}/bun.lockb" ]; then
             rm "${directory}/bun.lockb"
         fi
