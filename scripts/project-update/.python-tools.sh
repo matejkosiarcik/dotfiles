@@ -143,9 +143,33 @@ resolve_python_version() {
     directory="${1}"
 
     while true; do
-        for version_file in '.python-version' '.python-versions'; do
-            if [ -f "${directory}/${version_file}" ]; then
-                version="$(python_version_from_version_file "${directory}/${version_file}")"
+        for version_directory in "${directory}" "${directory}/.config"; do
+            for version_file in '.python-version' '.python-versions'; do
+                if [ -f "${version_directory}/${version_file}" ]; then
+                    version="$(python_version_from_version_file "${version_directory}/${version_file}")"
+                    if is_python_version "${version}"; then
+                        printf '%s\n' "${version}"
+                        return
+                    fi
+                fi
+            done
+        done
+
+        for version_directory in "${directory}" "${directory}/.config"; do
+            for mise_file in '.mise.local.toml' 'mise.local.toml' '.mise.toml' 'mise.toml'; do
+                if [ -f "${version_directory}/${mise_file}" ]; then
+                    version="$(python_version_from_mise_config "${version_directory}/${mise_file}")"
+                    if is_python_version "${version}"; then
+                        printf '%s\n' "${version}"
+                        return
+                    fi
+                fi
+            done
+        done
+
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/.tool-versions" ]; then
+                version="$(python_version_from_tool_versions "${version_directory}/.tool-versions")"
                 if is_python_version "${version}"; then
                     printf '%s\n' "${version}"
                     return
@@ -153,9 +177,9 @@ resolve_python_version() {
             fi
         done
 
-        for mise_file in '.mise.local.toml' 'mise.local.toml' '.mise.toml' 'mise.toml'; do
-            if [ -f "${directory}/${mise_file}" ]; then
-                version="$(python_version_from_mise_config "${directory}/${mise_file}")"
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/runtime.txt" ]; then
+                version="$(python_version_from_runtime_file "${version_directory}/runtime.txt")"
                 if is_python_version "${version}"; then
                     printf '%s\n' "${version}"
                     return
@@ -163,37 +187,25 @@ resolve_python_version() {
             fi
         done
 
-        if [ -f "${directory}/.tool-versions" ]; then
-            version="$(python_version_from_tool_versions "${directory}/.tool-versions")"
-            if is_python_version "${version}"; then
-                printf '%s\n' "${version}"
-                return
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/Pipfile" ]; then
+                version="$(python_version_from_pipfile "${version_directory}/Pipfile")"
+                if is_python_version "${version}"; then
+                    printf '%s\n' "${version}"
+                    return
+                fi
             fi
-        fi
+        done
 
-        if [ -f "${directory}/runtime.txt" ]; then
-            version="$(python_version_from_runtime_file "${directory}/runtime.txt")"
-            if is_python_version "${version}"; then
-                printf '%s\n' "${version}"
-                return
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/pyproject.toml" ]; then
+                version="$(python_version_from_pyproject "${version_directory}/pyproject.toml")"
+                if is_python_version "${version}"; then
+                    printf '%s\n' "${version}"
+                    return
+                fi
             fi
-        fi
-
-        if [ -f "${directory}/Pipfile" ]; then
-            version="$(python_version_from_pipfile "${directory}/Pipfile")"
-            if is_python_version "${version}"; then
-                printf '%s\n' "${version}"
-                return
-            fi
-        fi
-
-        if [ -f "${directory}/pyproject.toml" ]; then
-            version="$(python_version_from_pyproject "${directory}/pyproject.toml")"
-            if is_python_version "${version}"; then
-                printf '%s\n' "${version}"
-                return
-            fi
-        fi
+        done
 
         parent_directory="$(dirname "${directory}")"
         if [ "${parent_directory}" = "${directory}" ]; then
