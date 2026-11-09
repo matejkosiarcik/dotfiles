@@ -115,9 +115,35 @@ resolve_nodejs_version() {
     directory="${1}"
 
     while true; do
-        for version_file in '.node-version' '.nvmrc'; do
-            if [ -f "${directory}/${version_file}" ]; then
-                version="$(nodejs_version_from_version_file "${directory}/${version_file}")"
+        for version_directory in "${directory}" "${directory}/.config"; do
+            for version_file in '.node-version' '.nvmrc'; do
+                if [ -f "${version_directory}/${version_file}" ]; then
+                    version="$(nodejs_version_from_version_file "${version_directory}/${version_file}")"
+                    version="$(normalize_nodejs_version "${version}")"
+                    if [ -n "${version}" ]; then
+                        printf '%s\n' "${version}"
+                        return
+                    fi
+                fi
+            done
+        done
+
+        for version_directory in "${directory}" "${directory}/.config"; do
+            for mise_file in '.mise.local.toml' 'mise.local.toml' '.mise.toml' 'mise.toml'; do
+                if [ -f "${version_directory}/${mise_file}" ]; then
+                    version="$(nodejs_version_from_mise_config "${version_directory}/${mise_file}")"
+                    version="$(normalize_nodejs_version "${version}")"
+                    if [ -n "${version}" ]; then
+                        printf '%s\n' "${version}"
+                        return
+                    fi
+                fi
+            done
+        done
+
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/.tool-versions" ]; then
+                version="$(nodejs_version_from_tool_versions "${version_directory}/.tool-versions")"
                 version="$(normalize_nodejs_version "${version}")"
                 if [ -n "${version}" ]; then
                     printf '%s\n' "${version}"
@@ -126,9 +152,9 @@ resolve_nodejs_version() {
             fi
         done
 
-        for mise_file in '.mise.local.toml' 'mise.local.toml' '.mise.toml' 'mise.toml'; do
-            if [ -f "${directory}/${mise_file}" ]; then
-                version="$(nodejs_version_from_mise_config "${directory}/${mise_file}")"
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/package.json" ]; then
+                version="$(nodejs_version_from_package_json "${version_directory}/package.json")"
                 version="$(normalize_nodejs_version "${version}")"
                 if [ -n "${version}" ]; then
                     printf '%s\n' "${version}"
@@ -136,24 +162,6 @@ resolve_nodejs_version() {
                 fi
             fi
         done
-
-        if [ -f "${directory}/.tool-versions" ]; then
-            version="$(nodejs_version_from_tool_versions "${directory}/.tool-versions")"
-            version="$(normalize_nodejs_version "${version}")"
-            if [ -n "${version}" ]; then
-                printf '%s\n' "${version}"
-                return
-            fi
-        fi
-
-        if [ -f "${directory}/package.json" ]; then
-            version="$(nodejs_version_from_package_json "${directory}/package.json")"
-            version="$(normalize_nodejs_version "${version}")"
-            if [ -n "${version}" ]; then
-                printf '%s\n' "${version}"
-                return
-            fi
-        fi
 
         parent_directory="$(dirname "${directory}")"
         if [ "${parent_directory}" = "${directory}" ]; then

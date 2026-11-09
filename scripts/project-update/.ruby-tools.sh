@@ -120,18 +120,9 @@ resolve_ruby_version() {
     directory="${1}"
 
     while true; do
-        if [ -f "${directory}/.ruby-version" ]; then
-            version="$(ruby_version_from_version_file "${directory}/.ruby-version")"
-            version="$(normalize_ruby_version "${version}")"
-            if [ -n "${version}" ]; then
-                printf '%s\n' "${version}"
-                return
-            fi
-        fi
-
-        for mise_file in '.mise.local.toml' 'mise.local.toml' '.mise.toml' 'mise.toml'; do
-            if [ -f "${directory}/${mise_file}" ]; then
-                version="$(ruby_version_from_mise_config "${directory}/${mise_file}")"
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/.ruby-version" ]; then
+                version="$(ruby_version_from_version_file "${version_directory}/.ruby-version")"
                 version="$(normalize_ruby_version "${version}")"
                 if [ -n "${version}" ]; then
                     printf '%s\n' "${version}"
@@ -140,32 +131,51 @@ resolve_ruby_version() {
             fi
         done
 
-        if [ -f "${directory}/.tool-versions" ]; then
-            version="$(ruby_version_from_tool_versions "${directory}/.tool-versions")"
-            version="$(normalize_ruby_version "${version}")"
-            if [ -n "${version}" ]; then
-                printf '%s\n' "${version}"
-                return
-            fi
-        fi
+        for version_directory in "${directory}" "${directory}/.config"; do
+            for mise_file in '.mise.local.toml' 'mise.local.toml' '.mise.toml' 'mise.toml'; do
+                if [ -f "${version_directory}/${mise_file}" ]; then
+                    version="$(ruby_version_from_mise_config "${version_directory}/${mise_file}")"
+                    version="$(normalize_ruby_version "${version}")"
+                    if [ -n "${version}" ]; then
+                        printf '%s\n' "${version}"
+                        return
+                    fi
+                fi
+            done
+        done
 
-        if [ -f "${directory}/Gemfile" ]; then
-            version="$(ruby_version_from_gemfile "${directory}/Gemfile")"
-            version="$(normalize_ruby_version "${version}")"
-            if [ -n "${version}" ]; then
-                printf '%s\n' "${version}"
-                return
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/.tool-versions" ]; then
+                version="$(ruby_version_from_tool_versions "${version_directory}/.tool-versions")"
+                version="$(normalize_ruby_version "${version}")"
+                if [ -n "${version}" ]; then
+                    printf '%s\n' "${version}"
+                    return
+                fi
             fi
-        fi
+        done
 
-        if [ -f "${directory}/Gemfile.lock" ]; then
-            version="$(ruby_version_from_lockfile "${directory}/Gemfile.lock")"
-            version="$(normalize_ruby_version "${version}")"
-            if [ -n "${version}" ]; then
-                printf '%s\n' "${version}"
-                return
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/Gemfile" ]; then
+                version="$(ruby_version_from_gemfile "${version_directory}/Gemfile")"
+                version="$(normalize_ruby_version "${version}")"
+                if [ -n "${version}" ]; then
+                    printf '%s\n' "${version}"
+                    return
+                fi
             fi
-        fi
+        done
+
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/Gemfile.lock" ]; then
+                version="$(ruby_version_from_lockfile "${version_directory}/Gemfile.lock")"
+                version="$(normalize_ruby_version "${version}")"
+                if [ -n "${version}" ]; then
+                    printf '%s\n' "${version}"
+                    return
+                fi
+            fi
+        done
 
         parent_directory="$(dirname "${directory}")"
         if [ "${parent_directory}" = "${directory}" ]; then
