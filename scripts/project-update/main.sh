@@ -102,7 +102,7 @@ glob() {
     else
         # This is not a git repo
         while [ "${#}" -ge 1 ]; do
-            find . -name "${1}" -maxdepth 1 | sed -E 's~^./~~'
+            find "." -name "${1}" -maxdepth 1 | sed -E 's~^./~~'
             shift
         done
     fi

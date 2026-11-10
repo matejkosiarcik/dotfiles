@@ -254,19 +254,19 @@ update_python_requirements() {
             "python:${python_version}" \
             -c '
                 set -euf
-                python3 -m venv /venv
-                /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pur
+                python3 -m venv "/venv"
+                "/venv/bin/python" -m pip install --disable-pip-version-check --quiet --upgrade pur
 
-                mkdir /work
+                mkdir "/work"
                 cp "/input/${REQUIREMENTS_FILE}" "/work/${REQUIREMENTS_FILE}"
-                cd /work
+                cd "/work"
 
                 case "${UPDATE_TARGET}" in
                 major)
-                    /venv/bin/pur --force --requirement "${REQUIREMENTS_FILE}"
+                    "/venv/bin/pur" --force --requirement "${REQUIREMENTS_FILE}"
                     ;;
                 minor | patch)
-                    /venv/bin/pur --force "--${UPDATE_TARGET}" "*" --requirement "${REQUIREMENTS_FILE}"
+                    "/venv/bin/pur" --force "--${UPDATE_TARGET}" "*" --requirement "${REQUIREMENTS_FILE}"
                     ;;
                 esac
 
@@ -289,14 +289,14 @@ update_python_requirements() {
             "python:${python_version}" \
             -c '
                 set -euf
-                python -m venv /venv
-                /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pip-tools
+                python -m venv "/venv"
+                "/venv/bin/python" -m pip install --disable-pip-version-check --quiet --upgrade pip-tools
 
-                mkdir -p /work
+                mkdir -p "/work"
                 cp "/input/requirements.in" "/input/requirements.txt" "/work/"
-                cd /work
+                cd "/work"
 
-                /venv/bin/pip-compile --generate-hashes --strip-extras --output-file="./requirements.txt" "./requirements.in"
+                "/venv/bin/pip-compile" --generate-hashes --strip-extras --output-file="./requirements.txt" "./requirements.in"
 
                 cat "./requirements.txt" >"/input/requirements.txt"
             '
@@ -326,7 +326,7 @@ update_python_pipfile() {
         -c '
             set -euf
             python -m venv "/venv"
-            /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pipenv
+            "/venv/bin/python" -m pip install --disable-pip-version-check --quiet --upgrade pipenv
 
             mkdir -p "/work"
             cp -R "/input/." "/work/"
@@ -338,10 +338,10 @@ update_python_pipfile() {
 
             case "${UPDATE_TARGET}" in
             major | minor | patch)
-                /venv/bin/pipenv update --all
+                "/venv/bin/pipenv" update --all
                 ;;
             lock)
-                /venv/bin/pipenv lock
+                "/venv/bin/pipenv" lock
                 ;;
             esac
 
