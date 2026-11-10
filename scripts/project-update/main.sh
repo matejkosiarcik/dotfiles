@@ -6,7 +6,7 @@ print_help() {
     printf '\n'
     printf '  -h                                                              print help message\n'
     printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs, dart-pub, dotnet-nuget, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, haskell-cabal, gitman}  which runtime to update\n'
+    printf '  -r {all, nodejs, dart-pub, dotnet-nuget, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, haskell-cabal, haskell-stack, gitman}  which runtime to update\n'
 }
 
 # Resolve original script path to source utils
@@ -85,7 +85,7 @@ if printf '%s' "${target}" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|dotnet\-nuget|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|haskell\-cabal|gitman)$'; then
+if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|dotnet\-nuget|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|haskell\-cabal|haskell\-stack|gitman)$'; then
     printf 'Unsupported runtime %s\n' "${runtime}" >&2
     print_help
     exit 1
@@ -154,7 +154,21 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'haskell-cabal' ]; then
             continue
         fi
 
-        update_haskell_cabal_dependencies "${file}" "${target}"
+        if [ "${runtime}" = 'haskell-cabal' ] || ! is_haskell_stack_project "${file}"; then
+            update_haskell_cabal_dependencies "${file}" "${target}"
+        fi
+    done
+fi
+
+# Haskell - Stack
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'haskell-stack' ]; then
+    printf '\n## Updating Haskell > Stack ##\n' >&2
+    glob 'stack.yaml' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        update_haskell_stack_dependencies "${file}" "${target}"
     done
 fi
 

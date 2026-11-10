@@ -82,6 +82,10 @@ haskell_version_from_cabal_file() {
     sed -n -E '/^[[:space:]]*tested-with:[[:space:]]*/ { s~.*GHC[[:space:]]*==[[:space:]]*([0-9]+(\.[0-9]+){0,2}).*~\1~p; q; }' <"${1}"
 }
 
+haskell_version_from_stack_file() {
+    sed -n -E '/^[[:space:]]*(compiler|resolver|snapshot):[[:space:]]*ghc-[0-9]+(\.[0-9]+){0,2}([[:space:]]|$)/ { s~.*ghc-([0-9]+(\.[0-9]+){0,2}).*~\1~p; q; }' <"${1}"
+}
+
 haskell_workspace_directory() {
     directory="${1}"
     package_directory="${1}"
@@ -100,6 +104,32 @@ haskell_workspace_directory() {
     done
 
     printf '%s\n' "${package_directory}"
+}
+
+haskell_stack_workspace_directory() {
+    directory="${1}"
+
+    while true; do
+        if [ -f "${directory}/stack.yaml" ]; then
+            printf '%s\n' "${directory}"
+            return
+        fi
+
+        parent_directory="$(dirname "${directory}")"
+        if [ "${parent_directory}" = "${directory}" ]; then
+            break
+        fi
+        directory="${parent_directory}"
+    done
+
+    return 1
+}
+
+is_haskell_stack_project() {
+    package_file="${1}"
+    package_directory="$(cd "$(dirname "${package_file}")" && pwd -P)"
+
+    haskell_stack_workspace_directory "${package_directory}" >/dev/null
 }
 
 resolve_haskell_version() {
@@ -135,6 +165,17 @@ resolve_haskell_version() {
         for version_directory in "${directory}" "${directory}/.config"; do
             if [ -f "${version_directory}/.tool-versions" ]; then
                 version="$(haskell_version_from_tool_versions "${version_directory}/.tool-versions")"
+                version="$(normalize_haskell_version "${version}")"
+                if [ -n "${version}" ]; then
+                    printf '%s\n' "${version}"
+                    return
+                fi
+            fi
+        done
+
+        for version_directory in "${directory}" "${directory}/.config"; do
+            if [ -f "${version_directory}/stack.yaml" ]; then
+                version="$(haskell_version_from_stack_file "${version_directory}/stack.yaml")"
                 version="$(normalize_haskell_version "${version}")"
                 if [ -n "${version}" ]; then
                     printf '%s\n' "${version}"
@@ -216,5 +257,45 @@ update_haskell_cabal_dependencies() {
             cabal freeze
 
             cat "./cabal.project.freeze" >"/input/cabal.project.freeze"
+        '
+}
+
+update_haskell_stack_dependencies() {
+    stack_file="${1}"
+    update_target="${2}"
+    stack_directory="$(cd "$(dirname "${stack_file}")" && pwd -P)"
+    stack_lock_path="${stack_directory}/stack.yaml.lock"
+    haskell_version="$(resolve_haskell_version "${stack_directory}")"
+
+    printf '# Updating Haskell Stack project at %s\n' "${stack_file}" >&2
+    printf '# Resolved Haskell version %s for %s\n' "${haskell_version}" "${stack_file}" >&2
+
+    if [ ! -e "${stack_lock_path}" ]; then
+        touch "${stack_lock_path}"
+    fi
+
+    # shellcheck disable=SC2016
+    run_update_command docker run --rm \
+        --mount "type=bind,src=${stack_directory},dst=/input,readonly=false" \
+        --env "UPDATE_TARGET=${update_target}" \
+        --entrypoint '/bin/sh' \
+        "haskell:${haskell_version}" \
+        -c '
+            set -euf
+            mkdir -p "/work"
+            cp -R "/input/." "/work/"
+            cd "/work"
+
+            case "${UPDATE_TARGET}" in
+            major | minor | patch)
+                stack update
+                ;;
+            lock)
+                ;;
+            esac
+
+            stack config build-files
+
+            cat "./stack.yaml.lock" >"/input/stack.yaml.lock"
         '
 }
