@@ -139,6 +139,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
+
         update_gitman_dependencies "${file}" "${target}"
     done
 fi
@@ -222,6 +223,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
+
         update_rust_dependencies "${file}" "${target}"
     done
 fi
@@ -233,6 +235,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
+
         update_go_modules "${file}" "${target}"
     done
 fi
@@ -244,6 +247,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
+
         update_swift_dependencies "${file}" "${target}"
     done
 fi
