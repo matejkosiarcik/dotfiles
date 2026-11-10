@@ -6,7 +6,7 @@ print_help() {
     printf '\n'
     printf '  -h                                                              print help message\n'
     printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs, dart-pub, dotnet-nuget, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, haskell-cabal, haskell-stack, gitman}  which runtime to update\n'
+    printf '  -r {all, nodejs, dart-pub, dotnet-nuget, elixir-mix, go-mod, haskell-cabal, haskell-stack, julia-pkg, php-composer, python-pip, ruby-gem, rust-cargo, swift-swiftpm, gitman}  which runtime to update\n'
 }
 
 # Resolve original script path to source utils
@@ -47,12 +47,16 @@ export PYTHONPATH
 . "${source_dir}/utils/.dotnet-tools.sh"
 # shellcheck source=scripts/project-update/utils/.dart-tools.sh
 . "${source_dir}/utils/.dart-tools.sh"
+# shellcheck source=scripts/project-update/utils/.elixir-tools.sh
+. "${source_dir}/utils/.elixir-tools.sh"
 # shellcheck source=scripts/project-update/utils/.rust-tools.sh
 . "${source_dir}/utils/.rust-tools.sh"
 # shellcheck source=scripts/project-update/utils/.swift-tools.sh
 . "${source_dir}/utils/.swift-tools.sh"
 # shellcheck source=scripts/project-update/utils/.haskell-tools.sh
 . "${source_dir}/utils/.haskell-tools.sh"
+# shellcheck source=scripts/project-update/utils/.julia-tools.sh
+. "${source_dir}/utils/.julia-tools.sh"
 # shellcheck source=scripts/project-update/utils/.gitman-tools.sh
 . "${source_dir}/utils/.gitman-tools.sh"
 # shellcheck source=scripts/project-update/utils/.php-tools.sh
@@ -85,7 +89,7 @@ if printf '%s' "${target}" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|dotnet\-nuget|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|haskell\-cabal|haskell\-stack|gitman)$'; then
+if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|dotnet\-nuget|elixir\-mix|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|haskell\-cabal|haskell\-stack|julia\-pkg|gitman)$'; then
     printf 'Unsupported runtime %s\n' "${runtime}" >&2
     print_help
     exit 1
@@ -119,6 +123,18 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
         fi
 
         update_dart_dependencies "${file}" "${target}"
+    done
+fi
+
+# Elixir - Mix
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'elixir-mix' ]; then
+    printf '\n## Updating Elixir > Mix ##\n' >&2
+    glob 'mix.exs' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        update_elixir_dependencies "${file}" "${target}"
     done
 fi
 
@@ -169,6 +185,18 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'haskell-stack' ]; then
         fi
 
         update_haskell_stack_dependencies "${file}" "${target}"
+    done
+fi
+
+# Julia - Pkg
+if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'julia-pkg' ]; then
+    printf '\n## Updating Julia > Pkg ##\n' >&2
+    glob 'Project.toml' 'JuliaProject.toml' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        update_julia_dependencies "${file}" "${target}"
     done
 fi
 
