@@ -358,7 +358,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
         update_python_requirements "${file}" "${target}"
     done
 
-    # Only projects with requirements.txt
+    # Projects with requirements.txt, but no requirements.in
     glob '*requirements*.txt' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
