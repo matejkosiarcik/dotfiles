@@ -45,6 +45,10 @@ export PYTHONPATH
 . "${source_dir}/.dotnet-tools.sh"
 # shellcheck source=scripts/project-update/.dart-tools.sh
 . "${source_dir}/.dart-tools.sh"
+# shellcheck source=scripts/project-update/.rust-tools.sh
+. "${source_dir}/.rust-tools.sh"
+# shellcheck source=scripts/project-update/.swift-tools.sh
+. "${source_dir}/.swift-tools.sh"
 
 target='major'
 runtime='all'
@@ -442,15 +446,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
         fi
         printf '\n\n# Updating cargo file at %s\n' "${file}" >&2
 
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ]; then
-                cargo upgrade --incompatible # main
-            elif [ "${target}" = 'minor' ]; then
-                cargo upgrade # main
-            fi
-            cargo update # lock
-        )
+        update_rust_dependencies "${file}" "${target}"
     done
 fi
 
@@ -476,14 +472,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
         fi
         printf '\n\n# Updating Swift package file at %s\n' "${file}" >&2
 
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-                swift package update
-            fi
-
-            # Update lockfile always
-            swift package resolve
-        )
+        update_swift_dependencies "${file}" "${target}"
     done
 fi
