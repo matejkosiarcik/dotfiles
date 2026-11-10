@@ -287,7 +287,7 @@ update_python_requirements() {
             "python:${python_version}" \
             -c '
                 set -euf
-                python3 -m venv /venv
+                python -m venv /venv
                 /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pip-tools
 
                 mkdir -p /work
@@ -299,4 +299,50 @@ update_python_requirements() {
                 cat "./requirements.txt" >"/input/requirements.txt"
             '
     fi
+}
+
+update_python_pipfile() {
+    pipfile="${1}"
+    update_target="${2}"
+    pipfile_directory="$(cd "$(dirname "${pipfile}")" && pwd -P)"
+    pipfile_lock_path="${pipfile_directory}/Pipfile.lock"
+    python_version="$(resolve_python_version "${pipfile_directory}")"
+
+    printf '\n\n# Updating Pipfile at %s\n' "${pipfile}" >&2
+    printf '# Resolved Python version %s for %s\n' "${python_version}" "${pipfile}" >&2
+
+    if [ ! -e "${pipfile_lock_path}" ]; then
+        touch "${pipfile_lock_path}"
+    fi
+
+    docker run --rm \
+        --mount "type=bind,src=${pipfile_directory},dst=/input,readonly=false" \
+        --env "UPDATE_TARGET=${update_target}" \
+        --entrypoint '/bin/sh' \
+        "python:${python_version}" \
+        -c '
+            set -euf
+            python -m venv "/venv"
+            /venv/bin/python -m pip install --disable-pip-version-check --quiet --upgrade pipenv
+
+            mkdir -p "/work"
+            cp -R "/input/." "/work/"
+            cd "/work"
+
+            export PIPENV_NOSPIN=1
+            export PIPENV_VENV_IN_PROJECT=1
+            export PIPENV_YES=1
+
+            case "${UPDATE_TARGET}" in
+            major | minor | patch)
+                /venv/bin/pipenv update --all
+                ;;
+            lock)
+                /venv/bin/pipenv lock
+                ;;
+            esac
+
+            cat "./Pipfile" >"/input/Pipfile"
+            cat "./Pipfile.lock" >"/input/Pipfile.lock"
+        '
 }

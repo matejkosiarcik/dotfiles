@@ -192,7 +192,13 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
         update_python_requirements "${file}" "${target}"
     done
 
-    # TODO: Also update Pipfile
+    glob 'Pipfile' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        update_python_pipfile "${file}" "${target}"
+    done
 fi
 
 # Ruby - Gem
