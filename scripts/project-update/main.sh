@@ -2,11 +2,14 @@
 set -euf
 
 print_help() {
-    printf 'Usage: project-update [-h] [-t <target>] [-r <runtime>]\n'
+    printf 'Usage: project-update [-h] [-t <target>] [-r <runtime[,runtime...]>]\n'
     printf '\n'
-    printf '  -h                                                              print help message\n'
-    printf '  -t {major, minor, patch, lock}                                  semver upgrade target\n'
-    printf '  -r {all, nodejs, dart-pub, dotnet-nuget, php-composer, python-pip, ruby-gem, rust-cargo, go-mod, swift-swiftpm, gitman}  which runtime to update\n'
+    printf '  -h                              print help message\n'
+    printf '  -t {major, minor, patch, lock}  semver upgrade target\n'
+    printf '  -r <runtime[,runtime...]>       runtimes to update; partial names are accepted\n'
+    printf '                                  available: all, nodejs, dart-pub, dotnet-nuget, elixir-mix, go-mod,\n'
+    printf '                                             haskell-cabal, haskell-stack, julia-pkg, php-composer,\n'
+    printf '                                             python-pip, ruby-gem, rust-cargo, swift-swiftpm, gitman\n'
 }
 
 # Resolve original script path to source utils
@@ -47,10 +50,16 @@ export PYTHONPATH
 . "${source_dir}/utils/.dotnet-tools.sh"
 # shellcheck source=scripts/project-update/utils/.dart-tools.sh
 . "${source_dir}/utils/.dart-tools.sh"
+# shellcheck source=scripts/project-update/utils/.elixir-tools.sh
+. "${source_dir}/utils/.elixir-tools.sh"
 # shellcheck source=scripts/project-update/utils/.rust-tools.sh
 . "${source_dir}/utils/.rust-tools.sh"
 # shellcheck source=scripts/project-update/utils/.swift-tools.sh
 . "${source_dir}/utils/.swift-tools.sh"
+# shellcheck source=scripts/project-update/utils/.haskell-tools.sh
+. "${source_dir}/utils/.haskell-tools.sh"
+# shellcheck source=scripts/project-update/utils/.julia-tools.sh
+. "${source_dir}/utils/.julia-tools.sh"
 # shellcheck source=scripts/project-update/utils/.gitman-tools.sh
 . "${source_dir}/utils/.gitman-tools.sh"
 # shellcheck source=scripts/project-update/utils/.php-tools.sh
@@ -83,11 +92,21 @@ if printf '%s' "${target}" | grep -qvE '^(major|minor|patch|lock)$'; then
     exit 1
 fi
 
-if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|dotnet\-nuget|php\-composer|python\-pip|ruby\-gem|rust\-cargo|go\-mod|swift\-swiftpm|gitman)$'; then
-    printf 'Unsupported runtime %s\n' "${runtime}" >&2
-    print_help
-    exit 1
-fi
+runtime_matches() {
+    if [ "${runtime}" = 'all' ]; then
+        return 0
+    fi
+
+    printf '%s\n' "${runtime}" | tr ',' '\n' | (
+        while IFS= read -r runtime_filter; do
+            if [ -n "${runtime_filter}" ] && printf '%s\n' "${1}" | grep -Fq -- "${runtime_filter}"; then
+                exit 0
+            fi
+        done
+
+        exit 1
+    )
+}
 
 printf 'Updating %s runtime(s) to version %s\n' "${runtime}" "${target}" >&2
 
@@ -109,7 +128,7 @@ glob() {
 }
 
 # Dart / Flutter - Pub
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
+if runtime_matches 'dart-pub'; then
     printf '\n## Updating Dart / Flutter > Pub ##\n' >&2
     glob 'pubspec.yaml' | while read -r file; do
         if [ ! -e "${file}" ]; then
@@ -120,8 +139,20 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
     done
 fi
 
+# Elixir - Mix
+if runtime_matches 'elixir-mix'; then
+    printf '\n## Updating Elixir > Mix ##\n' >&2
+    glob 'mix.exs' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        update_elixir_dependencies "${file}" "${target}"
+    done
+fi
+
 # .NET - NuGet
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
+if runtime_matches 'dotnet-nuget'; then
     printf '\n## Updating .NET > NuGet ##\n' >&2
     glob '*.csproj' '*.fsproj' | while read -r file; do
         if [ ! -e "${file}" ]; then
@@ -133,7 +164,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
 fi
 
 # Gitman
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
+if runtime_matches 'gitman'; then
     printf '\n## Updating Gitman ##\n' >&2
     glob 'gitman.yml' '.gitman.yml' | while read -r file; do
         if [ ! -e "${file}" ]; then
@@ -144,8 +175,46 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
     done
 fi
 
+# Haskell - Cabal
+if runtime_matches 'haskell-cabal'; then
+    printf '\n## Updating Haskell > Cabal ##\n' >&2
+    glob '*.cabal' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        if { [ "${runtime}" != 'all' ] && runtime_matches 'haskell-cabal'; } || ! is_haskell_stack_project "${file}"; then
+            update_haskell_cabal_dependencies "${file}" "${target}"
+        fi
+    done
+fi
+
+# Haskell - Stack
+if runtime_matches 'haskell-stack'; then
+    printf '\n## Updating Haskell > Stack ##\n' >&2
+    glob 'stack.yaml' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        update_haskell_stack_dependencies "${file}" "${target}"
+    done
+fi
+
+# Julia - Pkg
+if runtime_matches 'julia-pkg'; then
+    printf '\n## Updating Julia > Pkg ##\n' >&2
+    glob 'Project.toml' 'JuliaProject.toml' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        update_julia_dependencies "${file}" "${target}"
+    done
+fi
+
 # JavaScript - NodeJS/NPM
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
+if runtime_matches 'nodejs'; then
     printf '\n## Updating JavaScript > NodeJS ##\n' >&2
     glob 'package.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
@@ -157,7 +226,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
 fi
 
 # PHP - Composer
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
+if runtime_matches 'php-composer'; then
     printf '\n## Updating PHP > Composer ##\n' >&2
     glob 'composer.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
@@ -169,7 +238,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
 fi
 
 # Python - Pip
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
+if runtime_matches 'python-pip'; then
     printf '\n## Updating Python > Pip ##\n' >&2
 
     # Projects with both requirements.in and requirements.txt
@@ -205,7 +274,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
 fi
 
 # Ruby - Gem
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
+if runtime_matches 'ruby-gem'; then
     printf '\n## Updating Ruby > Gem ##\n' >&2
     glob 'Gemfile' | while read -r file; do
         if [ ! -e "${file}" ]; then
@@ -217,7 +286,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
 fi
 
 # Rust - Cargo
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
+if runtime_matches 'rust-cargo'; then
     printf '\n## Updating Rust > Cargo ##\n' >&2
     glob 'Cargo.toml' | while read -r file; do
         if [ ! -e "${file}" ]; then
@@ -229,7 +298,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
 fi
 
 # Go - Modules
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
+if runtime_matches 'go-mod'; then
     printf '\n## Updating Go > Modules ##\n' >&2
     glob 'go.mod' | while read -r file; do
         if [ ! -e "${file}" ]; then
@@ -241,7 +310,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
 fi
 
 # Swift - Swift Package Manager
-if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
+if runtime_matches 'swift-swiftpm'; then
     printf '\n## Updating Swift > Package Manager ##\n' >&2
     glob 'Package.swift' | while read -r file; do
         if [ ! -e "${file}" ]; then
