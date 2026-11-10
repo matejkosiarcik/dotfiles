@@ -220,6 +220,9 @@ resolve_python_version() {
 update_python_requirements() {
     requirements_file="${1}"
     update_target="${2}"
+
+    printf '\n\n# Updating pip requirements file at %s\n' "${requirements_file}" >&2
+
     requirements_directory="$(cd "$(dirname "${requirements_file}")" && pwd -P)"
     requirements_path="${requirements_directory}/$(basename "${requirements_file}")"
     python_version="$(resolve_python_version "${requirements_directory}")"

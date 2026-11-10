@@ -119,6 +119,9 @@ resolve_swift_version() {
 update_swift_dependencies() {
     package_file="${1}"
     update_target="${2}"
+
+    printf '\n\n# Updating Swift package file at %s\n' "${package_file}" >&2
+
     package_directory="$(cd "$(dirname "${package_file}")" && pwd -P)"
     package_resolved_path="${package_directory}/Package.resolved"
     swift_version="$(resolve_swift_version "${package_directory}")"

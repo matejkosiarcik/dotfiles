@@ -114,7 +114,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
             continue
         fi
 
-        printf '\n\n# Updating Dart / Flutter package file at %s\n' "${file}" >&2
         update_dart_dependencies "${file}" "${target}"
     done
 fi
@@ -127,7 +126,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
             continue
         fi
 
-        printf '\n\n# Updating NuGet project at %s\n' "${file}" >&2
         update_dotnet_project "${file}" "${target}"
     done
 fi
@@ -139,7 +137,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '\n\n# Updating gitman file at %s\n' "${file}" >&2
         update_gitman_dependencies "${file}" "${target}"
     done
 fi
@@ -164,7 +161,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
             continue
         fi
 
-        printf '\n\n# Updating Composer package file at %s\n' "${file}" >&2
         update_composer_dependencies "${file}" "${target}"
     done
 fi
@@ -178,8 +174,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-
-        printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
 
         update_python_requirements "${file}" "${target}"
     done
@@ -195,14 +189,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
             continue
         fi
 
-        printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
-
-        if [ "${target}" = 'lock' ]; then
-            # There is no builtin way to update only lockfile, so skip it
-            true
-        else
-            update_python_requirements "${file}" "${target}"
-        fi
+        update_python_requirements "${file}" "${target}"
     done
 
     # TODO: Also update Pipfile
@@ -216,7 +203,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
             continue
         fi
 
-        printf '\n\n# Updating Gemfile file at %s\n' "${file}" >&2
         update_ruby_dependencies "${file}" "${target}"
     done
 fi
@@ -228,8 +214,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '\n\n# Updating cargo file at %s\n' "${file}" >&2
-
         update_rust_dependencies "${file}" "${target}"
     done
 fi
@@ -241,8 +225,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '\n\n# Updating Go module at %s\n' "${file}" >&2
-
         update_go_modules "${file}" "${target}"
     done
 fi
@@ -254,8 +236,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '\n\n# Updating Swift package file at %s\n' "${file}" >&2
-
         update_swift_dependencies "${file}" "${target}"
     done
 fi

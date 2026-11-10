@@ -5,6 +5,8 @@ update_gitman_dependencies() {
     gitman_file="${1}"
     update_target="${2}"
 
+    printf '\n\n# Updating gitman file at %s\n' "${gitman_file}" >&2
+
     (
         cd "$(dirname "${gitman_file}")"
         if [ "${update_target}" = 'major' ] || [ "${update_target}" = 'minor' ] || [ "${update_target}" = 'patch' ]; then

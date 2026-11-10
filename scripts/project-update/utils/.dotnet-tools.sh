@@ -140,6 +140,9 @@ dotnet_workspace_directory() {
 update_dotnet_project() {
     project_file="${1}"
     update_target="${2}"
+
+    printf '\n\n# Updating NuGet project at %s\n' "${project_file}" >&2
+
     project_directory="$(cd "$(dirname "${project_file}")" && pwd -P)"
     project_file_path="${project_directory}/$(basename "${project_file}")"
     workspace_directory="$(dotnet_workspace_directory "${project_directory}")"

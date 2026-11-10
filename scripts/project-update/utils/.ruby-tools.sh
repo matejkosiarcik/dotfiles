@@ -190,6 +190,9 @@ resolve_ruby_version() {
 update_ruby_dependencies() {
     gemfile="${1}"
     update_target="${2}"
+
+    printf '\n\n# Updating Gemfile file at %s\n' "${gemfile}" >&2
+
     directory="$(cd "$(dirname "${gemfile}")" && pwd -P)"
     gemfile_path="${directory}/Gemfile"
     lockfile_path="${directory}/Gemfile.lock"

@@ -5,6 +5,8 @@ update_composer_dependencies() {
     composer_file="${1}"
     update_target="${2}"
 
+    printf '\n\n# Updating Composer package file at %s\n' "${composer_file}" >&2
+
     (
         cd "$(dirname "${composer_file}")"
         if [ "${update_target}" = 'major' ]; then

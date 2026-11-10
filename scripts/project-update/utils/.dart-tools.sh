@@ -352,6 +352,9 @@ dart_workspace_directory() {
 update_dart_dependencies() {
     pubspec_file="${1}"
     update_target="${2}"
+
+    printf '\n\n# Updating Dart / Flutter package file at %s\n' "${pubspec_file}" >&2
+
     project_directory="$(cd "$(dirname "${pubspec_file}")" && pwd -P)"
     workspace_directory="$(dart_workspace_directory "${project_directory}")"
     pubspec_lock_path="${project_directory}/pubspec.lock"
