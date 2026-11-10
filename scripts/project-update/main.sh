@@ -33,26 +33,26 @@ export PATH
 PYTHONPATH="${source_dir}/python-vendor"
 export PYTHONPATH
 
-# shellcheck source=scripts/project-update/.python-tools.sh
-. "${source_dir}/.python-tools.sh"
-# shellcheck source=scripts/project-update/.js-tools.sh
-. "${source_dir}/.js-tools.sh"
-# shellcheck source=scripts/project-update/.ruby-tools.sh
-. "${source_dir}/.ruby-tools.sh"
-# shellcheck source=scripts/project-update/.go-tools.sh
-. "${source_dir}/.go-tools.sh"
-# shellcheck source=scripts/project-update/.dotnet-tools.sh
-. "${source_dir}/.dotnet-tools.sh"
-# shellcheck source=scripts/project-update/.dart-tools.sh
-. "${source_dir}/.dart-tools.sh"
-# shellcheck source=scripts/project-update/.rust-tools.sh
-. "${source_dir}/.rust-tools.sh"
-# shellcheck source=scripts/project-update/.swift-tools.sh
-. "${source_dir}/.swift-tools.sh"
-# shellcheck source=scripts/project-update/.gitman-tools.sh
-. "${source_dir}/.gitman-tools.sh"
-# shellcheck source=scripts/project-update/.php-tools.sh
-. "${source_dir}/.php-tools.sh"
+# shellcheck source=scripts/project-update/utils/.python-tools.sh
+. "${source_dir}/utils/.python-tools.sh"
+# shellcheck source=scripts/project-update/utils/.js-tools.sh
+. "${source_dir}/utils/.js-tools.sh"
+# shellcheck source=scripts/project-update/utils/.ruby-tools.sh
+. "${source_dir}/utils/.ruby-tools.sh"
+# shellcheck source=scripts/project-update/utils/.go-tools.sh
+. "${source_dir}/utils/.go-tools.sh"
+# shellcheck source=scripts/project-update/utils/.dotnet-tools.sh
+. "${source_dir}/utils/.dotnet-tools.sh"
+# shellcheck source=scripts/project-update/utils/.dart-tools.sh
+. "${source_dir}/utils/.dart-tools.sh"
+# shellcheck source=scripts/project-update/utils/.rust-tools.sh
+. "${source_dir}/utils/.rust-tools.sh"
+# shellcheck source=scripts/project-update/utils/.swift-tools.sh
+. "${source_dir}/utils/.swift-tools.sh"
+# shellcheck source=scripts/project-update/utils/.gitman-tools.sh
+. "${source_dir}/utils/.gitman-tools.sh"
+# shellcheck source=scripts/project-update/utils/.php-tools.sh
+. "${source_dir}/utils/.php-tools.sh"
 
 target='major'
 runtime='all'
