@@ -7,7 +7,7 @@ print_help() {
     printf '  -h                              print help message\n'
     printf '  -t {major, minor, patch, lock}  semver upgrade target\n'
     printf '  -r <runtime[,runtime...]>       runtimes to update; partial names are accepted\n'
-    printf '                                  available: all, nodejs, dart-pub, dotnet-nuget, elixir-mix, go-mod,\n'
+    printf '                                  available: all, nodejs, dart-pub, dotnet-nuget, elixir-mix, go-mod, gradle,\n'
     printf '                                             haskell-cabal, haskell-stack, julia-pkg, php-composer,\n'
     printf '                                             python-pip, ruby-gem, rust-cargo, swift-swiftpm, gitman\n'
 }
@@ -52,6 +52,8 @@ export PYTHONPATH
 . "${source_dir}/utils/.dart-tools.sh"
 # shellcheck source=scripts/project-update/utils/.elixir-tools.sh
 . "${source_dir}/utils/.elixir-tools.sh"
+# shellcheck source=scripts/project-update/utils/.gradle-tools.sh
+. "${source_dir}/utils/.gradle-tools.sh"
 # shellcheck source=scripts/project-update/utils/.rust-tools.sh
 . "${source_dir}/utils/.rust-tools.sh"
 # shellcheck source=scripts/project-update/utils/.swift-tools.sh
@@ -160,6 +162,18 @@ if runtime_matches 'dotnet-nuget'; then
         fi
 
         update_dotnet_project "${file}" "${target}"
+    done
+fi
+
+# Java / Kotlin / Android - Gradle
+if runtime_matches 'gradle' || runtime_matches 'java' || runtime_matches 'kotlin' || runtime_matches 'android'; then
+    printf '\n## Updating Java / Kotlin / Android > Gradle ##\n' >&2
+    glob 'settings.gradle' 'settings.gradle.kts' 'build.gradle' 'build.gradle.kts' | while read -r file; do
+        if [ ! -e "${file}" ]; then
+            continue
+        fi
+
+        update_gradle_dependencies "${file}" "${target}"
     done
 fi
 
