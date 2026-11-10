@@ -248,4 +248,4 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
     done
 fi
 
-printf 'Sucessfully updated dependencies\n' >&2
+printf '\n\nSucessfully updated dependencies\n\n' >&2
