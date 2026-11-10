@@ -161,7 +161,7 @@ update_composer_dependencies() {
     php_version="$(resolve_php_version "${composer_directory}")"
     has_composer_lock='false'
 
-    printf '\n\n# Updating Composer package file at %s\n' "${composer_file}" >&2
+    printf '# Updating Composer package file at %s\n' "${composer_file}" >&2
     printf '# Resolved PHP version %s for %s\n' "${php_version}" "${composer_file}" >&2
 
     if [ -e "${composer_lock_path}" ]; then
@@ -174,7 +174,8 @@ update_composer_dependencies() {
         composer_tmpdir="$(mktemp -d)"
         trap 'rm -rf "${composer_tmpdir}"' 0 HUP INT TERM
 
-        docker run --rm \
+        # shellcheck disable=SC2016
+        run_update_command docker run --rm \
             --mount "type=bind,src=${composer_tmpdir},dst=/output,readonly=false" \
             --entrypoint '/bin/sh' \
             'composer:2' \
@@ -183,7 +184,8 @@ update_composer_dependencies() {
                 cp "$(command -v composer)" "/output/composer"
             '
 
-        docker run --rm \
+        # shellcheck disable=SC2016
+        run_update_command docker run --rm \
             --mount "type=bind,src=${composer_directory},dst=/input,readonly=false" \
             --mount "type=bind,src=${composer_tmpdir},dst=/composer,readonly=true" \
             --env "HAS_COMPOSER_LOCK=${has_composer_lock}" \

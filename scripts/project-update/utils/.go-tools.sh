@@ -196,7 +196,7 @@ update_go_modules() {
     go_mod_file="${1}"
     update_target="${2}"
 
-    printf '\n\n# Updating Go module at %s\n' "${go_mod_file}" >&2
+    printf '# Updating Go module at %s\n' "${go_mod_file}" >&2
 
     go_directory="$(cd "$(dirname "${go_mod_file}")" && pwd -P)"
     workspace_directory="$(go_workspace_directory "${go_directory}")"
@@ -215,7 +215,8 @@ update_go_modules() {
         touch "${go_sum_path}"
     fi
 
-    docker run --rm \
+    # shellcheck disable=SC2016
+    run_update_command docker run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "INPUT_PROJECT_DIRECTORY=/input/${project_directory}" \
         --env "PROJECT_DIRECTORY=/work/${project_directory}" \

@@ -209,7 +209,7 @@ update_rust_dependencies() {
     cargo_file="${1}"
     update_target="${2}"
 
-    printf '\n\n# Updating cargo file at %s\n' "${cargo_file}" >&2
+    printf '# Updating cargo file at %s\n' "${cargo_file}" >&2
 
     project_directory="$(cd "$(dirname "${cargo_file}")" && pwd -P)"
     workspace_directory="$(rust_workspace_directory "${project_directory}")"
@@ -228,7 +228,8 @@ update_rust_dependencies() {
         touch "${cargo_lock_path}"
     fi
 
-    docker run --rm \
+    # shellcheck disable=SC2016
+    run_update_command docker run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "PROJECT_DIRECTORY=/work/${project_path}" \
         --env "UPDATE_TARGET=${update_target}" \

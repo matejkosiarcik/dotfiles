@@ -353,7 +353,7 @@ update_dart_dependencies() {
     pubspec_file="${1}"
     update_target="${2}"
 
-    printf '\n\n# Updating Dart / Flutter package file at %s\n' "${pubspec_file}" >&2
+    printf '# Updating Dart / Flutter package file at %s\n' "${pubspec_file}" >&2
 
     project_directory="$(cd "$(dirname "${pubspec_file}")" && pwd -P)"
     workspace_directory="$(dart_workspace_directory "${project_directory}")"
@@ -387,7 +387,8 @@ update_dart_dependencies() {
         touch "${pubspec_lock_path}"
     fi
 
-    docker run --rm \
+    # shellcheck disable=SC2016
+    run_update_command docker run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "INPUT_PROJECT_DIRECTORY=/input/${project_path}" \
         --env "PROJECT_DIRECTORY=/work/${project_path}" \

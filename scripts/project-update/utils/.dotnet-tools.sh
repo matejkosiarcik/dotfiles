@@ -141,7 +141,7 @@ update_dotnet_project() {
     project_file="${1}"
     update_target="${2}"
 
-    printf '\n\n# Updating NuGet project at %s\n' "${project_file}" >&2
+    printf '# Updating NuGet project at %s\n' "${project_file}" >&2
 
     project_directory="$(cd "$(dirname "${project_file}")" && pwd -P)"
     project_file_path="${project_directory}/$(basename "${project_file}")"
@@ -160,7 +160,8 @@ update_dotnet_project() {
         return
     fi
 
-    docker run --rm \
+    # shellcheck disable=SC2016
+    run_update_command docker run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "PROJECT_PATH=${project_path}" \
         --entrypoint '/bin/sh' \
