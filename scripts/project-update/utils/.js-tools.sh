@@ -202,7 +202,7 @@ update_nodejs_dependencies() {
 
     case "${package_manager}" in
     npm)
-        docker run --rm \
+        run_docker_update run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY='0' \
@@ -222,7 +222,7 @@ update_nodejs_dependencies() {
         lockfile='package-lock.json'
         ;;
     pnpm)
-        docker run --rm \
+        run_docker_update run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY='0' \
@@ -241,7 +241,7 @@ update_nodejs_dependencies() {
         lockfile='pnpm-lock.yaml'
         ;;
     yarn)
-        docker run --rm \
+        run_docker_update run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY='0' \
@@ -264,7 +264,7 @@ update_nodejs_dependencies() {
         lockfile='yarn.lock'
         ;;
     bun)
-        docker run --rm \
+        run_docker_update run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY='0' \

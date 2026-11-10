@@ -160,7 +160,7 @@ update_dotnet_project() {
         return
     fi
 
-    docker run --rm \
+    run_docker_update run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "PROJECT_PATH=${project_path}" \
         --entrypoint '/bin/sh' \

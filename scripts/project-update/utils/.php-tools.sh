@@ -174,7 +174,7 @@ update_composer_dependencies() {
         composer_tmpdir="$(mktemp -d)"
         trap 'rm -rf "${composer_tmpdir}"' 0 HUP INT TERM
 
-        docker run --rm \
+        run_docker_update run --rm \
             --mount "type=bind,src=${composer_tmpdir},dst=/output,readonly=false" \
             --entrypoint '/bin/sh' \
             'composer:2' \
@@ -183,7 +183,7 @@ update_composer_dependencies() {
                 cp "$(command -v composer)" "/output/composer"
             '
 
-        docker run --rm \
+        run_docker_update run --rm \
             --mount "type=bind,src=${composer_directory},dst=/input,readonly=false" \
             --mount "type=bind,src=${composer_tmpdir},dst=/composer,readonly=true" \
             --env "HAS_COMPOSER_LOCK=${has_composer_lock}" \

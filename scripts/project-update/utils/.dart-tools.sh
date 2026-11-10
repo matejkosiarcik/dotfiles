@@ -387,7 +387,7 @@ update_dart_dependencies() {
         touch "${pubspec_lock_path}"
     fi
 
-    docker run --rm \
+    run_docker_update run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "INPUT_PROJECT_DIRECTORY=/input/${project_path}" \
         --env "PROJECT_DIRECTORY=/work/${project_path}" \

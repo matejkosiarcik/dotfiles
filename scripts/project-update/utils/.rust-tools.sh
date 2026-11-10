@@ -228,7 +228,7 @@ update_rust_dependencies() {
         touch "${cargo_lock_path}"
     fi
 
-    docker run --rm \
+    run_docker_update run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "PROJECT_DIRECTORY=/work/${project_path}" \
         --env "UPDATE_TARGET=${update_target}" \

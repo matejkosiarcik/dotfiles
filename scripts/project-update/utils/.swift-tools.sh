@@ -132,7 +132,7 @@ update_swift_dependencies() {
         touch "${package_resolved_path}"
     fi
 
-    docker run --rm \
+    run_docker_update run --rm \
         --mount "type=bind,src=${package_directory},dst=/input,readonly=false" \
         --env "UPDATE_TARGET=${update_target}" \
         --entrypoint '/bin/sh' \

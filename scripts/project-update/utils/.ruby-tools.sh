@@ -204,7 +204,7 @@ update_ruby_dependencies() {
         touch "${lockfile_path}"
     fi
 
-    docker run --rm \
+    run_docker_update run --rm \
         --mount "type=bind,src=${gemfile_path},dst=/input/Gemfile,readonly=false" \
         --mount "type=bind,src=${lockfile_path},dst=/input/Gemfile.lock,readonly=false" \
         --env "UPDATE_TARGET=${update_target}" \
