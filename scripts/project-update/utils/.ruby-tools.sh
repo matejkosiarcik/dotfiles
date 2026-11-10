@@ -191,7 +191,7 @@ update_ruby_dependencies() {
     gemfile="${1}"
     update_target="${2}"
 
-    printf '\n\n# Updating Gemfile file at %s\n' "${gemfile}" >&2
+    printf '# Updating Gemfile file at %s\n' "${gemfile}" >&2
 
     directory="$(cd "$(dirname "${gemfile}")" && pwd -P)"
     gemfile_path="${directory}/Gemfile"
@@ -204,7 +204,7 @@ update_ruby_dependencies() {
         touch "${lockfile_path}"
     fi
 
-    run_docker_update run --rm \
+    run_update_command docker run --rm \
         --mount "type=bind,src=${gemfile_path},dst=/input/Gemfile,readonly=false" \
         --mount "type=bind,src=${lockfile_path},dst=/input/Gemfile.lock,readonly=false" \
         --env "UPDATE_TARGET=${update_target}" \

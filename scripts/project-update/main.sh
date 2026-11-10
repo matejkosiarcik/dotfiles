@@ -89,7 +89,7 @@ if printf '%s' "${runtime}" | grep -qvE '^(all|nodejs|dart\-pub|dotnet\-nuget|ph
     exit 1
 fi
 
-printf 'Updating %s runtime(s) to version: %s\n\n' "${runtime}" "${target}" >&2
+printf 'Updating %s runtime(s) to version %s\n' "${runtime}" "${target}" >&2
 
 glob() {
     if git rev-parse --show-toplevel >/dev/null 2>&1; then
@@ -110,7 +110,7 @@ glob() {
 
 # Dart / Flutter - Pub
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
-    printf '\n\n## Dart / Flutter > Pub ##\n' >&2
+    printf '\n## Updating Dart / Flutter > Pub ##\n' >&2
     glob 'pubspec.yaml' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -122,7 +122,7 @@ fi
 
 # .NET - NuGet
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
-    printf '\n\n## .NET > NuGet ##\n' >&2
+    printf '\n## Updating .NET > NuGet ##\n' >&2
     glob '*.csproj' '*.fsproj' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -134,7 +134,7 @@ fi
 
 # Gitman
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
-    printf '\n\n## Gitman ##\n' >&2
+    printf '\n## Updating Gitman ##\n' >&2
     glob 'gitman.yml' '.gitman.yml' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -145,7 +145,7 @@ fi
 
 # JavaScript - NodeJS/NPM
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
-    printf '\n\n## JavaScript > NodeJS ##\n' >&2
+    printf '\n## Updating JavaScript > NodeJS ##\n' >&2
     glob 'package.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -157,7 +157,7 @@ fi
 
 # PHP - Composer
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
-    printf '\n\n## PHP > Composer ##\n' >&2
+    printf '\n## Updating PHP > Composer ##\n' >&2
     glob 'composer.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -169,7 +169,7 @@ fi
 
 # Python - Pip
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
-    printf '\n\n## Python > Pip ##\n' >&2
+    printf '\n## Updating Python > Pip ##\n' >&2
 
     # Projects with both requirements.in and requirements.txt
     glob '*requirements*.in' | while read -r file; do
@@ -205,7 +205,7 @@ fi
 
 # Ruby - Gem
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
-    printf '\n\n## Ruby > Gem ##\n' >&2
+    printf '\n## Updating Ruby > Gem ##\n' >&2
     glob 'Gemfile' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -217,7 +217,7 @@ fi
 
 # Rust - Cargo
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
-    printf '\n\n## Rust > Cargo ##\n' >&2
+    printf '\n## Updating Rust > Cargo ##\n' >&2
     glob 'Cargo.toml' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -228,7 +228,7 @@ fi
 
 # Go - Modules
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
-    printf '\n\n## Go > Modules ##\n' >&2
+    printf '\n## Updating Go > Modules ##\n' >&2
     glob 'go.mod' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -239,7 +239,7 @@ fi
 
 # Swift - Swift Package Manager
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
-    printf '\n\n## Swift > Package Manager ##\n' >&2
+    printf '\n## Updating Swift > Package Manager ##\n' >&2
     glob 'Package.swift' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue

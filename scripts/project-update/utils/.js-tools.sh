@@ -185,7 +185,7 @@ update_nodejs_dependencies() {
         ncu_target='latest'
     fi
 
-    printf '\n\n# Updating %s package file at %s\n' "${package_manager}" "${package_file}" >&2
+    printf '# Updating %s package file at %s\n' "${package_manager}" "${package_file}" >&2
     printf '# Resolved NodeJS version %s for %s\n' "${nodejs_version}" "${package_file}" >&2
 
     if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
@@ -193,7 +193,7 @@ update_nodejs_dependencies() {
     fi
 
     if [ "${update_target}" != 'lock' ]; then
-        ncu --cwd "${package_directory}" --packageManager "${package_manager}" --target "${ncu_target}" --upgrade
+        run_update_command ncu --upgrade --cwd "${package_directory}" --packageManager "${package_manager}" --target "${ncu_target}"
     fi
 
     package_directory_name="$(cd "${package_directory}" >/dev/null 2>&1 && basename "${PWD}")"
@@ -202,7 +202,7 @@ update_nodejs_dependencies() {
 
     case "${package_manager}" in
     npm)
-        run_docker_update run --rm \
+        run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY='0' \
@@ -222,7 +222,7 @@ update_nodejs_dependencies() {
         lockfile='package-lock.json'
         ;;
     pnpm)
-        run_docker_update run --rm \
+        run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY='0' \
@@ -241,7 +241,7 @@ update_nodejs_dependencies() {
         lockfile='pnpm-lock.yaml'
         ;;
     yarn)
-        run_docker_update run --rm \
+        run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY='0' \
@@ -264,7 +264,7 @@ update_nodejs_dependencies() {
         lockfile='yarn.lock'
         ;;
     bun)
-        run_docker_update run --rm \
+        run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
             --env CYPRESS_INSTALL_BINARY='0' \

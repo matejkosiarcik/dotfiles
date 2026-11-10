@@ -221,7 +221,7 @@ update_python_requirements() {
     requirements_file="${1}"
     update_target="${2}"
 
-    printf '\n\n# Updating pip requirements file at %s\n' "${requirements_file}" >&2
+    printf '# Updating pip requirements file at %s\n' "${requirements_file}" >&2
 
     requirements_directory="$(cd "$(dirname "${requirements_file}")" && pwd -P)"
     requirements_path="${requirements_directory}/$(basename "${requirements_file}")"
@@ -245,7 +245,7 @@ update_python_requirements() {
     printf '# Resolved Python version %s for %s\n' "${python_version}" "${requirements_file}" >&2
 
     if [ "${update_target}" != 'lock' ]; then
-        run_docker_update run --rm \
+        run_update_command docker run --rm \
             --mount "type=bind,src=${requirements_path},dst=/input/${requirements_docker_filename},readonly=false" \
             --env "REQUIREMENTS_FILE=${requirements_docker_filename}" \
             --env "UPDATE_TARGET=${update_target}" \
@@ -280,7 +280,7 @@ update_python_requirements() {
 
         lockfile_path="${requirements_directory}/$(basename "${lockfile}")"
 
-        run_docker_update run --rm \
+        run_update_command docker run --rm \
             --mount "type=bind,src=${requirements_path},dst=/input/requirements.in,readonly=false" \
             --mount "type=bind,src=${lockfile_path},dst=/input/requirements.txt,readonly=false" \
             --entrypoint '/bin/sh' \
@@ -308,14 +308,14 @@ update_python_pipfile() {
     pipfile_lock_path="${pipfile_directory}/Pipfile.lock"
     python_version="$(resolve_python_version "${pipfile_directory}")"
 
-    printf '\n\n# Updating Pipfile at %s\n' "${pipfile}" >&2
+    printf '# Updating Pipfile at %s\n' "${pipfile}" >&2
     printf '# Resolved Python version %s for %s\n' "${python_version}" "${pipfile}" >&2
 
     if [ ! -e "${pipfile_lock_path}" ]; then
         touch "${pipfile_lock_path}"
     fi
 
-    run_docker_update run --rm \
+    run_update_command docker run --rm \
         --mount "type=bind,src=${pipfile_directory},dst=/input,readonly=false" \
         --env "UPDATE_TARGET=${update_target}" \
         --entrypoint '/bin/sh' \

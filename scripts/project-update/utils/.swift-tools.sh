@@ -120,7 +120,7 @@ update_swift_dependencies() {
     package_file="${1}"
     update_target="${2}"
 
-    printf '\n\n# Updating Swift package file at %s\n' "${package_file}" >&2
+    printf '# Updating Swift package file at %s\n' "${package_file}" >&2
 
     package_directory="$(cd "$(dirname "${package_file}")" && pwd -P)"
     package_resolved_path="${package_directory}/Package.resolved"
@@ -132,7 +132,7 @@ update_swift_dependencies() {
         touch "${package_resolved_path}"
     fi
 
-    run_docker_update run --rm \
+    run_update_command docker run --rm \
         --mount "type=bind,src=${package_directory},dst=/input,readonly=false" \
         --env "UPDATE_TARGET=${update_target}" \
         --entrypoint '/bin/sh' \
