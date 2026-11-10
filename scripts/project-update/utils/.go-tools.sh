@@ -195,6 +195,9 @@ resolve_go_version() {
 update_go_modules() {
     go_mod_file="${1}"
     update_target="${2}"
+
+    printf '\n\n# Updating Go module at %s\n' "${go_mod_file}" >&2
+
     go_directory="$(cd "$(dirname "${go_mod_file}")" && pwd -P)"
     workspace_directory="$(go_workspace_directory "${go_directory}")"
     go_sum_path="${go_directory}/go.sum"

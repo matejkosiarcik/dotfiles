@@ -33,18 +33,26 @@ export PATH
 PYTHONPATH="${source_dir}/python-vendor"
 export PYTHONPATH
 
-# shellcheck source=scripts/project-update/.python-tools.sh
-. "${source_dir}/.python-tools.sh"
-# shellcheck source=scripts/project-update/.js-tools.sh
-. "${source_dir}/.js-tools.sh"
-# shellcheck source=scripts/project-update/.ruby-tools.sh
-. "${source_dir}/.ruby-tools.sh"
-# shellcheck source=scripts/project-update/.go-tools.sh
-. "${source_dir}/.go-tools.sh"
-# shellcheck source=scripts/project-update/.dotnet-tools.sh
-. "${source_dir}/.dotnet-tools.sh"
-# shellcheck source=scripts/project-update/.dart-tools.sh
-. "${source_dir}/.dart-tools.sh"
+# shellcheck source=scripts/project-update/utils/.python-tools.sh
+. "${source_dir}/utils/.python-tools.sh"
+# shellcheck source=scripts/project-update/utils/.js-tools.sh
+. "${source_dir}/utils/.js-tools.sh"
+# shellcheck source=scripts/project-update/utils/.ruby-tools.sh
+. "${source_dir}/utils/.ruby-tools.sh"
+# shellcheck source=scripts/project-update/utils/.go-tools.sh
+. "${source_dir}/utils/.go-tools.sh"
+# shellcheck source=scripts/project-update/utils/.dotnet-tools.sh
+. "${source_dir}/utils/.dotnet-tools.sh"
+# shellcheck source=scripts/project-update/utils/.dart-tools.sh
+. "${source_dir}/utils/.dart-tools.sh"
+# shellcheck source=scripts/project-update/utils/.rust-tools.sh
+. "${source_dir}/utils/.rust-tools.sh"
+# shellcheck source=scripts/project-update/utils/.swift-tools.sh
+. "${source_dir}/utils/.swift-tools.sh"
+# shellcheck source=scripts/project-update/utils/.gitman-tools.sh
+. "${source_dir}/utils/.gitman-tools.sh"
+# shellcheck source=scripts/project-update/utils/.php-tools.sh
+. "${source_dir}/utils/.php-tools.sh"
 
 target='major'
 runtime='all'
@@ -106,7 +114,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dart-pub' ]; then
             continue
         fi
 
-        printf '\n\n# Updating Dart / Flutter package file at %s\n' "${file}" >&2
         update_dart_dependencies "${file}" "${target}"
     done
 fi
@@ -119,7 +126,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'dotnet-nuget' ]; then
             continue
         fi
 
-        printf '\n\n# Updating NuGet project at %s\n' "${file}" >&2
         update_dotnet_project "${file}" "${target}"
     done
 fi
@@ -131,150 +137,19 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'gitman' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '\n\n# Updating gitman file at %s\n' "${file}" >&2
-
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-                gitman update --force # main
-            elif [ "${target}" = 'lock' ]; then
-                gitman install --force --fetch # no-file
-            fi
-            gitman lock # lock
-        )
+        update_gitman_dependencies "${file}" "${target}"
     done
 fi
 
 # JavaScript - NodeJS/NPM
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
     printf '\n\n## JavaScript > NodeJS ##\n' >&2
-    if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
-        printf '# Placeholder\n' >>"${HOME}/.npmrc"
-    fi
-
-    ncu_target="${target}"
-    if [ "${target}" = 'major' ]; then
-        ncu_target='latest'
-    fi
-
     glob 'package.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
 
-        directory="$(dirname "${file}")"
-        package_manager="$(detect_nodejs_package_manager "${directory}")"
-        nodejs_version="$(resolve_nodejs_version "$(cd "${directory}" && pwd -P)")"
-
-        printf '\n\n# Updating %s package file at %s\n' "${package_manager}" "${file}" >&2
-        printf '# Resolved NodeJS version %s for %s\n' "${nodejs_version}" "${file}" >&2
-
-        if [ "${target}" != 'lock' ]; then
-            ncu --cwd "${directory}" --packageManager "${package_manager}" --target "${ncu_target}" --upgrade # package.json
-        fi
-
-        dirname="$(cd "${directory}" >/dev/null 2>&1 && basename "${PWD}")"
-        tmpdir="$(mktemp -d)"
-        cp "${directory}/package.json" "${tmpdir}/package.json"
-
-        case "${package_manager}" in
-        npm)
-            docker run --rm \
-                --volume "${tmpdir}:/app/${dirname}:rw" \
-                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-                --env CYPRESS_INSTALL_BINARY='0' \
-                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-                --env PROJECT_DIRECTORY="/app/${dirname}" \
-                --entrypoint '/bin/sh' \
-                --user 'root' \
-                "node:${nodejs_version}" \
-                -c '
-                    set -euf
-                    cd "${PROJECT_DIRECTORY}"
-                    npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error
-                    npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error
-                '
-            lockfile='package-lock.json'
-            ;;
-        pnpm)
-            docker run --rm \
-                --volume "${tmpdir}:/app/${dirname}:rw" \
-                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-                --env CYPRESS_INSTALL_BINARY='0' \
-                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-                --env PROJECT_DIRECTORY="/app/${dirname}" \
-                --entrypoint '/bin/sh' \
-                --user 'root' \
-                "node:${nodejs_version}" \
-                -c '
-                    set -euf
-                    npm install --global "corepack@latest" --no-audit --no-fund --loglevel=error
-                    corepack pnpm install --dir "${PROJECT_DIRECTORY}" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent
-                '
-            lockfile='pnpm-lock.yaml'
-            ;;
-        yarn)
-            docker run --rm \
-                --volume "${tmpdir}:/app/${dirname}:rw" \
-                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-                --env CYPRESS_INSTALL_BINARY='0' \
-                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-                --env PROJECT_DIRECTORY="/app/${dirname}" \
-                --entrypoint '/bin/sh' \
-                --user 'root' \
-                "node:${nodejs_version}" \
-                -c '
-                    set -euf
-                    npm install --global corepack@latest --no-audit --no-fund --loglevel=error
-                    if corepack yarn --version | grep -q "^1\\."; then
-                        corepack yarn install --cwd "${PROJECT_DIRECTORY}" --ignore-scripts --non-interactive --no-progress
-                    else
-                        corepack yarn install --cwd "${PROJECT_DIRECTORY}" --mode=update-lockfile
-                    fi
-                '
-            lockfile='yarn.lock'
-            ;;
-        bun)
-            docker run --rm \
-                --volume "${tmpdir}:/app/${dirname}:rw" \
-                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-                --env CYPRESS_INSTALL_BINARY='0' \
-                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-                --env PROJECT_DIRECTORY="/app/${dirname}" \
-                --entrypoint '/bin/sh' \
-                --user 'root' \
-                oven/bun:latest \
-                -c '
-                    set -euf
-                    cd "${PROJECT_DIRECTORY}"
-                    bun install --lockfile-only --ignore-scripts --no-progress
-                '
-            if [ -e "${tmpdir}/bun.lock" ]; then
-                lockfile='bun.lock'
-            else
-                lockfile='bun.lockb'
-            fi
-            ;;
-        *)
-            printf 'Unsupported NodeJS package manager %s\n' "${package_manager}" >&2
-            rm -rf "${tmpdir}"
-            exit 1
-            ;;
-        esac
-
-        cat "${tmpdir}/${lockfile}" >"${directory}/${lockfile}"
-        if [ "${package_manager}" = 'bun' ] && [ "${lockfile}" = 'bun.lock' ] && [ -e "${directory}/bun.lockb" ]; then
-            rm "${directory}/bun.lockb"
-        fi
-        rm -rf "${tmpdir}"
+        update_nodejs_dependencies "${file}" "${target}"
     done
 fi
 
@@ -286,56 +161,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'php-composer' ]; then
             continue
         fi
 
-        printf '\n\n# Updating Composer package file at %s\n' "${file}" >&2
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ]; then
-                if [ -e composer.lock ]; then
-                    composer_major_updates="$(composer outdated --locked --direct --major-only --format=json)"
-                    composer_major_packages="$(
-                        # shellcheck disable=SC2016
-                        printf '%s\n' "${composer_major_updates}" | php -r '
-                            $updates = json_decode(stream_get_contents(STDIN), true, 512, JSON_THROW_ON_ERROR);
-                            $manifest = json_decode(file_get_contents("composer.json"), true, 512, JSON_THROW_ON_ERROR);
-                            $require = $manifest["require"] ?? [];
-                            $requireDev = $manifest["require-dev"] ?? [];
-
-                            foreach ($updates["locked"] ?? [] as $update) {
-                                $package = $update["name"] ?? "";
-                                if (!is_string($package) || $package === "") {
-                                    continue;
-                                }
-                                if (array_key_exists($package, $require)) {
-                                    printf("production\t%s\n", $package);
-                                } elseif (array_key_exists($package, $requireDev)) {
-                                    printf("development\t%s\n", $package);
-                                }
-                            }
-                        '
-                    )"
-
-                    printf '%s\n' "${composer_major_packages}" | while IFS="$(printf '\t')" read -r dependency_type package; do
-                        if [ -z "${package}" ]; then
-                            continue
-                        fi
-
-                        printf '\n\n# Updating major Composer constraint for %s\n' "${package}" >&2
-                        if [ "${dependency_type}" = 'development' ]; then
-                            composer require --dev --no-update --no-interaction --no-scripts "${package}"
-                        else
-                            composer require --no-update --no-interaction --no-scripts "${package}"
-                        fi
-                    done
-                fi
-                composer update --with-all-dependencies --no-install --no-interaction --no-scripts
-            elif [ "${target}" = 'minor' ]; then
-                composer update --with-all-dependencies --no-install --no-interaction --no-scripts
-            elif [ "${target}" = 'patch' ]; then
-                composer update --patch-only --no-install --no-interaction --no-scripts
-            elif [ "${target}" = 'lock' ]; then
-                composer update --lock --no-install --no-interaction --no-scripts
-            fi
-        )
+        update_composer_dependencies "${file}" "${target}"
     done
 fi
 
@@ -349,12 +175,10 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
             continue
         fi
 
-        printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
-
         update_python_requirements "${file}" "${target}"
     done
 
-    # Only projects with requirements.txt
+    # Projects with requirements.txt, but no requirements.in
     glob '*requirements*.txt' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
@@ -365,14 +189,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'python-pip' ]; then
             continue
         fi
 
-        printf '\n\n# Updating pip requirements file at %s\n' "${file}" >&2
-
-        if [ "${target}" = 'lock' ]; then
-            # There is no builtin way to update only lockfile, so skip it
-            true
-        else
-            update_python_requirements "${file}" "${target}"
-        fi
+        update_python_requirements "${file}" "${target}"
     done
 
     # TODO: Also update Pipfile
@@ -386,50 +203,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
             continue
         fi
 
-        directory="$(cd "$(dirname "${file}")" && pwd -P)"
-        gemfile_path="${directory}/Gemfile"
-        lockfile_path="${directory}/Gemfile.lock"
-        ruby_version="$(resolve_ruby_version "${directory}")"
-
-        printf '\n\n# Updating Gemfile file at %s\n' "${file}" >&2
-        printf '# Resolved Ruby version %s for %s\n' "${ruby_version}" "${file}" >&2
-
-        if [ ! -e "${lockfile_path}" ]; then
-            touch "${lockfile_path}"
-        fi
-
-        docker run --rm \
-            --mount "type=bind,src=${gemfile_path},dst=/input/Gemfile,readonly=false" \
-            --mount "type=bind,src=${lockfile_path},dst=/input/Gemfile.lock,readonly=false" \
-            --env "UPDATE_TARGET=${target}" \
-            --entrypoint '/bin/sh' \
-            "ruby:${ruby_version}" \
-            -c '
-                set -euf
-                mkdir -p "/work" "/bundle"
-                cp "/input/Gemfile" "/input/Gemfile.lock" "/work/"
-                cd "/work"
-
-                export BUNDLE_DISABLE_SHARED_GEMS="true"
-                export BUNDLE_FROZEN="false"
-                export BUNDLE_PATH__SYSTEM="false"
-                export BUNDLE_PATH="/bundle"
-                export BUNDLE_GEMFILE="/work/Gemfile"
-
-                case "${UPDATE_TARGET}" in
-                major | minor | patch)
-                    bundle install --quiet
-                    bundle update --all --quiet "--${UPDATE_TARGET}" --strict
-                    ;;
-                lock)
-                    ;;
-                esac
-
-                bundle lock --normalize-platforms
-
-                cat "./Gemfile" >"/input/Gemfile"
-                cat "./Gemfile.lock" >"/input/Gemfile.lock"
-            '
+        update_ruby_dependencies "${file}" "${target}"
     done
 fi
 
@@ -440,17 +214,7 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'rust-cargo' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '\n\n# Updating cargo file at %s\n' "${file}" >&2
-
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ]; then
-                cargo upgrade --incompatible # main
-            elif [ "${target}" = 'minor' ]; then
-                cargo upgrade # main
-            fi
-            cargo update # lock
-        )
+        update_rust_dependencies "${file}" "${target}"
     done
 fi
 
@@ -461,8 +225,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'go-mod' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '\n\n# Updating Go module at %s\n' "${file}" >&2
-
         update_go_modules "${file}" "${target}"
     done
 fi
@@ -474,16 +236,6 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'swift-swiftpm' ]; then
         if [ ! -e "${file}" ]; then
             continue
         fi
-        printf '\n\n# Updating Swift package file at %s\n' "${file}" >&2
-
-        (
-            cd "$(dirname "${file}")"
-            if [ "${target}" = 'major' ] || [ "${target}" = 'minor' ] || [ "${target}" = 'patch' ]; then
-                swift package update
-            fi
-
-            # Update lockfile always
-            swift package resolve
-        )
+        update_swift_dependencies "${file}" "${target}"
     done
 fi
