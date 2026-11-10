@@ -215,6 +215,7 @@ update_go_modules() {
         touch "${go_sum_path}"
     fi
 
+    # shellcheck disable=SC2016
     run_update_command docker run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "INPUT_PROJECT_DIRECTORY=/input/${project_directory}" \

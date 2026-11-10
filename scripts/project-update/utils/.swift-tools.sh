@@ -132,6 +132,7 @@ update_swift_dependencies() {
         touch "${package_resolved_path}"
     fi
 
+    # shellcheck disable=SC2016
     run_update_command docker run --rm \
         --mount "type=bind,src=${package_directory},dst=/input,readonly=false" \
         --env "UPDATE_TARGET=${update_target}" \

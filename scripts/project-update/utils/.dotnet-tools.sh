@@ -160,6 +160,7 @@ update_dotnet_project() {
         return
     fi
 
+    # shellcheck disable=SC2016
     run_update_command docker run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
         --env "PROJECT_PATH=${project_path}" \

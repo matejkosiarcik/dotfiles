@@ -174,6 +174,7 @@ update_composer_dependencies() {
         composer_tmpdir="$(mktemp -d)"
         trap 'rm -rf "${composer_tmpdir}"' 0 HUP INT TERM
 
+        # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --mount "type=bind,src=${composer_tmpdir},dst=/output,readonly=false" \
             --entrypoint '/bin/sh' \
@@ -183,6 +184,7 @@ update_composer_dependencies() {
                 cp "$(command -v composer)" "/output/composer"
             '
 
+        # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --mount "type=bind,src=${composer_directory},dst=/input,readonly=false" \
             --mount "type=bind,src=${composer_tmpdir},dst=/composer,readonly=true" \

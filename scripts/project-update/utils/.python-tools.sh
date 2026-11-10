@@ -245,6 +245,7 @@ update_python_requirements() {
     printf '# Resolved Python version %s for %s\n' "${python_version}" "${requirements_file}" >&2
 
     if [ "${update_target}" != 'lock' ]; then
+        # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --mount "type=bind,src=${requirements_path},dst=/input/${requirements_docker_filename},readonly=false" \
             --env "REQUIREMENTS_FILE=${requirements_docker_filename}" \
@@ -280,6 +281,7 @@ update_python_requirements() {
 
         lockfile_path="${requirements_directory}/$(basename "${lockfile}")"
 
+        # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --mount "type=bind,src=${requirements_path},dst=/input/requirements.in,readonly=false" \
             --mount "type=bind,src=${lockfile_path},dst=/input/requirements.txt,readonly=false" \
@@ -315,6 +317,7 @@ update_python_pipfile() {
         touch "${pipfile_lock_path}"
     fi
 
+    # shellcheck disable=SC2016
     run_update_command docker run --rm \
         --mount "type=bind,src=${pipfile_directory},dst=/input,readonly=false" \
         --env "UPDATE_TARGET=${update_target}" \

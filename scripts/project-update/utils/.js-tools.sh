@@ -202,6 +202,7 @@ update_nodejs_dependencies() {
 
     case "${package_manager}" in
     npm)
+        # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
@@ -222,6 +223,7 @@ update_nodejs_dependencies() {
         lockfile='package-lock.json'
         ;;
     pnpm)
+        # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
@@ -241,6 +243,7 @@ update_nodejs_dependencies() {
         lockfile='pnpm-lock.yaml'
         ;;
     yarn)
+        # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
@@ -264,6 +267,7 @@ update_nodejs_dependencies() {
         lockfile='yarn.lock'
         ;;
     bun)
+        # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \

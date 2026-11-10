@@ -204,6 +204,7 @@ update_ruby_dependencies() {
         touch "${lockfile_path}"
     fi
 
+    # shellcheck disable=SC2016
     run_update_command docker run --rm \
         --mount "type=bind,src=${gemfile_path},dst=/input/Gemfile,readonly=false" \
         --mount "type=bind,src=${lockfile_path},dst=/input/Gemfile.lock,readonly=false" \
