@@ -33,8 +33,8 @@ export PATH
 PYTHONPATH="${source_dir}/python-vendor"
 export PYTHONPATH
 
-# shellcheck source=scripts/project-update/utils/.docker-tools.sh
-. "${source_dir}/utils/.docker-tools.sh"
+# shellcheck source=scripts/project-update/utils/.misc-tools.sh
+. "${source_dir}/utils/.misc-tools.sh"
 # shellcheck source=scripts/project-update/utils/.python-tools.sh
 . "${source_dir}/utils/.python-tools.sh"
 # shellcheck source=scripts/project-update/utils/.js-tools.sh
