@@ -186,3 +186,51 @@ resolve_ruby_version() {
 
     printf '%s\n' 'latest'
 }
+
+update_ruby_dependencies() {
+    gemfile="${1}"
+    update_target="${2}"
+    directory="$(cd "$(dirname "${gemfile}")" && pwd -P)"
+    gemfile_path="${directory}/Gemfile"
+    lockfile_path="${directory}/Gemfile.lock"
+    ruby_version="$(resolve_ruby_version "${directory}")"
+
+    printf '# Resolved Ruby version %s for %s\n' "${ruby_version}" "${gemfile}" >&2
+
+    if [ ! -e "${lockfile_path}" ]; then
+        touch "${lockfile_path}"
+    fi
+
+    docker run --rm \
+        --mount "type=bind,src=${gemfile_path},dst=/input/Gemfile,readonly=false" \
+        --mount "type=bind,src=${lockfile_path},dst=/input/Gemfile.lock,readonly=false" \
+        --env "UPDATE_TARGET=${update_target}" \
+        --entrypoint '/bin/sh' \
+        "ruby:${ruby_version}" \
+        -c '
+            set -euf
+            mkdir -p "/work" "/bundle"
+            cp "/input/Gemfile" "/input/Gemfile.lock" "/work/"
+            cd "/work"
+
+            export BUNDLE_DISABLE_SHARED_GEMS="true"
+            export BUNDLE_FROZEN="false"
+            export BUNDLE_PATH__SYSTEM="false"
+            export BUNDLE_PATH="/bundle"
+            export BUNDLE_GEMFILE="/work/Gemfile"
+
+            case "${UPDATE_TARGET}" in
+            major | minor | patch)
+                bundle install --quiet
+                bundle update --all --quiet "--${UPDATE_TARGET}" --strict
+                ;;
+            lock)
+                ;;
+            esac
+
+            bundle lock --normalize-platforms
+
+            cat "./Gemfile" >"/input/Gemfile"
+            cat "./Gemfile.lock" >"/input/Gemfile.lock"
+        '
+}

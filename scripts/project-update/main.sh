@@ -152,133 +152,12 @@ fi
 # JavaScript - NodeJS/NPM
 if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'nodejs' ]; then
     printf '\n\n## JavaScript > NodeJS ##\n' >&2
-    if [ ! -e "${HOME}/.npmrc" ] || [ "$(wc -c <"${HOME}/.npmrc")" -eq '0' ]; then
-        printf '# Placeholder\n' >>"${HOME}/.npmrc"
-    fi
-
-    ncu_target="${target}"
-    if [ "${target}" = 'major' ]; then
-        ncu_target='latest'
-    fi
-
     glob 'package.json' | while read -r file; do
         if [ ! -e "${file}" ]; then
             continue
         fi
 
-        directory="$(dirname "${file}")"
-        package_manager="$(detect_nodejs_package_manager "${directory}")"
-        nodejs_version="$(resolve_nodejs_version "$(cd "${directory}" && pwd -P)")"
-
-        printf '\n\n# Updating %s package file at %s\n' "${package_manager}" "${file}" >&2
-        printf '# Resolved NodeJS version %s for %s\n' "${nodejs_version}" "${file}" >&2
-
-        if [ "${target}" != 'lock' ]; then
-            ncu --cwd "${directory}" --packageManager "${package_manager}" --target "${ncu_target}" --upgrade # package.json
-        fi
-
-        dirname="$(cd "${directory}" >/dev/null 2>&1 && basename "${PWD}")"
-        tmpdir="$(mktemp -d)"
-        cp "${directory}/package.json" "${tmpdir}/package.json"
-
-        case "${package_manager}" in
-        npm)
-            docker run --rm \
-                --volume "${tmpdir}:/app/${dirname}:rw" \
-                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-                --env CYPRESS_INSTALL_BINARY='0' \
-                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-                --env PROJECT_DIRECTORY="/app/${dirname}" \
-                --entrypoint '/bin/sh' \
-                --user 'root' \
-                "node:${nodejs_version}" \
-                -c '
-                    set -euf
-                    cd "${PROJECT_DIRECTORY}"
-                    npm install --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error
-                    npm dedupe --ignore-scripts --no-progress --no-audit --no-fund --loglevel=error
-                '
-            lockfile='package-lock.json'
-            ;;
-        pnpm)
-            docker run --rm \
-                --volume "${tmpdir}:/app/${dirname}:rw" \
-                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-                --env CYPRESS_INSTALL_BINARY='0' \
-                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-                --env PROJECT_DIRECTORY="/app/${dirname}" \
-                --entrypoint '/bin/sh' \
-                --user 'root' \
-                "node:${nodejs_version}" \
-                -c '
-                    set -euf
-                    npm install --global "corepack@latest" --no-audit --no-fund --loglevel=error
-                    corepack pnpm install --dir "${PROJECT_DIRECTORY}" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent
-                '
-            lockfile='pnpm-lock.yaml'
-            ;;
-        yarn)
-            docker run --rm \
-                --volume "${tmpdir}:/app/${dirname}:rw" \
-                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-                --env CYPRESS_INSTALL_BINARY='0' \
-                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-                --env PROJECT_DIRECTORY="/app/${dirname}" \
-                --entrypoint '/bin/sh' \
-                --user 'root' \
-                "node:${nodejs_version}" \
-                -c '
-                    set -euf
-                    npm install --global corepack@latest --no-audit --no-fund --loglevel=error
-                    if corepack yarn --version | grep -q "^1\\."; then
-                        corepack yarn install --cwd "${PROJECT_DIRECTORY}" --ignore-scripts --non-interactive --no-progress
-                    else
-                        corepack yarn install --cwd "${PROJECT_DIRECTORY}" --mode=update-lockfile
-                    fi
-                '
-            lockfile='yarn.lock'
-            ;;
-        bun)
-            docker run --rm \
-                --volume "${tmpdir}:/app/${dirname}:rw" \
-                --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
-                --env CYPRESS_INSTALL_BINARY='0' \
-                --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
-                --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
-                --env NODE_OPTIONS='--dns-result-order=ipv4first' \
-                --env PROJECT_DIRECTORY="/app/${dirname}" \
-                --entrypoint '/bin/sh' \
-                --user 'root' \
-                oven/bun:latest \
-                -c '
-                    set -euf
-                    cd "${PROJECT_DIRECTORY}"
-                    bun install --lockfile-only --ignore-scripts --no-progress
-                '
-            if [ -e "${tmpdir}/bun.lock" ]; then
-                lockfile='bun.lock'
-            else
-                lockfile='bun.lockb'
-            fi
-            ;;
-        *)
-            printf 'Unsupported NodeJS package manager %s\n' "${package_manager}" >&2
-            rm -rf "${tmpdir}"
-            exit 1
-            ;;
-        esac
-
-        cat "${tmpdir}/${lockfile}" >"${directory}/${lockfile}"
-        if [ "${package_manager}" = 'bun' ] && [ "${lockfile}" = 'bun.lock' ] && [ -e "${directory}/bun.lockb" ]; then
-            rm "${directory}/bun.lockb"
-        fi
-        rm -rf "${tmpdir}"
+        update_nodejs_dependencies "${file}" "${target}"
     done
 fi
 
@@ -390,50 +269,8 @@ if [ "${runtime}" = 'all' ] || [ "${runtime}" = 'ruby-gem' ]; then
             continue
         fi
 
-        directory="$(cd "$(dirname "${file}")" && pwd -P)"
-        gemfile_path="${directory}/Gemfile"
-        lockfile_path="${directory}/Gemfile.lock"
-        ruby_version="$(resolve_ruby_version "${directory}")"
-
         printf '\n\n# Updating Gemfile file at %s\n' "${file}" >&2
-        printf '# Resolved Ruby version %s for %s\n' "${ruby_version}" "${file}" >&2
-
-        if [ ! -e "${lockfile_path}" ]; then
-            touch "${lockfile_path}"
-        fi
-
-        docker run --rm \
-            --mount "type=bind,src=${gemfile_path},dst=/input/Gemfile,readonly=false" \
-            --mount "type=bind,src=${lockfile_path},dst=/input/Gemfile.lock,readonly=false" \
-            --env "UPDATE_TARGET=${target}" \
-            --entrypoint '/bin/sh' \
-            "ruby:${ruby_version}" \
-            -c '
-                set -euf
-                mkdir -p "/work" "/bundle"
-                cp "/input/Gemfile" "/input/Gemfile.lock" "/work/"
-                cd "/work"
-
-                export BUNDLE_DISABLE_SHARED_GEMS="true"
-                export BUNDLE_FROZEN="false"
-                export BUNDLE_PATH__SYSTEM="false"
-                export BUNDLE_PATH="/bundle"
-                export BUNDLE_GEMFILE="/work/Gemfile"
-
-                case "${UPDATE_TARGET}" in
-                major | minor | patch)
-                    bundle install --quiet
-                    bundle update --all --quiet "--${UPDATE_TARGET}" --strict
-                    ;;
-                lock)
-                    ;;
-                esac
-
-                bundle lock --normalize-platforms
-
-                cat "./Gemfile" >"/input/Gemfile"
-                cat "./Gemfile.lock" >"/input/Gemfile.lock"
-            '
+        update_ruby_dependencies "${file}" "${target}"
     done
 fi
 
