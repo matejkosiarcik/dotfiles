@@ -20,3 +20,4 @@
     "~/.config/matejkosiarcik/bin/dir2sha": "./scripts/dir2sha.py"
     "~/.config/matejkosiarcik/bin/export-container": "./scripts/export-container.sh"
     "~/.config/matejkosiarcik/bin/export-image": "./scripts/export-image.sh"
+    "~/.config/matejkosiarcik/bin/project-update": "./scripts/project-update/main.sh"

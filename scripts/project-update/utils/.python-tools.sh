@@ -255,7 +255,7 @@ update_python_requirements() {
             -c '
                 set -euf
                 python3 -m venv "/venv"
-                "/venv/bin/python" -m pip install --disable-pip-version-check --quiet --upgrade pur
+                "/venv/bin/python" -m pip install --quiet --disable-pip-version-check --upgrade pur
 
                 mkdir "/work"
                 cp "/input/${REQUIREMENTS_FILE}" "/work/${REQUIREMENTS_FILE}"
@@ -290,13 +290,13 @@ update_python_requirements() {
             -c '
                 set -euf
                 python -m venv "/venv"
-                "/venv/bin/python" -m pip install --disable-pip-version-check --quiet --upgrade pip-tools
+                "/venv/bin/python" -m pip install --quiet --disable-pip-version-check --upgrade pip-tools
 
                 mkdir -p "/work"
                 cp "/input/requirements.in" "/input/requirements.txt" "/work/"
                 cd "/work"
 
-                "/venv/bin/pip-compile" --generate-hashes --strip-extras --output-file="./requirements.txt" "./requirements.in"
+                "/venv/bin/pip-compile" --generate-hashes --strip-extras --allow-unsafe --output-file="./requirements.txt" "./requirements.in"
 
                 cat "./requirements.txt" >"/input/requirements.txt"
             '
@@ -326,7 +326,7 @@ update_python_pipfile() {
         -c '
             set -euf
             python -m venv "/venv"
-            "/venv/bin/python" -m pip install --disable-pip-version-check --quiet --upgrade pipenv
+            "/venv/bin/python" -m pip install --quiet --disable-pip-version-check --upgrade pipenv
 
             mkdir -p "/work"
             cp -R "/input/." "/work/"

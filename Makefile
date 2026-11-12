@@ -21,7 +21,7 @@ bootstrap:
 	PATH="$${PWD}/venv/bin:$${PATH}" \
 	PIP_DISABLE_PIP_VERSION_CHECK='1' \
 	PYTHONDONTWRITEBYTECODE='1' \
-		python3 -m pip install --requirement './requirements.txt' --quiet --upgrade
+		python3 -m pip install --quiet --no-compile --require-hashes --requirement './requirements.txt'
 
 	# Python dependencies
 	printf '%s\n' './scripts/project-update' | \
@@ -29,7 +29,7 @@ bootstrap:
 		cd "$(PROJECT_DIR)/$${dir}" && \
 		PIP_DISABLE_PIP_VERSION_CHECK='1' \
 		PYTHONDONTWRITEBYTECODE='1' \
-			python3 -m pip install --requirement './requirements.txt' --target './python-vendor' --quiet --upgrade && \
+			python3 -m pip install --quiet --no-compile --require-hashes --requirement './requirements.txt' --target './python-vendor' && \
 		find './python-vendor/bin' -type f | while read -r file; do \
 			if cat "$${file}" | grep -E '^\#\!' >/dev/null 2>&1; then \
 				content="$$(tail -n +2 "$${file}")" && \
@@ -55,7 +55,7 @@ server-bootstrap:
 	PATH="$${PWD}/venv/bin:$${PATH}" \
 	PIP_DISABLE_PIP_VERSION_CHECK='1' \
 	PYTHONDONTWRITEBYTECODE='1' \
-		python3 -m pip install --requirement './requirements.txt' --quiet --upgrade
+		python3 -m pip install --quiet --no-compile --require-hashes --requirement './requirements.txt'
 
 .PHONY: build
 build:
