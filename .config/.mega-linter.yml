@@ -1,4 +1,4 @@
-LINTER_RULES_PATH: "./.config/"
+LINTER_RULES_PATH: .config/
 
 DISABLE:
   - COPYPASTE # too many false-positives
@@ -21,6 +21,12 @@ DISABLE_LINTERS:
   - RUST_CLIPPY
   - SPELL_CSPELL
 
+# Disable errors
+REPOSITORY_OSV_SCANNER_DISABLE_ERRORS: true
+
+# The requirements.txt files use intentional public PyPI packages, so retain findings as audit output without failing the lint job
+REPOSITORY_DUSTILOCK_ARGUMENTS: --audit
+
 # Override default config files
 DOCKERFILE_HADOLINT_CONFIG_FILE: .hadolint.yaml
 MAKEFILE_CHECKMAKE_CONFIG_FILE: checkmake.ini
@@ -32,10 +38,11 @@ RUBY_RUBOCOP_CONFIG_FILE: .rubocop.yml
 YAML_YAMLLINT_CONFIG_FILE: .yamllint.yml
 
 # Config
+ENV_DOTENV_LINTER_ARGUMENTS: --ignore-checks QuoteCharacter
 JSON_BIOME_FILTER_REGEX_EXCLUDE: '(?:^|/)package-lock\.json$'
-JSON_BIOME_RULES_PATH: "."
-JSON_V8R_FILTER_REGEX_EXCLUDE: '(composer.json\|package\.json\|package\-lock\.json)'
-JAVASCRIPT_BIOME_FILTER_REGEX_EXCLUDE: '(package\.json\|package\-lock\.json)'
+JSON_BIOME_RULES_PATH: .
+JSON_V8R_FILTER_REGEX_EXCLUDE: (?:(?:^|/)composer\.json|(?:^|/)package\.json|(?:^|/)package\-lock\.json)
+YAML_V8R_FILTER_REGEX_EXCLUDE: (?:^|/)docker\-images/homepage/app/config/services\.ya?ml$
 
 ACTION_ZIZMOR_UNSECURED_ENV_VARIABLES:
   - GITHUB_TOKEN
