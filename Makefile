@@ -81,6 +81,7 @@ clean:
 	fi
 
 	find "$(PROJECT_DIR)" -type d \( \
+		-name '.bundle' -or \
 		-name '.mypy_cache' -or \
 		-name 'build' -or \
 		-name 'dist' -or \
