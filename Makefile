@@ -73,8 +73,23 @@ server-install:
 
 .PHONY: clean
 clean:
-	rm -rf './venv'
-	rm -rf './scripts/convert2pdf/node_modules'
-	rm -rf './scripts/convert2pdf/dist'
-	rm -rf './scripts/project-update/node_modules'
-	rm -rf './scripts/project-update/python'
+	# Check if there is an active virtualenv and abort
+	$(define_log_function); \
+	if [ -n "$${VIRTUAL_ENV+x}" ]; then \
+		log ERROR 'There is an active python virtualenv. Run "deactivate" and try again.'; \
+		exit 1; \
+	fi
+
+	find "$(PROJECT_DIR)" -type d \( \
+		-name '.bundle' -or \
+		-name '.mypy_cache' -or \
+		-name 'build' -or \
+		-name 'dist' -or \
+		-name 'gitman-repositories' -or \
+		-name 'node_modules' -or \
+		-name 'python-vendor' -or \
+		-name 'target' -or \
+		-name 'test-report' -or \
+		-name 'vendor' -or \
+		-name 'venv' \
+	\) -prune -exec rm -rf {} \;
