@@ -296,7 +296,7 @@ update_python_requirements() {
                 cp "/input/requirements.in" "/input/requirements.txt" "/work/"
                 cd "/work"
 
-                "/venv/bin/pip-compile" --generate-hashes --strip-extras --output-file="./requirements.txt" "./requirements.in"
+                "/venv/bin/pip-compile" --generate-hashes --strip-extras --allow-unsafe --output-file="./requirements.txt" "./requirements.in"
 
                 cat "./requirements.txt" >"/input/requirements.txt"
             '
