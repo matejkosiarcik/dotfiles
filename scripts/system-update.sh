@@ -162,7 +162,7 @@ Linux)
         log_missing_command 'nix'
     fi
     ;;
-MINGW*|MSYS*|CYGWIN*|Windows)
+MINGW* | MSYS* | CYGWIN* | Windows)
     if command -v winget >/dev/null 2>&1; then
         log INFO 'Updating Windows - WinGet'
         run_update_command winget upgrade --all --accept-package-agreements --accept-source-agreements --disable-interactivity
