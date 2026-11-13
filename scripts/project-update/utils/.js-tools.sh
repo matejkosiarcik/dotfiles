@@ -194,13 +194,31 @@ update_nodejs_dependencies() {
         printf '# Placeholder\n' >>"${HOME}/.npmrc"
     fi
 
-    if [ "${update_target}" != 'lock' ]; then
-        run_update_command ncu --upgrade --cwd "${package_directory}" --packageManager "${package_manager}" --target "${ncu_target}"
-    fi
-
     package_directory_name="$(cd "${package_directory}" >/dev/null 2>&1 && basename "${PWD}")"
     tmpdir="$(mktemp -d)"
     cp "${package_directory}/package.json" "${tmpdir}/package.json"
+
+    if [ "${update_target}" != 'lock' ]; then
+        # shellcheck disable=SC2016
+        run_update_command docker run --rm \
+            --volume "${tmpdir}:/app/${package_directory_name}:rw" \
+            --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+            --mount "type=bind,src=${source_dir}/container-dependencies/npm-check-updates,dst=/deps/npm-check-updates,readonly" \
+            --env "NCU_TARGET=${ncu_target}" \
+            --env "PACKAGE_MANAGER=${package_manager}" \
+            --env "PROJECT_DIRECTORY=/app/${package_directory_name}" \
+            --entrypoint '/bin/sh' \
+            --user 'root' \
+            "node:${nodejs_version}" \
+            -c '
+                set -euf
+                mkdir "/tmp/deps"
+                cp "/deps/npm-check-updates/package.json" "/deps/npm-check-updates/package-lock.json" "/tmp/deps/"
+                npm ci --prefix "/tmp/deps" --no-audit --no-fund --no-progress --no-save --loglevel=error
+                export PATH="/tmp/deps/node_modules/.bin:${PATH}"
+                ncu --upgrade --cwd "${PROJECT_DIRECTORY}" --packageManager "${PACKAGE_MANAGER}" --target "${NCU_TARGET}"
+            '
+    fi
 
     case "${package_manager}" in
     npm)
@@ -307,6 +325,7 @@ update_nodejs_dependencies() {
         ;;
     esac
 
+    cat "${tmpdir}/package.json" >"${package_directory}/package.json"
     cat "${tmpdir}/${lockfile}" >"${package_directory}/${lockfile}"
     if [ "${package_manager}" = 'bun' ] && [ "${lockfile}" = 'bun.lock' ] && [ -e "${package_directory}/bun.lockb" ]; then
         rm "${package_directory}/bun.lockb"
