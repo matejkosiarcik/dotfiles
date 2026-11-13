@@ -1,6 +1,8 @@
 #!/bin/sh
 set -euf
 
+source_dir="${source_dir:?source_dir must be set before sourcing this file}"
+
 detect_nodejs_package_manager() {
     if [ -e "${1}/pnpm-lock.yaml" ]; then
         printf '%s\n' 'pnpm'
@@ -227,6 +229,7 @@ update_nodejs_dependencies() {
         run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+            --mount "type=bind,src=${source_dir}/container-dependencies/corepack,dst=/deps/corepack,readonly" \
             --env CYPRESS_INSTALL_BINARY='0' \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
             --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
@@ -237,7 +240,10 @@ update_nodejs_dependencies() {
             "node:${nodejs_version}" \
             -c '
                 set -euf
-                npm install --global "corepack@latest" --no-audit --no-fund --loglevel=error
+                mkdir "/tmp/deps"
+                cp "/deps/corepack/package.json" "/deps/corepack/package-lock.json" "/tmp/deps/"
+                npm ci --prefix "/tmp/deps" --no-audit --no-fund --no-progress --no-save --loglevel=error
+                export PATH="/tmp/deps/node_modules/.bin:${PATH}"
                 corepack pnpm install --dir "${PROJECT_DIRECTORY}" --lockfile-only --ignore-scripts --no-frozen-lockfile --reporter=silent
             '
         lockfile='pnpm-lock.yaml'
@@ -247,6 +253,7 @@ update_nodejs_dependencies() {
         run_update_command docker run --rm \
             --volume "${tmpdir}:/app/${package_directory_name}:rw" \
             --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+            --mount "type=bind,src=${source_dir}/container-dependencies/corepack,dst=/deps/corepack,readonly" \
             --env CYPRESS_INSTALL_BINARY='0' \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
             --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
@@ -257,7 +264,10 @@ update_nodejs_dependencies() {
             "node:${nodejs_version}" \
             -c '
                 set -euf
-                npm install --global corepack@latest --no-audit --no-fund --loglevel=error
+                mkdir "/tmp/deps"
+                cp "/deps/corepack/package.json" "/deps/corepack/package-lock.json" "/tmp/deps/"
+                npm ci --prefix "/tmp/deps" --no-audit --no-fund --no-progress --no-save --loglevel=error
+                export PATH="/tmp/deps/node_modules/.bin:${PATH}"
                 if corepack yarn --version | grep -q "^1\\."; then
                     corepack yarn install --cwd "${PROJECT_DIRECTORY}" --ignore-scripts --non-interactive --no-progress
                 else

@@ -1,6 +1,8 @@
 #!/bin/sh
 set -euf
 
+source_dir="${source_dir:?source_dir must be set before sourcing this file}"
+
 is_rust_version() {
     printf '%s\n' "${1}" | grep -qE '^(latest|stable|beta|nightly|[0-9]+(\.[0-9]+){0,2})$'
 }
@@ -215,6 +217,7 @@ update_rust_dependencies() {
     workspace_directory="$(rust_workspace_directory "${project_directory}")"
     cargo_lock_path="${workspace_directory}/Cargo.lock"
     rust_version="$(resolve_rust_version "${project_directory}")"
+    cargo_edit_version="$(sed -nE 's/^cargo-edit = "([0-9]+\.[0-9]+\.[0-9]+)"$/\1/p' "${source_dir}/container-dependencies/cargo-edit/Cargo.toml")"
 
     if [ "${workspace_directory}" = "${project_directory}" ]; then
         project_path='.'
@@ -228,11 +231,18 @@ update_rust_dependencies() {
         touch "${cargo_lock_path}"
     fi
 
+    if [ -z "${cargo_edit_version}" ]; then
+        printf 'Unable to determine the locked cargo-edit version\n' >&2
+        return 1
+    fi
+
     # shellcheck disable=SC2016
     run_update_command docker run --rm \
         --mount "type=bind,src=${workspace_directory},dst=/input,readonly=false" \
+        --mount "type=bind,src=${source_dir}/container-dependencies/cargo-edit,dst=/deps/cargo-edit,readonly" \
         --env "PROJECT_DIRECTORY=/work/${project_path}" \
         --env "UPDATE_TARGET=${update_target}" \
+        --env "CARGO_EDIT_VERSION=${cargo_edit_version}" \
         --entrypoint '/bin/sh' \
         "rust:${rust_version}" \
         -c '
@@ -243,11 +253,13 @@ update_rust_dependencies() {
 
             case "${UPDATE_TARGET}" in
             major)
-                cargo install cargo-edit --locked
+                cargo fetch --locked --manifest-path "/deps/cargo-edit/Cargo.toml"
+                cargo install cargo-edit --version "${CARGO_EDIT_VERSION}" --locked
                 cargo upgrade --incompatible
                 ;;
             minor)
-                cargo install cargo-edit --locked
+                cargo fetch --locked --manifest-path "/deps/cargo-edit/Cargo.toml"
+                cargo install cargo-edit --version "${CARGO_EDIT_VERSION}" --locked
                 cargo upgrade
                 ;;
             patch | lock)
