@@ -61,8 +61,8 @@ import pAll from 'p-all';
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'tmp'));
 
     try {
-        const tmpFiles = await pAll(input.map((file) => async () => {
-            const tmpFile = path.join(tmpDir, path.basename(file, path.extname(file))) + '.jpg';
+        const tmpFiles = await pAll(input.map((file, index) => async () => {
+            const tmpFile = path.join(tmpDir, `${index}.jpg`);
             await execa('magick', ['convert', '-auto-orient', file, '-quality', '90', '-resize', `${targetResolution.width}x${targetResolution.height}!`, tmpFile]);
             return tmpFile;
         }), { concurrency: concurrencyLimit });
