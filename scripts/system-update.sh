@@ -39,8 +39,8 @@ run_update_command() (
         update_command_status="${?}"
     fi
 
-    printf 'Command "%s" failed, captured output follows:\n' "${update_command_name}" >&2
-    cat "${update_command_logfile}" >&2
+    log ERROR "Command \"${update_command_name}\" failed, captured output follows:" >&2
+    cat "${update_command_logfile}" | sed -E 's~^~  > ~' >&2
     exit "${update_command_status}"
 )
 
@@ -58,9 +58,9 @@ run_update_command_and_ignore_status() (
         update_command_status="${?}"
     fi
 
-    printf 'Command "%s" failed, captured output follows:\n' "${update_command_name}" >&2
-    cat "${update_command_logfile}" >&2
-    printf 'Ignoring failure and continuing\n' >&2
+    log WARNING "Command \"${update_command_name}\" failed, captured output follows:" >&2
+    cat "${update_command_logfile}" | sed -E 's~^~  > ~' >&2
+    log WARNING 'Ignoring failure and continuing' >&2
 )
 
 log_missing_command() {
