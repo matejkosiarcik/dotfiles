@@ -15,7 +15,7 @@ run_update_command() (
         update_command_status="${?}"
     fi
 
-    printf '%s failed; captured output follows:\n' "${update_command_name}" >&2
+    printf 'Command "%s" failed, captured output follows:\n' "${update_command_name}" >&2
     cat "${update_command_logfile}" >&2
     exit "${update_command_status}"
 )
