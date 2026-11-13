@@ -51,7 +51,7 @@ bootstrap:
 		'./scripts/project-update' | \
 	while read -r dir; do \
 		cd "$(PROJECT_DIR)/$${dir}" && \
-		npm ci --no-save --no-progress --no-audit --no-fund --loglevel=error && \
+		npm ci --no-audit --no-fund --no-progress --no-save --loglevel=error && \
 	true; done
 
 	$(define_log_function); log INFO 'Dependencies installed successfully'
