@@ -85,7 +85,9 @@ fi
 
 ### System package managers ###
 
-if [ "$(uname -s)" = 'Darwin' ]; then
+system_name="$(uname -s)"
+case "${system_name}" in
+Darwin)
     # if command -v softwareupdate >/dev/null 2>&1; then
     #     log INFO 'Updating macOS (softwareupdate)'
     #     run_update_command softwareupdate --install --all --agree-to-license --force
@@ -107,11 +109,12 @@ if [ "$(uname -s)" = 'Darwin' ]; then
     else
         log_missing_command 'mas'
     fi
-elif [ "$(uname -s)" = 'Linux' ]; then
+    ;;
+Linux)
     if command -v yum >/dev/null 2>&1 && ! command -v dnf >/dev/null 2>&1; then
         log INFO 'Updating Linux - Yum'
-        run_update_command yum update
-        run_update_command yum upgrade
+        run_update_command yum update --assumeyes
+        run_update_command yum upgrade --assumeyes
     fi
 
     if command -v apt-get >/dev/null 2>&1; then
@@ -133,19 +136,52 @@ elif [ "$(uname -s)" = 'Linux' ]; then
         run_update_command swupd update
     elif command -v zypper >/dev/null 2>&1; then
         log INFO 'Updating Linux - Zypper'
-        run_update_command zypper update
+        run_update_command zypper --non-interactive update --auto-agree-with-licenses
+    elif command -v emerge >/dev/null 2>&1; then
+        log INFO 'Updating Linux - Portage'
+        run_update_command emerge --sync
+        run_update_command emerge --update --deep --newuse @world
+    elif command -v xbps-install >/dev/null 2>&1; then
+        log INFO 'Updating Linux - XBPS'
+        run_update_command xbps-install -Suy
     else
         printf '%s\n' 'Skipping system package updates: no supported package manager found' >&2
     fi
-elif [ "$(uname -s)" = 'Windows' ]; then
+
+    if command -v flatpak >/dev/null 2>&1; then
+        log INFO 'Updating Linux - Flatpak'
+        run_update_command flatpak update --assumeyes --noninteractive
+    else
+        log_missing_command 'flatpak'
+    fi
+
+    if command -v nix >/dev/null 2>&1; then
+        log INFO 'Updating Linux - Nix profile'
+        run_update_command nix profile upgrade '.*'
+    else
+        log_missing_command 'nix'
+    fi
+    ;;
+MINGW* | MSYS* | CYGWIN* | Windows)
+    if command -v winget >/dev/null 2>&1; then
+        log INFO 'Updating Windows - WinGet'
+        run_update_command winget upgrade --all --accept-package-agreements --accept-source-agreements --disable-interactivity
+    else
+        log_missing_command 'winget'
+    fi
+
     if command -v choco >/dev/null 2>&1; then
         log INFO 'Updating Windows - Chocolatey'
-        run_update_command choco upgrade chocolatey
-        run_update_command choco upgrade all
+        run_update_command choco upgrade chocolatey --yes
+        run_update_command choco upgrade all --yes
     else
         log_missing_command 'choco'
     fi
-fi
+    ;;
+*)
+    log INFO "Unknown OS \"${system_name}\""
+    ;;
+esac
 
 ### JavaScript ###
 
