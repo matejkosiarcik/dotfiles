@@ -86,13 +86,27 @@ fi
 ### System package managers ###
 
 if [ "$(uname -s)" = 'Darwin' ]; then
-    true
     # if command -v softwareupdate >/dev/null 2>&1; then
     #     log INFO 'Updating macOS (softwareupdate)'
     #     run_update_command softwareupdate --install --all --agree-to-license --force
     # else
     #     log_missing_command 'softwareupdate'
     # fi
+
+    if command -v mas >/dev/null 2>&1; then
+        log INFO 'Updating macOS - App Store'
+
+        # mas upgrade requires sudo - prompt visibly when interactive, otherwise skip
+        if sudo -n -v >/dev/null 2>&1; then
+            run_update_command mas upgrade
+        elif [ -t 0 ] && sudo -v; then
+            run_update_command mas upgrade
+        else
+            log WARNING 'Skipping mas, because it requires an interactive sudo authentication'
+        fi
+    else
+        log_missing_command 'mas'
+    fi
 elif [ "$(uname -s)" = 'Linux' ]; then
     if command -v yum >/dev/null 2>&1 && ! command -v dnf >/dev/null 2>&1; then
         log INFO 'Updating Linux - Yum'
