@@ -1,0 +1,8 @@
+[package]
+name = "container-cargo-edit"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+cargo-edit = "0.13.14"
