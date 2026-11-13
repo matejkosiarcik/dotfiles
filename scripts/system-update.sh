@@ -40,7 +40,7 @@ run_update_command() (
     fi
 
     log ERROR "Command \"${update_command_name}\" failed, captured output follows:" >&2
-    cat "${update_command_logfile}" | sed -E 's~^~  > ~' >&2
+    sed -E 's~^~  > ~' <"${update_command_logfile}" >&2
     exit "${update_command_status}"
 )
 
@@ -59,7 +59,7 @@ run_update_command_and_ignore_status() (
     fi
 
     log WARNING "Command \"${update_command_name}\" failed, captured output follows:" >&2
-    cat "${update_command_logfile}" | sed -E 's~^~  > ~' >&2
+    sed -E 's~^~  > ~' <"${update_command_logfile}" >&2
     log WARNING 'Ignoring failure and continuing' >&2
 )
 
