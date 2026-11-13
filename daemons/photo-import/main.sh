@@ -1,7 +1,26 @@
 #!/bin/sh
 set -euf
 
-source_dir="$(dirname "$(readlink "${0}")")"
+script_path="${0}"
+case "${script_path}" in
+*/*) ;;
+*)
+    if [ -f "${script_path}" ]; then
+        script_path="$(pwd)/${script_path}"
+    else
+        script_path="$(command -v "${script_path}")"
+    fi
+    ;;
+esac
+while [ -L "${script_path}" ]; do
+    script_directory="$(cd -P "$(dirname "${script_path}")" && pwd)"
+    script_path="$(readlink "${script_path}")"
+    case "${script_path}" in
+    /*) ;;
+    *) script_path="${script_directory}/${script_path}" ;;
+    esac
+done
+source_dir="$(cd -P "$(dirname "${script_path}")" && pwd)"
 export source_dir
 
 PATH="/opt/homebrew/bin:${PATH}"
