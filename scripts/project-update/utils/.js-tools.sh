@@ -1,6 +1,8 @@
 #!/bin/sh
 set -euf
 
+source_dir="${source_dir:?source_dir must be set before sourcing this file}"
+
 detect_nodejs_package_manager() {
     if [ -e "${1}/pnpm-lock.yaml" ]; then
         printf '%s\n' 'pnpm'

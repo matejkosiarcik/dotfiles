@@ -1,6 +1,8 @@
 #!/bin/sh
 set -euf
 
+source_dir="${source_dir:?source_dir must be set before sourcing this file}"
+
 is_elixir_version() {
     printf '%s\n' "${1}" | grep -qE '^(latest|[0-9]+(\.[0-9]+){0,2}(-otp-[0-9]+)?)$'
 }
