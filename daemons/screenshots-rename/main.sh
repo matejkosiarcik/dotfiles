@@ -1,7 +1,26 @@
 #!/bin/sh
 set -euf
 
-source_dir="$(dirname "$(readlink "${0}")")"
+script_path="${0}"
+case "${script_path}" in
+*/*) ;;
+*)
+    if [ -f "${script_path}" ]; then
+        script_path="$(pwd)/${script_path}"
+    else
+        script_path="$(command -v "${script_path}")"
+    fi
+    ;;
+esac
+while [ -L "${script_path}" ]; do
+    script_directory="$(cd -P "$(dirname "${script_path}")" && pwd)"
+    script_path="$(readlink "${script_path}")"
+    case "${script_path}" in
+    /*) ;;
+    *) script_path="${script_directory}/${script_path}" ;;
+    esac
+done
+source_dir="$(cd -P "$(dirname "${script_path}")" && pwd)"
 export source_dir
 
 PATH="/opt/homebrew/bin:${PATH}"
@@ -15,8 +34,7 @@ fi
 
 # Rename existing files
 tmpfile="$(mktemp)"
-find "${watchdir}" -maxdepth 1 -type f -iname '*.png' -print0 |
-    grep -E -i -z '/Screenshot [0-9]{4}-[0-9]{2}-[0-9]{2} at [0-9]{2}\.[0-9]{2}\.[0-9]{2}( [\(]?[0-9]+[\)]?)?\.png$' >"${tmpfile}" || true
+find "${watchdir}" -maxdepth 1 -type f -iname '*.png' -print0 >"${tmpfile}"
 # shellcheck disable=SC2016
 xargs -0 -n1 sh -c 'sh "${source_dir}/rename.sh" "${1}" || true' - <"${tmpfile}"
 rm -f "${tmpfile}"

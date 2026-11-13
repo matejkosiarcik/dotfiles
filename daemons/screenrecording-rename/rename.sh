@@ -1,9 +1,16 @@
 #!/bin/sh
 set -euf
 
-if [ "${#}" -lt 1 ]; then
-    printf 'Not enough arguments to rename file\n' >&2
-    usage >&2
+get_creation_date() {
+    if [ "$(uname -s)" = 'Darwin' ]; then
+        stat -f '%SB' -t '%Y-%m-%d_%H-%M-%S' "${1}"
+    else
+        stat -c '%w' "${1}" | sed -E 's~^([0-9]{4}-[0-9]{2}-[0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2}).*$~\1_\2-\3-\4~'
+    fi
+}
+
+if [ "${#}" -ne 1 ]; then
+    printf 'Usage: %s <screen-recording-file>\n' "${0}" >&2
     exit 1
 fi
 
@@ -20,17 +27,24 @@ fi
 
 old_filename="$(basename "${old_filepath}")"
 
-# Exit on files not in proper format
-if printf '%s\n' "${old_filename}" | grep -v -E '/Screenshot [0-9]{4}-[0-9]{2}-[0-9]{2} at [0-9]{2}\.[0-9]{2}\.[0-9]{2}\.mov$' >/dev/null; then
-    # printf 'Skipping file (wrong filename format) %s\n' "${old_filename}"
+if printf '%s\n' "${old_filename}" | grep -E '^.+ [0-9]{4}-[0-9]{2}-[0-9]{2} at [0-9]{2}\.[0-9]{2}\.[0-9]{2}( [\(]?[0-9]+[\)]?)?\.[mM][oO][vV]$' >/dev/null; then
+    # Use the timestamp in macOS screen-recording filenames when available
+    date="$(printf '%s\n' "${old_filename}" | sed -E 's~^.+ ([0-9]{4})-([0-9]{2})-([0-9]{2}) at ([0-9]{2})\.([0-9]{2})\.([0-9]{2})( [\(]?[0-9]+[\)]?)?\.[a-zA-Z0-9]+$~\1-\2-\3_\4-\5-\6~')"
+elif printf '%s\n' "${old_filename}" | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}( [0-9]+)?\.[mM][oO][vV]$' >/dev/null; then
+    # Do not rename files that already have the daemon's target format
     exit 0
+else
+    date="$(get_creation_date "${old_filepath}")"
 fi
 
-date="$(printf '%s\n' "$(basename "${old_filename}")" | sed -E 's~^.+ ([0-9]{4})-([0-9]{2})-([0-9]{2}) at ([0-9]{2})\.([0-9]{2})\.([0-9]{2})\.[a-zA-Z0-9]+$~\1-\2-\3_\4-\5-\6~')"
 extension="$(printf '%s\n' "$(basename "${old_filename}")" | sed -E 's~^.+\.([a-zA-Z0-9]+)$~\1~' | tr '[:upper:]' '[:lower:]')"
 new_filename="${date}.${extension}"
-new_filepath="${targetdir}/new_filename"
+new_filepath="${targetdir}/${new_filename}"
 
-if [ "${new_filename}" != "${old_filename}" ]; then
-    mv "${old_filepath}" "${new_filepath}"
-fi
+i=1
+while [ -e "${new_filepath}" ] || [ -L "${new_filepath}" ]; do
+    i="$((i + 1))"
+    new_filepath="${targetdir}/${date} ${i}.${extension}"
+done
+
+mv -n "${old_filepath}" "${new_filepath}"
