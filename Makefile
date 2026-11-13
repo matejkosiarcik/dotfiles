@@ -71,6 +71,7 @@ server-bootstrap:
 
 	$(define_log_function); log INFO 'Dependencies installed successfully'
 	printf '\n'
+
 .PHONY: build
 build:
 	$(define_log_function); log INFO 'Building repository components'
