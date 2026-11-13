@@ -33,7 +33,7 @@ done
 source_dir="$(cd -P "$(dirname "${script_path}")" && pwd)"
 PATH="/opt/homebrew/bin:${PATH}"               # Homebrew
 PATH="${source_dir}/node_modules/.bin:${PATH}" # NodeJS dependencies
-PATH="${source_dir}/venv/bin:${PATH}" # Python dependencies
+PATH="${source_dir}/venv/bin:${PATH}"          # Python dependencies
 export PATH
 
 # shellcheck source=scripts/project-update/utils/.misc-tools.sh
