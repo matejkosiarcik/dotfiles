@@ -9,6 +9,9 @@ PATH := $(PROJECT_DIR)/venv/bin:$(PATH)
 # Define portable datetime format
 define_log_function := log_timestamp() { date_supports_milliseconds="$$(date '+%3N')"; case "$${date_supports_milliseconds}" in [0-9][0-9][0-9]) milliseconds_format='%3N' ;; *) milliseconds_format='000' ;; esac; date "+%Y-%m-%dT%H:%M:%S.$${milliseconds_format}Z"; }; log() { log_level="$$1"; shift; log_timestamp="$$(log_timestamp)"; printf '%s\n' "$${*}" | while IFS= read -r log_message || [ -n "$${log_message}" ]; do printf '%s [%s]: %s\n' "$${log_timestamp}" "$$log_level" "$${log_message}"; done >&2; }
 
+NPM_COMPONENTS_ALL := $(shell find '.' -type f -name 'package.json' -not \( -path '*/app-data/*' -or -path '*/gitman-repositories/*' -or -path '*/node_modules/*' -or -path '*/venv/*' \) -exec dirname {} \; | base64)
+PYTHON_COMPONENTS := $(shell find '.' -type f -name 'requirements.txt' -not \( -path '*/app-data/*' -or -path '*/gitman-repositories/*' -or -path '*/node_modules/*' -or -path '*/venv/*' \) -exec dirname {} \; | base64)
+
 .POSIX:
 .SILENT:
 
@@ -22,36 +25,25 @@ all: clean bootstrap build # NOTE: "install" intentionally left out
 bootstrap:
 	$(define_log_function); log INFO 'Installing dependencies (native)'
 
-	rm -rf './venv' && \
-		python3 -m venv './venv'
+	#
+	## Python ##
+	#
 
-	PATH="$${PWD}/venv/bin:$${PATH}" \
-	PIP_DISABLE_PIP_VERSION_CHECK='1' \
-	PYTHONDONTWRITEBYTECODE='1' \
-		python3 -m pip install --quiet --no-compile --require-hashes --requirement './requirements.txt'
-
-	# Python dependencies
-	printf '%s\n' './scripts/project-update' | \
-	while read -r dir; do \
-		cd "$(PROJECT_DIR)/$${dir}" && \
+	printf '%s' "$(PYTHON_COMPONENTS)" | tr -d ' ' | base64 -d | while read -r component; do \
+		cd "$(PROJECT_DIR)/$${component}" && \
+		if [ -e './venv' ]; then true; else python3 -m venv './venv'; fi && \
+		PATH="$(PROJECT_DIR)/$${component}/venv/bin:$${PATH}" \
 		PIP_DISABLE_PIP_VERSION_CHECK='1' \
 		PYTHONDONTWRITEBYTECODE='1' \
-			python3 -m pip install --quiet --no-compile --require-hashes --requirement './requirements.txt' --target './python-vendor' && \
-		find './python-vendor/bin' -type f | while read -r file; do \
-			if cat "$${file}" | grep -E '^\#\!' >/dev/null 2>&1; then \
-				content="$$(tail -n +2 "$${file}")" && \
-				printf '#%s/usr/bin/env python3\n%s\n' '!' "$${content}" >"$${file}" && \
-			true; fi && \
-		true; done && \
+			python -m pip install --quiet --no-compile --require-hashes --requirement './requirements.txt' <'/dev/null' && \
 	true; done
 
-	# NodeJS dependencies
-	printf '%s\n%s\n' \
-		'./scripts/convert2pdf' \
-		'./scripts/project-update' | \
-	while read -r dir; do \
-		cd "$(PROJECT_DIR)/$${dir}" && \
-		npm ci --no-audit --no-fund --no-progress --no-save --loglevel=error && \
+	#
+	## NodeJS ##
+	#
+
+	printf '%s' "$(NPM_COMPONENTS_ALL)" | tr -d ' ' | base64 -d | while read -r component; do \
+		npm ci --prefix "$(PROJECT_DIR)/$${component}" --no-audit --no-fund --no-progress --no-save --loglevel=error --prefer-offline <'/dev/null' && \
 	true; done
 
 	$(define_log_function); log INFO 'Dependencies installed successfully'
