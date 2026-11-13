@@ -248,6 +248,7 @@ update_python_requirements() {
         # shellcheck disable=SC2016
         run_update_command docker run --rm \
             --mount "type=bind,src=${requirements_path},dst=/input/${requirements_docker_filename},readonly=false" \
+            --mount "type=bind,src=${source_dir}/container-dependencies/pur,dst=/deps/pur,readonly" \
             --env "REQUIREMENTS_FILE=${requirements_docker_filename}" \
             --env "UPDATE_TARGET=${update_target}" \
             --entrypoint '/bin/sh' \
@@ -255,7 +256,8 @@ update_python_requirements() {
             -c '
                 set -euf
                 python3 -m venv "/venv"
-                "/venv/bin/python" -m pip install --quiet --disable-pip-version-check --upgrade pur
+                . "/venv/bin/activate"
+                python -m pip install --quiet --disable-pip-version-check --require-hashes --requirement "/deps/pur/requirements.txt"
 
                 mkdir "/work"
                 cp "/input/${REQUIREMENTS_FILE}" "/work/${REQUIREMENTS_FILE}"
@@ -263,10 +265,10 @@ update_python_requirements() {
 
                 case "${UPDATE_TARGET}" in
                 major)
-                    "/venv/bin/pur" --force --requirement "${REQUIREMENTS_FILE}"
+                    pur --force --requirement "${REQUIREMENTS_FILE}"
                     ;;
                 minor | patch)
-                    "/venv/bin/pur" --force "--${UPDATE_TARGET}" "*" --requirement "${REQUIREMENTS_FILE}"
+                    pur --force "--${UPDATE_TARGET}" "*" --requirement "${REQUIREMENTS_FILE}"
                     ;;
                 esac
 
@@ -285,18 +287,20 @@ update_python_requirements() {
         run_update_command docker run --rm \
             --mount "type=bind,src=${requirements_path},dst=/input/requirements.in,readonly=false" \
             --mount "type=bind,src=${lockfile_path},dst=/input/requirements.txt,readonly=false" \
+            --mount "type=bind,src=${source_dir}/container-dependencies/pip-tools,dst=/deps/pip-tools,readonly" \
             --entrypoint '/bin/sh' \
             "python:${python_version}" \
             -c '
                 set -euf
                 python -m venv "/venv"
-                "/venv/bin/python" -m pip install --quiet --disable-pip-version-check --upgrade pip-tools
+                . "/venv/bin/activate"
+                python -m pip install --quiet --disable-pip-version-check --require-hashes --requirement "/deps/pip-tools/requirements.txt"
 
                 mkdir -p "/work"
                 cp "/input/requirements.in" "/input/requirements.txt" "/work/"
                 cd "/work"
 
-                "/venv/bin/pip-compile" --generate-hashes --strip-extras --allow-unsafe --output-file="./requirements.txt" "./requirements.in"
+                pip-compile --generate-hashes --strip-extras --allow-unsafe --output-file="./requirements.txt" "./requirements.in"
 
                 cat "./requirements.txt" >"/input/requirements.txt"
             '
@@ -320,13 +324,15 @@ update_python_pipfile() {
     # shellcheck disable=SC2016
     run_update_command docker run --rm \
         --mount "type=bind,src=${pipfile_directory},dst=/input,readonly=false" \
+        --mount "type=bind,src=${source_dir}/container-dependencies/pipenv,dst=/deps/pipenv,readonly" \
         --env "UPDATE_TARGET=${update_target}" \
         --entrypoint '/bin/sh' \
         "python:${python_version}" \
         -c '
             set -euf
             python -m venv "/venv"
-            "/venv/bin/python" -m pip install --quiet --disable-pip-version-check --upgrade pipenv
+            . "/venv/bin/activate"
+            python -m pip install --quiet --disable-pip-version-check --require-hashes --requirement "/deps/pipenv/requirements.txt"
 
             mkdir -p "/work"
             cp -R "/input/." "/work/"
@@ -338,10 +344,10 @@ update_python_pipfile() {
 
             case "${UPDATE_TARGET}" in
             major | minor | patch)
-                "/venv/bin/pipenv" update --all
+                pipenv update --all
                 ;;
             lock)
-                "/venv/bin/pipenv" lock
+                pipenv lock
                 ;;
             esac
 
