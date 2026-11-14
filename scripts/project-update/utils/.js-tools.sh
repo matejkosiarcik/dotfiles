@@ -201,8 +201,8 @@ update_nodejs_dependencies() {
     if [ "${update_target}" != 'lock' ]; then
         # shellcheck disable=SC2016
         run_update_command docker run --rm \
-            --volume "${tmpdir}:/app/${package_directory_name}:rw" \
-            --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+            --mount "type=bind,src=${tmpdir},dst=/app/${package_directory_name},readonly=false" \
+            --mount "type=bind,src=${HOME}/.npmrc,dst=/root/.npmrc,readonly=true" \
             --mount "type=bind,src=${source_dir}/container-dependencies/npm-check-updates,dst=/deps/npm-check-updates,readonly" \
             --env "NCU_TARGET=${ncu_target}" \
             --env "PACKAGE_MANAGER=${package_manager}" \
@@ -224,8 +224,8 @@ update_nodejs_dependencies() {
     npm)
         # shellcheck disable=SC2016
         run_update_command docker run --rm \
-            --volume "${tmpdir}:/app/${package_directory_name}:rw" \
-            --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+            --mount "type=bind,src=${tmpdir},dst=/app/${package_directory_name},readonly=false" \
+            --mount "type=bind,src=${HOME}/.npmrc,dst=/root/.npmrc,readonly=true" \
             --env CYPRESS_INSTALL_BINARY='0' \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
             --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \
@@ -245,8 +245,8 @@ update_nodejs_dependencies() {
     pnpm)
         # shellcheck disable=SC2016
         run_update_command docker run --rm \
-            --volume "${tmpdir}:/app/${package_directory_name}:rw" \
-            --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+            --mount "type=bind,src=${tmpdir},dst=/app/${package_directory_name},readonly=false" \
+            --mount "type=bind,src=${HOME}/.npmrc,dst=/root/.npmrc,readonly=true" \
             --mount "type=bind,src=${source_dir}/container-dependencies/corepack,dst=/deps/corepack,readonly" \
             --env CYPRESS_INSTALL_BINARY='0' \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
@@ -269,8 +269,8 @@ update_nodejs_dependencies() {
     yarn)
         # shellcheck disable=SC2016
         run_update_command docker run --rm \
-            --volume "${tmpdir}:/app/${package_directory_name}:rw" \
-            --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+            --mount "type=bind,src=${tmpdir},dst=/app/${package_directory_name},readonly=false" \
+            --mount "type=bind,src=${HOME}/.npmrc,dst=/root/.npmrc,readonly=true" \
             --mount "type=bind,src=${source_dir}/container-dependencies/corepack,dst=/deps/corepack,readonly" \
             --env CYPRESS_INSTALL_BINARY='0' \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
@@ -297,8 +297,8 @@ update_nodejs_dependencies() {
     bun)
         # shellcheck disable=SC2016
         run_update_command docker run --rm \
-            --volume "${tmpdir}:/app/${package_directory_name}:rw" \
-            --volume "${HOME}/.npmrc:/root/.npmrc:ro" \
+            --mount "type=bind,src=${tmpdir},dst=/app/${package_directory_name},readonly=false" \
+            --mount "type=bind,src=${HOME}/.npmrc,dst=/root/.npmrc,readonly=true" \
             --env CYPRESS_INSTALL_BINARY='0' \
             --env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD='true' \
             --env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1' \

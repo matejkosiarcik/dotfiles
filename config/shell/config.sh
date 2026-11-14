@@ -48,8 +48,8 @@ alias ytdv='yt-dlp --ignore-error --format "bestvideo[ext=mp4]+bestaudio[ext=m4a
 alias ytda='yt-dlp --ignore-error --format "bestaudio[ext=m4a]" --'
 
 # azlint
-alias azlint_lint='docker run --interactive --volume "${PWD}:/project:ro" matejkosiarcik/azlint:dev lint'
-alias azlint_fmt='docker run --interactive --volume "${PWD}:/project" matejkosiarcik/azlint:dev fmt'
+alias azlint_lint='docker run --interactive --mount "type=bind,src=${PWD},dst=/project,readonly=true" matejkosiarcik/azlint:dev lint'
+alias azlint_fmt='docker run --interactive --mount "type=bind,src=${PWD},dst=/project,readonly=false" matejkosiarcik/azlint:dev fmt'
 
 # Other
 alias whatsmyip='curl --silent ipinfo.io | jq -r .ip'
